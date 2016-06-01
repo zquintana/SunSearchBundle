@@ -29,16 +29,22 @@ class FindByDocumentNameQuery extends AbstractQuery
      */
     public function getQuery()
     {
+        $this->setQuery($this->prepareQuery());
+
+        return parent::getQuery();
+    }
+
+    /**
+     * @return string
+     */
+    public function prepareQuery()
+    {
         $documentName = $this->documentName;
 
         if ($documentName == null) {
             throw new \RuntimeException('documentName should not be null');
         }
 
-        $query = sprintf('id:%s_*', $documentName);
-
-        $this->setQuery($query);
-
-        return parent::getQuery();
+        return sprintf('id:%s_*', $documentName);
     }
 }

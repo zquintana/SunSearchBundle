@@ -24,15 +24,22 @@ class FindByIdentifierQuery extends AbstractQuery
      */
     public function getQuery()
     {
+        $this->setQuery($this->prepareQuery());
+
+        return parent::getQuery();
+    }
+
+    /**
+     * @return string
+     */
+    public function prepareQuery()
+    {
         $idField = $this->documentKey;
 
         if ($idField == null) {
             throw new \RuntimeException('id should not be null');
         }
 
-        $query = sprintf('id:%s', $idField);
-        $this->setQuery($query);
-
-        return parent::getQuery();
+        return sprintf('id:%s', $idField);
     }
 }
