@@ -74,14 +74,24 @@ class EntityMapper
 
     /**
      * @param \ArrayAccess    $document
-     * @param MetaInformation $metaInformation
+     * @param object          $sourceTargetEntity
      *
-     * @return object
+     * @return object|null
      *
      * @throws \InvalidArgumentException if $sourceTargetEntity is null
      */
-    public function toEntity(\ArrayAccess $document, MetaInformation $metaInformation)
+    public function toEntity(\ArrayAccess $document, $sourceTargetEntity)
     {
+        if (null === $sourceTargetEntity) {
+            throw new \InvalidArgumentException('$sourceTargetEntity should not be null');
+        }
+
+        $metaInformation = $this->metaInformationFactory->loadInformation($sourceTargetEntity);
+
+        if ($metaInformation->isDoctrineEntity() === false && $this->hydrationMode == HydrationModes::HYDRATE_DOCTRINE) {
+            throw new \RuntimeException(sprintf('Please check your config. Given entity is not a Doctrine entity, but Doctrine hydration is enabled. Use setHydrationMode(HydrationModes::HYDRATE_DOCTRINE) to fix this.'));
+        }
+
         $hydratedDocument = $this->indexHydrator->hydrate($document, $metaInformation);
 
         if ($this->hydrationMode == HydrationModes::HYDRATE_INDEX) {
@@ -93,6 +103,8 @@ class EntityMapper
         if ($this->hydrationMode == HydrationModes::HYDRATE_DOCTRINE) {
             return $this->doctrineHydrator->hydrate($document, $metaInformation);
         }
+
+        return null;
     }
 
     /**
