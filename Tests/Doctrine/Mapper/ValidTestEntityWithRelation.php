@@ -2,13 +2,12 @@
 namespace FS\SolrBundle\Tests\Doctrine\Mapper;
 
 use FS\SolrBundle\Doctrine\Annotation as Solr;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ *
  * @Solr\Document(boost="1")
  */
-class ValidTestEntity
+class ValidTestEntityWithRelation
 {
 
     /**
@@ -31,7 +30,7 @@ class ValidTestEntity
     private $title;
 
     /**
-     * @Solr\Field(type="date", getter="format('d.m.Y')")
+     * @Solr\Field(type="date")
      *
      * @var date
      */
@@ -45,7 +44,16 @@ class ValidTestEntity
     private $costomField;
 
     /**
-     * @var ValidTestEntity[]
+     * @var object
+     *
+     * @Solr\Field(type="strings", getter="getTitle")
+     */
+    private $relation;
+
+    /**
+     * @var object
+     *
+     * @Solr\Field(type="strings")
      */
     private $posts;
 
@@ -124,7 +132,23 @@ class ValidTestEntity
     }
 
     /**
-     * @return ValidTestEntity[]
+     * @return object
+     */
+    public function getRelation()
+    {
+        return $this->relation;
+    }
+
+    /**
+     * @param object $relation
+     */
+    public function setRelation($relation)
+    {
+        $this->relation = $relation;
+    }
+
+    /**
+     * @return object
      */
     public function getPosts()
     {
@@ -132,11 +156,12 @@ class ValidTestEntity
     }
 
     /**
-     * @param ValidTestEntity[] $posts
+     * @param object $posts
      */
     public function setPosts($posts)
     {
         $this->posts = $posts;
     }
+
 }
 

@@ -103,34 +103,11 @@ class FSSolrExtension extends Extension
         }
 
         if ($this->isODMConfigured($container)) {
-            $container->getDefinition('solr.delete.document.odm.listener')->addTag(
-                'doctrine_mongodb.odm.event_listener',
-                array('event' => 'preRemove')
-            );
-            $container->getDefinition('solr.update.document.odm.listener')->addTag(
-                'doctrine_mongodb.odm.event_listener',
-                array('event' => 'postUpdate')
-            );
-            $container->getDefinition('solr.add.document.odm.listener')->addTag(
-                'doctrine_mongodb.odm.event_listener',
-                array('event' => 'postPersist')
-            );
-
+            $container->getDefinition('solr.document.odm.subscriber')->addTag('doctrine_mongodb.odm.event_subscriber');
         }
 
         if ($this->isOrmConfigured($container)) {
-            $container->getDefinition('solr.add.document.orm.listener')->addTag(
-                'doctrine.event_listener',
-                array('event' => 'postPersist')
-            );
-            $container->getDefinition('solr.delete.document.orm.listener')->addTag(
-                'doctrine.event_listener',
-                array('event' => 'preRemove')
-            );
-            $container->getDefinition('solr.update.document.orm.listener')->addTag(
-                'doctrine.event_listener',
-                array('event' => 'postUpdate')
-            );
+            $container->getDefinition('solr.document.orm.subscriber')->addTag('doctrine.event_subscriber');
         }
     }
 

@@ -2,6 +2,8 @@
 
 namespace FS\SolrBundle\Doctrine\Hydration;
 
+use Doctrine\Common\Collections\Collection;
+use FS\SolrBundle\Doctrine\Annotation\Field;
 use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
 
 /**
@@ -20,6 +22,12 @@ class ValueHydrator implements HydratorInterface
         foreach ($document as $property => $value) {
             if ($property === MetaInformationInterface::DOCUMENT_KEY_FIELD_NAME) {
                 $value = $this->removePrefixedKeyFieldName($value);
+            }
+
+            // skip field if value is array or "flat" object
+            // hydrated object should contain a list of real entities / entity
+            if ($this->mapValue($property, $value, $metaInformation) == false) {
+                continue;
             }
 
             try {
@@ -56,7 +64,7 @@ class ValueHydrator implements HydratorInterface
      *
      * @return string
      */
-    private function removeFieldSuffix($property)
+    protected function removeFieldSuffix($property)
     {
         if (($pos = strrpos($property, '_')) !== false) {
             return substr($property, 0, $pos);
@@ -72,7 +80,7 @@ class ValueHydrator implements HydratorInterface
      *
      * @return string
      */
-    private function removePrefixedKeyFieldName($value)
+    protected function removePrefixedKeyFieldName($value)
     {
         if (($pos = strrpos($value, '_')) !== false) {
             return substr($value, ($pos+1));
@@ -97,5 +105,13 @@ class ValueHydrator implements HydratorInterface
         $pascalCased = str_replace(' ', '', $words);
 
         return lcfirst($pascalCased);
+    }
+
+    /**
+     * @return bool
+     */
+    public function mapValue($fieldName, $value, MetaInformationInterface $metaInformation)
+    {
+        return true;
     }
 } 

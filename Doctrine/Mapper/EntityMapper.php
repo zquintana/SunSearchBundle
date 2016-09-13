@@ -12,7 +12,7 @@ use Solarium\QueryType\Update\Query\Document\Document;
 class EntityMapper
 {
     /**
-     * @var CreateDocumentCommandInterface
+     * @var AbstractDocumentCommand
      */
     private $mappingCommand = null;
 
@@ -32,13 +32,20 @@ class EntityMapper
     private $hydrationMode = '';
 
     /**
-     * @param HydratorInterface $doctrineHydrator
-     * @param HydratorInterface $indexHydrator
+     * @var MetaInformationFactory
      */
-    public function __construct(HydratorInterface $doctrineHydrator, HydratorInterface $indexHydrator)
+    private $metaInformationFactory;
+
+    /**
+     * @param HydratorInterface      $doctrineHydrator
+     * @param HydratorInterface      $indexHydrator
+     * @param MetaInformationFactory $metaInformationFactory
+     */
+    public function __construct(HydratorInterface $doctrineHydrator, HydratorInterface $indexHydrator, MetaInformationFactory $metaInformationFactory)
     {
         $this->doctrineHydrator = $doctrineHydrator;
         $this->indexHydrator = $indexHydrator;
+        $this->metaInformationFactory = $metaInformationFactory;
 
         $this->hydrationMode = HydrationModes::HYDRATE_DOCTRINE;
     }
@@ -86,32 +93,6 @@ class EntityMapper
         if ($this->hydrationMode == HydrationModes::HYDRATE_DOCTRINE) {
             return $this->doctrineHydrator->hydrate($document, $metaInformation);
         }
-    }
-
-    /**
-     * @param Result $result
-     * @param object $sourceTargetEntity
-     *
-     * @return array
-     */
-    public function toEntities(Result $result, $sourceTargetEntity)
-    {
-        $metaInformationFactory = new MetaInformationFactory();
-        $metaInformation = $metaInformationFactory->loadInformation($sourceTargetEntity);
-
-        $hydroMode  = $this->hydrationMode;
-        $this->setHydrationMode(HydrationModes::HYDRATE_INDEX);
-        $entities = [];
-        foreach ($result as $document) {
-            array_push($entities, $this->toEntity($document, $metaInformation));
-        }
-
-        $this->setHydrationMode($hydroMode);
-        if ($this->hydrationMode === HydrationModes::HYDRATE_DOCTRINE) {
-            $entities = $this->doctrineHydrator->hydrateEntities($entities, $metaInformation);
-        }
-
-        return $entities;
     }
 
     /**

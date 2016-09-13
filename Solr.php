@@ -2,11 +2,10 @@
 
 namespace FS\SolrBundle;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use FS\SolrBundle\Client\Solarium\SolariumMulticoreClient;
 use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
 use FS\SolrBundle\Query\ResultSet;
-use Solarium\Core\Query\Query;
-use Solarium\QueryType\Select\Result\Result;
+use Solarium\Plugin\BufferedAdd\BufferedAdd;
 use Solarium\QueryType\Update\Query\Document\Document;
 use FS\SolrBundle\Doctrine\Mapper\EntityMapper;
 use FS\SolrBundle\Doctrine\Mapper\Mapping\CommandFactory;
@@ -25,8 +24,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Solr implements SolrInterface
 {
-
-
     /**
      * @var Client
      */
@@ -178,7 +175,7 @@ class Solr implements SolrInterface
             try {
                 $indexName = $metaInformations->getIndex();
 
-                $client = new \FS\SolrBundle\Client\Client($this->solrClientCore);
+                $client = new SolariumMulticoreClient($this->solrClientCore);
 
                 $client->delete($document, $indexName);
             } catch (\Exception $e) {
@@ -200,7 +197,7 @@ class Solr implements SolrInterface
         $metaInformation = $this->metaInformationFactory->loadInformation($entity);
 
         if (!$this->addToIndex($metaInformation, $entity)) {
-            return;
+            return false;
         }
 
         $doc = $this->toDocument($metaInformation);
@@ -236,6 +233,30 @@ class Solr implements SolrInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function computeChangeSet(array $doctrineChangeSet, $entity)
+    {
+        /* If not set, act the same way as if there are changes */
+        if (empty($doctrineChangeSet)) {
+            return array();
+        }
+
+        $metaInformation = $this->metaInformationFactory->loadInformation($entity);
+
+        $documentChangeSet = array();
+
+        /* Check all Solr fields on this entity and check if this field is in the change set */
+        foreach ($metaInformation->getFields() as $field) {
+            if (array_key_exists($field->name, $doctrineChangeSet)) {
+                $documentChangeSet[] = $field->name;
+            }
+        }
+
+        return $documentChangeSet;
+    }
+
+    /**
      * Get select query
      *
      * @param AbstractQuery $query
@@ -246,9 +267,10 @@ class Solr implements SolrInterface
     {
         $selectQuery = $this->solrClientCore->createSelect($query->getOptions());
 
-        $selectQuery->setQuery($query->prepareQuery());
+        $selectQuery->setQuery($query->getQuery());
         $selectQuery->setFilterQueries($query->getFilterQueries());
         $selectQuery->setSorts($query->getSorts());
+        $selectQuery->setFields($query->getFields());
 
         return $selectQuery;
     }
@@ -258,9 +280,9 @@ class Solr implements SolrInterface
      */
     public function query(AbstractQuery $query)
     {
-        $entity          = $query->getEntity();
+        $entity = $query->getEntity();
         $runQueryInIndex = $query->getIndex();
-        $selectQuery     = $query->getSelectQuery();
+        $selectQuery = $this->getSelectQuery($query);
 
         try {
             $response = $this->solrClientCore->select($selectQuery, $runQueryInIndex);
@@ -285,7 +307,7 @@ class Solr implements SolrInterface
     }
 
     /**
-     * Number of results found by query
+     * Number of overall found documents for a given query
      *
      * @return integer
      */
@@ -302,7 +324,7 @@ class Solr implements SolrInterface
         $this->eventManager->dispatch(Events::PRE_CLEAR_INDEX, new Event($this->solrClientCore));
 
         try {
-            $client = new \FS\SolrBundle\Client\Client($this->solrClientCore);
+            $client = new SolariumMulticoreClient($this->solrClientCore);
             $client->clearCores();
         } catch (\Exception $e) {
             $errorEvent = new ErrorEvent(null, null, 'clear-index');
@@ -315,11 +337,27 @@ class Solr implements SolrInterface
     }
 
     /**
-     * @param object $entity
+     * @param array $entities
      */
-    public function synchronizeIndex($entity)
+    public function synchronizeIndex($entities)
     {
-        $this->updateDocument($entity);
+        /** @var BufferedAdd $buffer */
+        $buffer = $this->solrClientCore->getPlugin('bufferedadd');
+        $buffer->setBufferSize(500);
+
+        foreach ($entities as $entity) {
+            $metaInformations = $this->metaInformationFactory->loadInformation($entity);
+
+            if (!$this->addToIndex($metaInformations, $entity)) {
+                continue;
+            }
+
+            $doc = $this->toDocument($metaInformations);
+
+            $buffer->addDocument($doc);
+        }
+
+        $buffer->commit();
     }
 
     /**
@@ -332,7 +370,7 @@ class Solr implements SolrInterface
         $metaInformations = $this->metaInformationFactory->loadInformation($entity);
 
         if (!$this->addToIndex($metaInformations, $entity)) {
-            return;
+            return false;
         }
 
         $doc = $this->toDocument($metaInformations);
@@ -372,7 +410,7 @@ class Solr implements SolrInterface
         try {
             $indexName = $metaInformation->getIndex();
 
-            $client = new \FS\SolrBundle\Client\Client($this->solrClientCore);
+            $client = new SolariumMulticoreClient($this->solrClientCore);
             $client->update($doc, $indexName);
 
         } catch (\Exception $e) {

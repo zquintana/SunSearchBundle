@@ -59,11 +59,11 @@ interface MetaInformationInterface
     public function getEntity();
 
     /**
-     * @param string $field
+     * @param string $fieldName
      *
      * @return Field|null
      */
-    public function getField($field);
+    public function getField($fieldName);
 
     /**
      * @return array

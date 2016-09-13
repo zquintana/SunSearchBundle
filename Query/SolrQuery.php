@@ -2,8 +2,7 @@
 
 namespace FS\SolrBundle\Query;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Solarium\Core\Query\Query;
+use FS\SolrBundle\Query\Exception\UnknownFieldException;
 
 class SolrQuery extends AbstractQuery
 {
@@ -26,17 +25,15 @@ class SolrQuery extends AbstractQuery
     /**
      * @var bool
      */
-    private $useWildcards = true;
+    private $useWildcards = false;
 
     /**
      * @var string
      */
     private $customQuery;
 
-
-
     /**
-     * @return ResultSet
+     * @return array
      */
     public function getResult()
     {
@@ -117,16 +114,19 @@ class SolrQuery extends AbstractQuery
      * @param string $value
      *
      * @return SolrQuery
+     *
+     * @throws UnknownFieldException if $field has not mapping / is unknown
      */
     public function addSearchTerm($field, $value)
     {
         $documentFieldsAsValues = array_flip($this->mappedFields);
 
-        if (array_key_exists($field, $documentFieldsAsValues)) {
-            $documentFieldName = $documentFieldsAsValues[$field];
-
-            $this->searchTerms[$documentFieldName] = $value;
+        if (!array_key_exists($field, $documentFieldsAsValues)) {
+            throw new UnknownFieldException(sprintf('Entity %s has no mapping for field %s', get_class($this->getEntity()), $field));
         }
+
+        $documentFieldName = $documentFieldsAsValues[$field];
+        $this->searchTerms[$documentFieldName] = $value;
 
         return $this;
     }
@@ -149,16 +149,20 @@ class SolrQuery extends AbstractQuery
     /**
      * @return string
      */
-    public function prepareQuery()
+    public function getQuery()
     {
         if ($this->customQuery) {
-            $this->setQuery($this->customQuery);
+            parent::setQuery($this->customQuery);
+
             return $this->customQuery;
         }
 
         $term = '';
         if (count($this->searchTerms) == 0) {
-            return '*:*';
+            $query = '*:*';
+            parent::setQuery($query);
+
+            return $query;
         }
 
         $logicOperator = 'AND';
@@ -169,11 +173,9 @@ class SolrQuery extends AbstractQuery
         $termCount = 1;
         foreach ($this->searchTerms as $fieldName => $fieldValue) {
 
-            if ($this->useWildcards) {
-                $term .= $fieldName . ':*' . $fieldValue . '*';
-            } else {
-                $term .= $fieldName . ':"' . $fieldValue .'"';
-            }
+            $fieldValue = $this->querifyFieldValue($fieldValue);
+
+            $term .= $fieldName . ':' . $fieldValue;
 
             if ($termCount < count($this->searchTerms)) {
                 $term .= ' ' . $logicOperator . ' ';
@@ -181,9 +183,47 @@ class SolrQuery extends AbstractQuery
 
             $termCount++;
         }
+
         $this->setQuery($term);
 
         return $term;
     }
 
+    /**
+     * Transforms array to string representation and adds quotes
+     *
+     * @param string $fieldValue
+     *
+     * @return string
+     */
+    private function querifyFieldValue($fieldValue)
+    {
+        if (is_array($fieldValue) && count($fieldValue) > 1) {
+            sort($fieldValue);
+
+            $quoted = array_map(function($value) {
+                return '"'. $value .'"';
+            }, $fieldValue);
+
+            $fieldValue = implode(' TO ', $quoted);
+            $fieldValue = '['. $fieldValue . ']';
+
+            return $fieldValue;
+        }
+
+        if (is_array($fieldValue) && count($fieldValue) === 1) {
+            $fieldValue = array_pop($fieldValue);
+        }
+
+        if ($this->useWildcards) {
+            $fieldValue = '*' . $fieldValue . '*';
+        }
+
+        $termParts = explode(' ', $fieldValue);
+        if (count($termParts) > 1) {
+            $fieldValue = '"'.$fieldValue.'"';
+        }
+
+        return $fieldValue;
+    }
 }

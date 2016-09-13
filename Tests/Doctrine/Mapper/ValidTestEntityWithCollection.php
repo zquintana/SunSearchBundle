@@ -1,14 +1,14 @@
 <?php
 namespace FS\SolrBundle\Tests\Doctrine\Mapper;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use FS\SolrBundle\Doctrine\Annotation as Solr;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ *
  * @Solr\Document(boost="1")
  */
-class ValidTestEntity
+class ValidTestEntityWithCollection
 {
 
     /**
@@ -31,11 +31,18 @@ class ValidTestEntity
     private $title;
 
     /**
-     * @Solr\Field(type="date", getter="format('d.m.Y')")
+     * @Solr\Field(type="date")
      *
      * @var date
      */
     private $created_at;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @Solr\Field(type="strings", getter="getTitle")
+     */
+    private $collection;
 
     /**
      * @Solr\Field(type="my_costom_fieldtype")
@@ -43,11 +50,6 @@ class ValidTestEntity
      * @var string
      */
     private $costomField;
-
-    /**
-     * @var ValidTestEntity[]
-     */
-    private $posts;
 
     public function getId()
     {
@@ -124,19 +126,21 @@ class ValidTestEntity
     }
 
     /**
-     * @return ValidTestEntity[]
+     * @return ArrayCollection
      */
-    public function getPosts()
+    public function getCollection()
     {
-        return $this->posts;
+        return $this->collection;
     }
 
     /**
-     * @param ValidTestEntity[] $posts
+     * @param ArrayCollection $collection
      */
-    public function setPosts($posts)
+    public function setCollection($collection)
     {
-        $this->posts = $posts;
+        $this->collection = $collection;
     }
+
+
 }
 

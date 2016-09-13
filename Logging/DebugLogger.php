@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: zach
- * Date: 1/28/16
- * Time: 11:26 AM
- */
 
 namespace FS\SolrBundle\Logging;
 
@@ -13,6 +7,11 @@ namespace FS\SolrBundle\Logging;
  * Class DebugLogger
  *
  * @package FS\SolrBundle\Logging
+
+namespace FS\SolrBundle\Logging;
+
+/**
+ * Logs the current request and information about this request
  */
 class DebugLogger implements SolrLoggerInterface
 {

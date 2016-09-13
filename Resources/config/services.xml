@@ -5,28 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-
         <parameter key="solr.class">FS\SolrBundle\Solr</parameter>
-        <parameter key="solr.client.adapter.builder.class">FS\SolrBundle\Client\SolrBuilder</parameter>
-        <parameter key="solr.client.adapter.class">Solarium\Client</parameter>
-
-        <parameter key="solr.mapping.factory.class">FS\SolrBundle\Doctrine\Mapper\Mapping\CommandFactory</parameter>
-        <parameter key="solr.meta.information.factory.class">FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory</parameter>
-
-        <parameter key="solr.doctrine.classnameresolver.class">FS\SolrBundle\Doctrine\ClassnameResolver\ClassnameResolver</parameter>
-        <parameter key="solr.doctrine.classnameresolver.known_entity_namespaces.class">FS\SolrBundle\Doctrine\ClassnameResolver\KnownNamespaceAliases</parameter>
-
-        <parameter key="solr.mapping.all.class">FS\SolrBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand</parameter>
-        <parameter key="solr.mapping.identifier.class">FS\SolrBundle\Doctrine\Mapper\Mapping\MapIdentifierCommand</parameter>
-
-        <parameter key="solr.console.command.result.class">FS\SolrBundle\Console\ConsoleCommandResults</parameter>
-        <parameter key="solr.synchronize.error.listener.class">FS\SolrBundle\Event\Listener\SynchronizationSummaryListener</parameter>
-        <parameter key="solr.console.result.factory.class">FS\SolrBundle\Console\ConsoleResultFactory</parameter>
-
-        <parameter key="solr.client.plugin.logger.class">FS\SolrBundle\Plugin\LoggerPlugin</parameter>
-        <parameter key="solr.client.logger.chain.class">FS\SolrBundle\Logging\LoggerChain</parameter>
-        <parameter key="solr.client.logger.debug.class">FS\SolrBundle\Logging\DebugLogger</parameter>
-        <parameter key="solr.data_collector.class">FS\SolrBundle\DataCollector\SolrRequestCollector</parameter>
     </parameters>
 
     <services>
@@ -38,93 +17,80 @@
             <argument type="service" id="solr.doctrine.entity_mapper"/>
         </service>
 
-        <service id="solr.client.adapter" class="%solr.client.adapter.class%" factory-service="solr.client.adapter.builder" factory-method="build" />
+        <service id="solr.client.adapter" class="Solarium\Client">
+            <factory service="solr.client.adapter.builder" method="build" />
+        </service>
 
-        <service id="solr.client.adapter.builder" class="%solr.client.adapter.builder.class%">
+        <service id="solr.client.adapter.builder" class="FS\SolrBundle\Client\Solarium\SolariumClientBuilder">
             <argument type="collection"/>
-            <call method="addPlugin">
-                <argument>SolrBundleLogger</argument>
-                <argument type="service" id="solr.client.plugin.logger" />
-            </call>
+            <argument type="service" id="event_dispatcher" />
         </service>
 
-        <service id="solr.client.plugin.logger" class="%solr.client.plugin.logger.class%">
-            <call method="setLogger">
-                <argument type="service" id="solr.client.logger.chain" />
-            </call>
+        <service id="solr.client.plugin.logger" class="FS\SolrBundle\Client\Solarium\Plugin\LoggerPlugin">
+            <argument type="service" id="solr.client.logger.debug"/>
+
+            <tag name="solarium.client.plugin" plugin-name="SolrBundleLogger"/>
         </service>
 
-        <service id="solr.client.logger.chain" class="%solr.client.logger.chain.class%">
-            <call method="addLogger">
-                <argument type="service" id="solr.client.logger.debug" />
-            </call>
-        </service>
+        <service id="solr.client.logger.debug" class="FS\SolrBundle\Logging\DebugLogger" />
 
-        <service id="solr.client.logger.debug" class="%solr.client.logger.debug.class%" />
-
-        <service id="solr.data_collector" class="%solr.data_collector.class%" public="false">
+        <service id="solr.data_collector" class="FS\SolrBundle\DataCollector\RequestCollector" public="false">
             <argument type="service" id="solr.client.logger.debug" />
+
             <tag name="data_collector" template="FSSolrBundle:Profiler:solr" id="solr" />
         </service>
 
-        <service class="FS\SolrBundle\Debug\RequestDebugger" id="solr.debug.client_debugger">
+        <service id="solr.debug.client_debugger" class="FS\SolrBundle\Client\Solarium\Plugin\RequestDebugger">
             <argument type="service" id="logger"/>
 
             <tag name="monolog.logger" channel="solr" />
+            <tag name="kernel.event_listener" event="solarium.core.preExecuteRequest" method="preExecuteRequest" />
         </service>
 
-        <service id="solr.meta.information.factory" class="%solr.meta.information.factory.class%" public="false"/>
+        <service id="solr.meta.information.factory" class="FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory">
+            <argument type="service" id="solr.doctrine.annotation.annotation_reader" />
+        </service>
 
-        <service id="solr.mapping.factory" class="%solr.mapping.factory.class%" public="false"/>
+        <service id="solr.mapping.factory" class="FS\SolrBundle\Doctrine\Mapper\Mapping\CommandFactory" public="false"/>
 
-        <service id="solr.doctrine.classnameresolver.known_entity_namespaces" class="%solr.doctrine.classnameresolver.known_entity_namespaces.class%"/>
+        <service id="solr.doctrine.classnameresolver.known_entity_namespaces" class="FS\SolrBundle\Doctrine\ClassnameResolver\KnownNamespaceAliases"/>
 
-        <service id="solr.doctrine.classnameresolver" class="%solr.doctrine.classnameresolver.class%" public="false">
+        <service id="solr.doctrine.classnameresolver" class="FS\SolrBundle\Doctrine\ClassnameResolver\ClassnameResolver" public="false">
             <argument type="service" id="solr.doctrine.classnameresolver.known_entity_namespaces"/>
         </service>
 
-        <service id="solr.mapping.all" class="%solr.mapping.all.class%" public="false">
+        <service id="solr.mapping.all" class="FS\SolrBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand" public="false">
+            <argument type="service" id="solr.meta.information.factory"/>
             <tag name="solr.document.command" command="all"/>
         </service>
 
-        <service id="solr.mapping.identifier" class="%solr.mapping.identifier.class%" public="false">
+        <service id="solr.mapping.identifier" class="FS\SolrBundle\Doctrine\Mapper\Mapping\MapIdentifierCommand" public="false">
             <tag name="solr.document.command" command="identifier"/>
-        </service>
-
-        <service id="solr.console.command.results" class="%solr.console.command.result.class%">
-        </service>
-
-        <service id="solr.console.result.factory" class="%solr.console.result.factory.class%">
-        </service>
-
-        <service id="solr.synchronize.error.listener" class="%solr.synchronize.error.listener.class%">
-            <argument type="service" id="solr.console.command.results"/>
-            <argument type="service" id="solr.console.result.factory"/>
-
-            <tag name="kernel.event_listener" event="error" method="onSolrError"/>
-            <tag name="kernel.event_listener" event="solr.post_insert" method="onSolrSuccess"/>
-            <tag name="kernel.event_listener" event="solr.post_update" method="onSolrSuccess"/>
         </service>
 
         <service id="solr.doctrine.entity_mapper" class="FS\SolrBundle\Doctrine\Mapper\EntityMapper">
             <argument id="solr.doctrine.hydration.doctrine_hydrator" type="service"/>
             <argument id="solr.doctrine.hydration.index_hydrator" type="service"/>
+            <argument type="service" id="solr.meta.information.factory"/>
         </service>
 
         <service id="solr.doctrine.hydration.doctrine_hydrator" class="FS\SolrBundle\Doctrine\Hydration\DoctrineHydrator">
             <argument id="doctrine" type="service"/>
-            <argument id="solr.doctrine.hydration.value_hydrator" type="service"/>
+            <argument id="solr.doctrine.hydration.doctrine_value_hydrator" type="service"/>
         </service>
 
         <service id="solr.doctrine.hydration.value_hydrator" class="FS\SolrBundle\Doctrine\Hydration\ValueHydrator">
+        </service>
+
+        <service id="solr.doctrine.hydration.doctrine_value_hydrator" class="FS\SolrBundle\Doctrine\Hydration\DoctrineValueHydrator">
         </service>
 
         <service id="solr.doctrine.hydration.index_hydrator" class="FS\SolrBundle\Doctrine\Hydration\IndexHydrator">
             <argument id="solr.doctrine.hydration.value_hydrator" type="service"/>
         </service>
 
-        <service id="solr.twig.solr_extension" class="FS\SolrBundle\Twig\SolrExtension" public="false">
-            <tag name="twig.extension" />
+        <service id="solr.doctrine.annotation.annotation_reader" class="FS\SolrBundle\Doctrine\Annotation\AnnotationReader">
+            <argument id="annotation_reader" type="service"/>
         </service>
     </services>
 </container>

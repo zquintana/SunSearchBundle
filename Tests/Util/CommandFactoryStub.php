@@ -5,6 +5,7 @@ use FS\SolrBundle\Doctrine\Annotation\AnnotationReader;
 use FS\SolrBundle\Doctrine\Mapper\Mapping\CommandFactory;
 use FS\SolrBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand;
 use FS\SolrBundle\Doctrine\Mapper\Mapping\MapIdentifierCommand;
+use FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory;
 
 class CommandFactoryStub
 {
@@ -14,8 +15,10 @@ class CommandFactoryStub
      */
     public static function getFactoryWithAllMappingCommand()
     {
+        $reader = new AnnotationReader(new \Doctrine\Common\Annotations\AnnotationReader());
+
         $commandFactory = new CommandFactory();
-        $commandFactory->add(new MapAllFieldsCommand(), 'all');
+        $commandFactory->add(new MapAllFieldsCommand(new MetaInformationFactory($reader)), 'all');
         $commandFactory->add(new MapIdentifierCommand(), 'identifier');
 
         return $commandFactory;

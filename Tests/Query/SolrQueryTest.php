@@ -3,6 +3,7 @@
 namespace FS\SolrBundle\Tests\Query;
 
 use FS\SolrBundle\Doctrine\Annotation\AnnotationReader;
+use FS\SolrBundle\Query\Exception\UnknownFieldException;
 use FS\SolrBundle\Query\SolrQuery;
 use FS\SolrBundle\SolrQueryFacade;
 
@@ -78,7 +79,7 @@ class SolrQueryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSolrQuery_QueryTermShouldCorrect()
     {
-        $expected = 'title_s:"*foo*" OR text_t:"*bar*"';
+        $expected = 'title_s:foo OR text_t:bar';
 
         $query = $this->createQueryWithSearchTerms();
 
@@ -99,33 +100,19 @@ class SolrQueryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(array_key_exists('text_t', $terms), 'text_t not in terms');
     }
 
-    public function testAddSearchTerm_OneFieldOfTwoNotMapped()
-    {
-        $solrQuery = $this->createQueryWithFieldMapping();
-
-        $solrQuery->addSearchTerm('title', 'foo')
-            ->addSearchTerm('foo', 'bar');
-
-        $terms = $solrQuery->getSearchTerms();
-
-        $this->assertTrue(array_key_exists('title_s', $terms), 'title_s not in terms');
-        $this->assertEquals(1, count($terms));
-    }
-
+    /**
+     * @expectedException \FS\SolrBundle\Query\Exception\UnknownFieldException
+     */
     public function testAddSearchTerm_UnknownField()
     {
         $solrQuery = $this->createQueryWithFieldMapping();
 
         $solrQuery->addSearchTerm('unknownfield', 'foo');
-
-        $terms = $solrQuery->getSearchTerms();
-
-        $this->assertEquals(0, count($terms));
     }
 
     public function testGetQuery_TermsConcatWithOr()
     {
-        $expected = 'title_s:"*foo*" OR text_t:"*bar*"';
+        $expected = 'title_s:foo OR text_t:bar';
 
         $query = $this->createQueryWithSearchTerms();
 
@@ -134,7 +121,7 @@ class SolrQueryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetQuery_TermsConcatWithAnd()
     {
-        $expected = 'title_s:"*foo*" AND text_t:"*bar*"';
+        $expected = 'title_s:foo AND text_t:bar';
 
         $query = $this->createQueryWithSearchTerms();
         $query->setUseAndOperator(true);
@@ -147,7 +134,84 @@ class SolrQueryTest extends \PHPUnit_Framework_TestCase
         $solrQuery = $this->createQueryWithFieldMapping();
         $solrQuery->queryAllFields('foo');
 
-        $expected = 'title_s:"*foo*" OR text_t:"*foo*" OR created_at_dt:"*foo*"';
+        $expected = 'title_s:foo OR text_t:foo OR created_at_dt:foo';
+
+        $this->assertEquals($expected, $solrQuery->getQuery());
+    }
+
+    public function testGetQuery_SurroundTermWithDoubleQuotes()
+    {
+        $solrQuery = $this->createQueryWithFieldMapping();
+        $solrQuery->queryAllFields('foo 12');
+
+        $expected = 'title_s:"foo 12" OR text_t:"foo 12" OR created_at_dt:"foo 12"';
+
+        $this->assertEquals($expected, $solrQuery->getQuery());
+    }
+
+    public function testGetQuery_SurroundWildcardTermWithDoubleQuotes()
+    {
+        $solrQuery = $this->createQueryWithFieldMapping();
+        $solrQuery->queryAllFields('foo 12');
+        $solrQuery->setUseWildcard(true);
+
+        $expected = 'title_s:"*foo 12*" OR text_t:"*foo 12*" OR created_at_dt:"*foo 12*"';
+
+        $this->assertEquals($expected, $solrQuery->getQuery());
+    }
+
+    public function testGetQuery_NoWildcard_Word()
+    {
+        $solrQuery = $this->createQueryWithFieldMapping();
+        $solrQuery->setUseWildcard(false);
+        $solrQuery->addSearchTerm('title', 'a_word');
+
+        $expected = 'title_s:a_word';
+
+        $this->assertEquals($expected, $solrQuery->getQuery());
+    }
+
+    public function testGetQuery_NoSearchTerm()
+    {
+        $solrQuery = $this->createQueryWithFieldMapping();
+
+        $expected = '*:*';
+
+        $this->assertEquals($expected, $solrQuery->getQuery());
+    }
+
+    public function testGetQuery_CustomQuery()
+    {
+        $solrQuery = $this->createQueryWithFieldMapping();
+        $solrQuery->setCustomQuery('title_s:[*:*]');
+
+        $expected = 'title_s:[*:*]';
+
+        $this->assertEquals($expected, $solrQuery->getQuery());
+    }
+
+    /**
+     * @test
+     */
+    public function searchInSetMultipleValues()
+    {
+        $solrQuery = $this->createQueryWithFieldMapping();
+        $solrQuery->addSearchTerm('title', array('value2', 'value1'));
+
+        $expected = 'title_s:["value1" TO "value2"]';
+
+        $this->assertEquals($expected, $solrQuery->getQuery());
+    }
+
+    /**
+     * @test
+     */
+    public function searchInSetSingleValues()
+    {
+        $solrQuery = $this->createQueryWithFieldMapping();
+        $solrQuery->addSearchTerm('title', array('value #1'));
+
+        $expected = 'title_s:"value #1"';
 
         $this->assertEquals($expected, $solrQuery->getQuery());
     }

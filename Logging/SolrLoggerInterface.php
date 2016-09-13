@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: zach
- * Date: 1/28/16
- * Time: 9:59 AM
- */
-
 namespace FS\SolrBundle\Logging;
 
 /**
@@ -14,6 +7,9 @@ namespace FS\SolrBundle\Logging;
  *
  * @package FS\SolrBundle\Logging
  */
+
+namespace FS\SolrBundle\Logging;
+
 interface SolrLoggerInterface
 {
     /**

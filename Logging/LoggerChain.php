@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: zach
- * Date: 1/28/16
- * Time: 10:02 AM
- */
 
 namespace FS\SolrBundle\Logging;
 
@@ -14,6 +8,9 @@ namespace FS\SolrBundle\Logging;
  *
  * @package FS\SolrBundle\Logging
  */
+
+namespace FS\SolrBundle\Logging;
+
 class LoggerChain implements SolrLoggerInterface
 {
     /**
