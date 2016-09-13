@@ -60,10 +60,6 @@ class MapAllFieldsCommand extends AbstractDocumentCommand
                 } elseif (is_object($value) && method_exists($value, $getter)) {
                     $document->addField($field->getNameWithAlias(), $value->{$getter}(), $field->getBoost());
                 }
-
-            $value = $field->getValue();
-            if ($value instanceof Collection) {
-                $document->addField($field->getNameWithAlias(), $this->mapCollection($field), $field->getBoost());
             } elseif (is_object($value)) {
                 $document->addField($field->getNameWithAlias(), $this->mapObject($field), $field->getBoost());
             } else {
