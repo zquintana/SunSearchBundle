@@ -35,7 +35,7 @@ class MapAllFieldsCommand extends AbstractDocumentCommand
     public function createDocument(MetaInformationInterface $meta)
     {
         $fields = $meta->getFields();
-        if (count($fields) === 0) {
+        if (count($fields) == 0) {
             return null;
         }
 
@@ -48,18 +48,8 @@ class MapAllFieldsCommand extends AbstractDocumentCommand
 
 
             $value  = $field->getValue();
-            $getter = $field->getGetterName();
-            if (!empty($getter)) {
-                if ($value instanceof Collection) {
-                    $values = array();
-                    foreach ($value as $relatedObj) {
-                        $values[] = $relatedObj->{$getter}();
-                    }
-                    
-                    $document->addField($field->getNameWithAlias(), $values, $field->getBoost());
-                } elseif (is_object($value) && method_exists($value, $getter)) {
-                    $document->addField($field->getNameWithAlias(), $value->{$getter}(), $field->getBoost());
-                }
+            if ($value instanceof Collection) {
+                $document->addField($field->getNameWithAlias(), $this->mapCollection($field), $field->getBoost());
             } elseif (is_object($value)) {
                 $document->addField($field->getNameWithAlias(), $this->mapObject($field), $field->getBoost());
             } else {

@@ -17,7 +17,7 @@ class EntityMapper
     private $mappingCommand = null;
 
     /**
-     * @var DoctrineHydrator
+     * @var HydratorInterface
      */
     private $doctrineHydrator;
 
@@ -73,8 +73,8 @@ class EntityMapper
     }
 
     /**
-     * @param \ArrayAccess    $document
-     * @param object          $sourceTargetEntity
+     * @param \ArrayAccess $document
+     * @param object       $sourceTargetEntity
      *
      * @return object|null
      *

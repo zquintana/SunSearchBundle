@@ -8,9 +8,6 @@ namespace FS\SolrBundle\Logging;
  *
  * @package FS\SolrBundle\Logging
  */
-
-namespace FS\SolrBundle\Logging;
-
 class LoggerChain implements SolrLoggerInterface
 {
     /**
