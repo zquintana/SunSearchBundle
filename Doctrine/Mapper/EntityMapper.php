@@ -36,17 +36,20 @@ class EntityMapper
      */
     private $metaInformationFactory;
 
+
     /**
      * @param HydratorInterface      $doctrineHydrator
      * @param HydratorInterface      $indexHydrator
      * @param MetaInformationFactory $metaInformationFactory
      */
-    public function __construct(HydratorInterface $doctrineHydrator, HydratorInterface $indexHydrator, MetaInformationFactory $metaInformationFactory)
-    {
+    public function __construct(
+        HydratorInterface $doctrineHydrator,
+        HydratorInterface $indexHydrator,
+        MetaInformationFactory $metaInformationFactory
+    ) {
         $this->doctrineHydrator = $doctrineHydrator;
         $this->indexHydrator = $indexHydrator;
         $this->metaInformationFactory = $metaInformationFactory;
-
         $this->hydrationMode = HydrationModes::HYDRATE_DOCTRINE;
     }
 
@@ -73,8 +76,8 @@ class EntityMapper
     }
 
     /**
-     * @param \ArrayAccess    $document
-     * @param object          $sourceTargetEntity
+     * @param \ArrayAccess $document
+     * @param object       $sourceTargetEntity
      *
      * @return object|null
      *

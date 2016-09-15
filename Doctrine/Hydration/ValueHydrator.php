@@ -56,6 +56,14 @@ class ValueHydrator implements HydratorInterface
     }
 
     /**
+     * @return bool
+     */
+    public function mapValue($fieldName, $value, MetaInformationInterface $metaInformation)
+    {
+        return true;
+    }
+
+    /**
      * returns the clean fieldname without type-suffix
      *
      * eg: title_s => title
@@ -105,13 +113,5 @@ class ValueHydrator implements HydratorInterface
         $pascalCased = str_replace(' ', '', $words);
 
         return lcfirst($pascalCased);
-    }
-
-    /**
-     * @return bool
-     */
-    public function mapValue($fieldName, $value, MetaInformationInterface $metaInformation)
-    {
-        return true;
     }
 } 
