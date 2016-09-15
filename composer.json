@@ -26,8 +26,8 @@
   },
   "minimum-stability": "beta",
   "autoload": {
-    "psr-0": {
-      "ZQ\\SunSearchBundle": ""
+    "psr-4": {
+      "ZQ\\SunSearchBundle\\": ""
     }
   },
   "config": {
