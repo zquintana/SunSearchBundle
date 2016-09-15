@@ -37,6 +37,5 @@
     "doctrine/orm": "Required if you want to use the Doctrine ORM",
     "doctrine/mongodb": "Required if you want to use the MongoDB ODM",
     "doctrine/mongodb-odm": "Required if you want to use the MongoDB ODM"
-  },
-  "target-dir": "ZQ/SunSearchBundle"
+  }
 }
