@@ -1,6 +1,6 @@
 <?php
 
-namespace ZQ\SunSearchBundle\SolrBundle;
+namespace ZQ\SunSearchBundle;
 
 use ZQ\SunSearchBundle\DependencyInjection\Compiler\AddCreateDocumentCommandPass;
 use ZQ\SunSearchBundle\DependencyInjection\Compiler\AddSolariumPluginsPass;
