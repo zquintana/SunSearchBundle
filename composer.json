@@ -1,14 +1,14 @@
 {
-  "name": "floriansemm/solr-bundle",
+  "name": "zquintana/sun-search-bundle",
   "type": "symfony-bundle",
-  "description": "Symfony2 Solr integration bundle",
+  "description": "Symfony Solr integration bundle",
   "keywords": [
     "search",
     "index",
     "symfony",
     "solr"
   ],
-  "homepage": "https://github.com/floriansemm/SolrBundle",
+  "homepage": "https://github.com/zquintana/SunSearchBundle",
   "license": "MIT",
   "require": {
     "php": ">=5.5.9",
@@ -27,7 +27,7 @@
   "minimum-stability": "beta",
   "autoload": {
     "psr-0": {
-      "FS\\SolrBundle": ""
+      "ZQ\\SunSearchBundle": ""
     }
   },
   "config": {
@@ -38,5 +38,5 @@
     "doctrine/mongodb": "Required if you want to use the MongoDB ODM",
     "doctrine/mongodb-odm": "Required if you want to use the MongoDB ODM"
   },
-  "target-dir": "FS/SolrBundle"
+  "target-dir": "ZQ/SunSearchBundle"
 }
