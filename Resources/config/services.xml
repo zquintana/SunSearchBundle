@@ -33,7 +33,7 @@
         <service id="sunsearch.data_collector" class="ZQ\SunSearchBundle\DataCollector\RequestCollector" public="false">
             <argument type="service" id="sunsearch.client.logger.debug" />
 
-            <tag name="data_collector" template="ZQSunSearchBundle:Profiler:solr" id="solr" />
+            <tag name="data_collector" template="SunSearchBundle:Profiler:solr" id="solr" />
         </service>
 
         <service id="sunsearch.debug.client_debugger" class="ZQ\SunSearchBundle\Client\Solarium\Plugin\RequestDebugger">

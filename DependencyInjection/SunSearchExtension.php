@@ -11,9 +11,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
- * Class FSSolrExtension
+ * Class SunSearchExtension
  */
-class FSSolrExtension extends Extension
+class SunSearchExtension extends Extension
 {
 
     /**

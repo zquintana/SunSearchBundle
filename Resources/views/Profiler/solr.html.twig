@@ -17,7 +17,7 @@
             {% if collector.querycount > 0 %}
                 {% set status = collector.querycount > 50 ? 'yellow' %}
 
-            {{ include('@ZQSunSearch/Profiler/icon.svg') }}
+            {{ include('@SunSearch/Profiler/icon.svg') }}
 
                 <span class="sf-toolbar-value">{{ collector.querycount }}</span>
                 <span class="sf-toolbar-info-piece-additional-detail">
@@ -61,7 +61,7 @@
     {% else %}
 
         <span class="label {{ collector.querycount == 0 ? 'disabled' }}">
-        <span class="icon">{{ include('@ZQSunSearch/Profiler/icon.svg') }}</span>
+        <span class="icon">{{ include('@SunSearch/Profiler/icon.svg') }}</span>
             <strong>Solr</strong>
         </span>
 

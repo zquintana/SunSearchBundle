@@ -11,9 +11,9 @@ This Bundle provides a simple API to index and query a Solr Index.
 
 Installation is a quick (I promise!) 3 step process:
 
-1. Download ZQSunSearchBundle
+1. Download SunSearchBundle
 2. Enable the Bundle
-3. Configure the ZQSunSearchBundle
+3. Configure the SunSearchBundle
 
 ### Step 1: Download ZQSunSearchBundle
 
@@ -46,7 +46,7 @@ Finally, configure the bundle:
 
 ``` yaml
 # app/config/config.yml
-sunsearch:
+sun_search:
     endpoints:
         core0:
             host: host

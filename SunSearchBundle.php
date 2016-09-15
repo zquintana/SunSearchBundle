@@ -9,9 +9,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class ZQSunSearchBundle
+ * Class SunSearchBundle
  */
-class ZQSunSearchBundle extends Bundle
+class SunSearchBundle extends Bundle
 {
     /**
      * {@inheritdoc}

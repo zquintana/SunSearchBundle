@@ -17,7 +17,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('sunsearch');
+        $rootNode = $treeBuilder->root('sun_search');
         $rootNode->children()
                 ->arrayNode('endpoints')
                     ->useAttributeAsKey('name')->prototype('array')

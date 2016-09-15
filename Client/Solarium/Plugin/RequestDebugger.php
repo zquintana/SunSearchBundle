@@ -3,7 +3,6 @@
 namespace ZQ\SunSearchBundle\Client\Solarium\Plugin;
 
 use Psr\Log\LoggerInterface;
-use Solarium\Core\Event\Events;
 use Solarium\Core\Event\PreExecuteRequest;
 use Solarium\Core\Plugin\AbstractPlugin;
 

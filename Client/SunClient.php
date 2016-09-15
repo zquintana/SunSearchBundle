@@ -23,7 +23,7 @@ use ZQ\SunSearchBundle\Repository\Repository;
 /**
  * Class allows to index doctrine entities
  */
-class SunSunClient implements SunClientInterface
+class SunClient implements SunClientInterface
 {
     /**
      * @var SolrClient
