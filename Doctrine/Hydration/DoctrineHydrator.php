@@ -44,10 +44,31 @@ class DoctrineHydrator implements HydratorInterface
             ->getRepository($metaInformation->getClassName())
             ->find($entityId);
 
-        if ($doctrineEntity !== null) {
-            $metaInformation->setEntity($doctrineEntity);
+        $metaInformation->setEntity($doctrineEntity);
+
+        return $doctrineEntity;
+    }
+
+    /**
+     * @param array                    $entities
+     * @param MetaInformationInterface $metaInformation
+     *
+     * @return array
+     */
+    public function hydrateEntities(array $entities, MetaInformationInterface $metaInformation)
+    {
+        $ids    = [];
+        foreach ($entities as $entity) {
+            $metaInformation->setEntity($entity);
+            array_push($ids, $metaInformation->getEntityId());
         }
 
-        return $this->valueHydrator->hydrate($document, $metaInformation);
+        $finderMethod = $metaInformation->getFinderMethod();
+        $repo         = $this->doctrine->getManager()->getRepository($metaInformation->getClassName());
+        if ($finderMethod && method_exists($repo, $finderMethod)) {
+            return $repo->{$finderMethod}($ids);
+        } else {
+            return $repo->findBy(['id' => $ids]);
+        }
     }
 }

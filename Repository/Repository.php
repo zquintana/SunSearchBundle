@@ -12,7 +12,6 @@ use ZQ\SunSearchBundle\Query\FindByIdentifierQuery;
  */
 class Repository implements RepositoryInterface
 {
-
     /**
      * @var SunSunClient
      */
@@ -28,15 +27,15 @@ class Repository implements RepositoryInterface
      */
     protected $hydrationMode = '';
 
+
     /**
      * @param SunSunClient $sunClient
      * @param object $entity
      */
     public function __construct(SunSunClient $sunClient, $entity)
     {
-        $this->sunClient = $sunClient;
-        $this->entity = $entity;
-
+        $this->sunClient     = $sunClient;
+        $this->entity        = $entity;
         $this->hydrationMode = HydrationModes::HYDRATE_DOCTRINE;
     }
 

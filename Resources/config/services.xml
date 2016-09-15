@@ -4,94 +4,89 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="solr.class">FS\SolrBundle\Solr</parameter>
-    </parameters>
-
     <services>
-        <service id="solr.client" class="%solr.class%">
-            <argument type="service" id="solr.client.adapter"/>
-            <argument type="service" id="solr.mapping.factory"/>
+        <service id="sunsearch.client" class="ZQ\SunSearchBundle\Client\SunClient">
+            <argument type="service" id="sunsearch.client.adapter"/>
+            <argument type="service" id="sunsearch.mapping.factory"/>
             <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="solr.meta.information.factory"/>
-            <argument type="service" id="solr.doctrine.entity_mapper"/>
+            <argument type="service" id="sunsearch.meta.information.factory"/>
+            <argument type="service" id="sunsearch.doctrine.entity_mapper"/>
         </service>
 
-        <service id="solr.client.adapter" class="Solarium\SunSunClient">
-            <factory service="solr.client.adapter.builder" method="build" />
+        <service id="sunsearch.client.adapter" class="Solarium\Client">
+            <factory service="sunsearch.client.adapter.builder" method="build" />
         </service>
 
-        <service id="solr.client.adapter.builder" class="FS\SolrBundle\SunSunClient\Solarium\SolariumClientBuilder">
+        <service id="sunsearch.client.adapter.builder" class="ZQ\SunSearchBundle\Client\Solarium\SolariumClientBuilder">
             <argument type="collection"/>
             <argument type="service" id="event_dispatcher" />
         </service>
 
-        <service id="solr.client.plugin.logger" class="FS\SolrBundle\SunSunClient\Solarium\Plugin\LoggerPlugin">
-            <argument type="service" id="solr.client.logger.debug"/>
+        <service id="sunsearch.client.plugin.logger" class="ZQ\SunSearchBundle\Client\Solarium\Plugin\LoggerPlugin">
+            <argument type="service" id="sunsearch.client.logger.debug"/>
 
             <tag name="solarium.client.plugin" plugin-name="SolrBundleLogger"/>
         </service>
 
-        <service id="solr.client.logger.debug" class="FS\SolrBundle\Logging\DebugLogger" />
+        <service id="sunsearch.client.logger.debug" class="ZQ\SunSearchBundle\Logging\DebugLogger" />
 
-        <service id="solr.data_collector" class="FS\SolrBundle\DataCollector\RequestCollector" public="false">
-            <argument type="service" id="solr.client.logger.debug" />
+        <service id="sunsearch.data_collector" class="ZQ\SunSearchBundle\DataCollector\RequestCollector" public="false">
+            <argument type="service" id="sunsearch.client.logger.debug" />
 
-            <tag name="data_collector" template="FSSolrBundle:Profiler:solr" id="solr" />
+            <tag name="data_collector" template="ZQSunSearchBundle:Profiler:solr" id="solr" />
         </service>
 
-        <service id="solr.debug.client_debugger" class="FS\SolrBundle\SunSunClient\Solarium\Plugin\RequestDebugger">
+        <service id="sunsearch.debug.client_debugger" class="ZQ\SunSearchBundle\Client\Solarium\Plugin\RequestDebugger">
             <argument type="service" id="logger"/>
 
             <tag name="monolog.logger" channel="solr" />
             <tag name="kernel.event_listener" event="solarium.core.preExecuteRequest" method="preExecuteRequest" />
         </service>
 
-        <service id="solr.meta.information.factory" class="FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory">
-            <argument type="service" id="solr.doctrine.annotation.annotation_reader" />
+        <service id="sunsearch.meta.information.factory" class="ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory">
+            <argument type="service" id="sunsearch.doctrine.annotation.annotation_reader" />
         </service>
 
-        <service id="solr.mapping.factory" class="FS\SolrBundle\Doctrine\Mapper\Mapping\CommandFactory" public="false"/>
+        <service id="sunsearch.mapping.factory" class="ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\CommandFactory" public="false"/>
 
-        <service id="solr.doctrine.classnameresolver.known_entity_namespaces" class="FS\SolrBundle\Doctrine\ClassnameResolver\KnownNamespaceAliases"/>
+        <service id="sunsearch.doctrine.classnameresolver.known_entity_namespaces" class="ZQ\SunSearchBundle\Doctrine\ClassnameResolver\KnownNamespaceAliases"/>
 
-        <service id="solr.doctrine.classnameresolver" class="FS\SolrBundle\Doctrine\ClassnameResolver\ClassnameResolver" public="false">
-            <argument type="service" id="solr.doctrine.classnameresolver.known_entity_namespaces"/>
+        <service id="sunsearch.doctrine.classnameresolver" class="ZQ\SunSearchBundle\Doctrine\ClassnameResolver\ClassnameResolver" public="false">
+            <argument type="service" id="sunsearch.doctrine.classnameresolver.known_entity_namespaces"/>
         </service>
 
-        <service id="solr.mapping.all" class="FS\SolrBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand" public="false">
-            <argument type="service" id="solr.meta.information.factory"/>
-            <tag name="solr.document.command" command="all"/>
+        <service id="sunsearch.mapping.all" class="ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand" public="false">
+            <argument type="service" id="sunsearch.meta.information.factory"/>
+            <tag name="sunsearch.document.command" command="all"/>
         </service>
 
-        <service id="solr.mapping.identifier" class="FS\SolrBundle\Doctrine\Mapper\Mapping\MapIdentifierCommand" public="false">
-            <tag name="solr.document.command" command="identifier"/>
+        <service id="sunsearch.mapping.identifier" class="ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\MapIdentifierCommand" public="false">
+            <tag name="sunsearch.document.command" command="identifier"/>
         </service>
 
-        <service id="solr.doctrine.entity_mapper" class="FS\SolrBundle\Doctrine\Mapper\EntityMapper">
-            <argument id="solr.doctrine.hydration.doctrine_hydrator" type="service"/>
-            <argument id="solr.doctrine.hydration.index_hydrator" type="service"/>
-            <argument type="service" id="solr.meta.information.factory"/>
+        <service id="sunsearch.doctrine.entity_mapper" class="ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper">
+            <argument id="sunsearch.doctrine.hydration.doctrine_hydrator" type="service"/>
+            <argument id="sunsearch.doctrine.hydration.index_hydrator" type="service"/>
+            <argument type="service" id="sunsearch.meta.information.factory"/>
         </service>
 
-        <service id="solr.doctrine.hydration.doctrine_hydrator" class="FS\SolrBundle\Doctrine\Hydration\DoctrineHydrator">
+        <service id="sunsearch.doctrine.hydration.doctrine_hydrator" class="ZQ\SunSearchBundle\Doctrine\Hydration\DoctrineHydrator">
             <argument id="doctrine" type="service"/>
-            <argument id="solr.doctrine.hydration.doctrine_value_hydrator" type="service"/>
+            <argument id="sunsearch.doctrine.hydration.doctrine_value_hydrator" type="service"/>
         </service>
 
-        <service id="solr.doctrine.hydration.value_hydrator" class="FS\SolrBundle\Doctrine\Hydration\ValueHydrator">
+        <service id="sunsearch.doctrine.hydration.value_hydrator" class="ZQ\SunSearchBundle\Doctrine\Hydration\ValueHydrator">
         </service>
 
-        <service id="solr.doctrine.hydration.doctrine_value_hydrator" class="FS\SolrBundle\Doctrine\Hydration\DoctrineValueHydrator">
+        <service id="sunsearch.doctrine.hydration.doctrine_value_hydrator" class="ZQ\SunSearchBundle\Doctrine\Hydration\DoctrineValueHydrator">
         </service>
 
-        <service id="solr.doctrine.hydration.index_hydrator" class="FS\SolrBundle\Doctrine\Hydration\IndexHydrator">
-            <argument id="solr.doctrine.hydration.value_hydrator" type="service"/>
+        <service id="sunsearch.doctrine.hydration.index_hydrator" class="ZQ\SunSearchBundle\Doctrine\Hydration\IndexHydrator">
+            <argument id="sunsearch.doctrine.hydration.value_hydrator" type="service"/>
         </service>
 
-        <service id="solr.doctrine.annotation.annotation_reader" class="FS\SolrBundle\Doctrine\Annotation\AnnotationReader">
+        <service id="sunsearch.doctrine.annotation.annotation_reader" class="ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader">
             <argument id="annotation_reader" type="service"/>
         </service>
-
     </services>
 </container>

@@ -4,6 +4,7 @@ namespace ZQ\SunSearchBundle\Client;
 
 use Solarium\Client as SolrClient;
 use Solarium\Plugin\BufferedAdd\BufferedAdd;
+use Solarium\QueryType\Select\Query\Query;
 use Solarium\QueryType\Update\Query\Document\Document;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ZQ\SunSearchBundle\Client\Solarium\SolariumMulticoreClient;
@@ -67,13 +68,11 @@ class SunSunClient implements SunClientInterface
         EventDispatcherInterface $manager,
         MetaInformationFactory $metaInformationFactory,
         EntityMapper $entityMapper
-    )
-    {
+    ) {
         $this->solrClientCore = $client;
         $this->commandFactory = $commandFactory;
         $this->eventManager = $manager;
         $this->metaInformationFactory = $metaInformationFactory;
-
         $this->entityMapper = $entityMapper;
     }
 
@@ -271,6 +270,7 @@ class SunSunClient implements SunClientInterface
         $selectQuery->setFilterQueries($query->getFilterQueries());
         $selectQuery->setSorts($query->getSorts());
         $selectQuery->setFields($query->getFields());
+        $selectQuery->setComponent(Query::COMPONENT_FACETSET, $query->getComponent(Query::COMPONENT_FACETSET));
 
         return $selectQuery;
     }
@@ -287,21 +287,14 @@ class SunSunClient implements SunClientInterface
         try {
             $response = $this->solrClientCore->select($selectQuery, $runQueryInIndex);
 
-            $this->numberOfFoundDocuments = $response->getNumFound();
-
-            $entities = array();
-            foreach ($response as $document) {
-                $entities[] = $this->entityMapper->toEntity($document, $entity);
-            }
-
-            return $entities;
+            return new ResultSet($entity, $this->entityMapper, $response);
         } catch (\Exception $e) {
             $errorEvent = new ErrorEvent(null, null, 'query solr');
             $errorEvent->setException($e);
 
             $this->eventManager->dispatch(Events::ERROR, $errorEvent);
 
-            return array();
+            return new ResultSet($entity, null, null);
         }
     }
 

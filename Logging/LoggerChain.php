@@ -12,6 +12,7 @@ class LoggerChain implements SolrLoggerInterface
      */
     protected $loggers = [];
 
+
     /**
      * @param SolrLoggerInterface $logger
      */

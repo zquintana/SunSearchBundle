@@ -39,9 +39,19 @@ interface MetaInformationInterface
     public function getFields();
 
     /**
+     * @return VirtualField[]
+     */
+    public function getVirtualFields();
+
+    /**
      * @return string
      */
     public function getRepository();
+
+    /**
+     * @return string
+     */
+    public function getFinderMethod();
 
     /**
      * @return object

@@ -31,6 +31,11 @@ class MetaInformation implements MetaInformationInterface
     private $fields = array();
 
     /**
+     * @var VirtualField[]
+     */
+    private $virtualFields = array();
+
+    /**
      * @var array
      */
     private $fieldMapping = array();
@@ -64,6 +69,11 @@ class MetaInformation implements MetaInformationInterface
      * @var int
      */
     private $entityId;
+
+    /**
+     * @var string
+     */
+    private $finderMethod;
 
     /**
      * @var bool
@@ -125,6 +135,14 @@ class MetaInformation implements MetaInformationInterface
     /**
      * {@inheritdoc}
      */
+    public function getVirtualFields()
+    {
+        return $this->virtualFields;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRepository()
     {
         return $this->repository;
@@ -167,7 +185,25 @@ class MetaInformation implements MetaInformationInterface
      */
     public function setFields($fields)
     {
-        $this->fields = $fields;
+        $transformedFields = [];
+        foreach ($fields as $field) {
+            $transformedFields[$field->name] = $field;
+        }
+
+        $this->fields = $transformedFields;
+    }
+
+    /**
+     * @param VirtualField[] $virtualFields
+     */
+    public function setVirtualFields($virtualFields)
+    {
+        $transformedFields = [];
+        foreach ($virtualFields as $field) {
+            $transformedFields[$field->name] = $field;
+        }
+
+        $this->virtualFields = $transformedFields;
     }
 
     /**
@@ -186,6 +222,20 @@ class MetaInformation implements MetaInformationInterface
         }
 
         return true;
+    }
+
+    /**
+     * @param string $field
+     *
+     * @return boolean
+     */
+    public function hasVirtualField($field)
+    {
+        if (count($this->virtualFields) == 0) {
+            return false;
+        }
+
+        return isset($this->virtualFields[$field]);
     }
 
     /**
@@ -318,6 +368,26 @@ class MetaInformation implements MetaInformationInterface
     public function getDocumentKey()
     {
         return $this->documentName . '_' . $this->getEntityId();
+    }
+
+    /**
+     * @param string $method
+     *
+     * @return MetaInformation $this
+     */
+    public function setFinderMethod($method)
+    {
+        $this->finderMethod = $method;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFinderMethod()
+    {
+        return $this->finderMethod;
     }
 
     /**

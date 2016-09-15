@@ -1,14 +1,14 @@
 <?php
 namespace ZQ\SunSearchBundle\Doctrine\Mapper;
 
-use ZQ\SunSearchBundle\Doctrine\Hydration\DoctrineHydrator;
+use Solarium\QueryType\Update\Query\Document\Document;
 use ZQ\SunSearchBundle\Doctrine\Hydration\HydrationModes;
 use ZQ\SunSearchBundle\Doctrine\Hydration\HydratorInterface;
 use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\AbstractDocumentCommand;
-use ZQ\SunSearchBundle\Doctrine\Annotation\Index as Solr;
-use Solarium\QueryType\Select\Result\Result;
-use Solarium\QueryType\Update\Query\Document\Document;
 
+/**
+ * Class EntityMapper
+ */
 class EntityMapper
 {
     /**
@@ -36,17 +36,20 @@ class EntityMapper
      */
     private $metaInformationFactory;
 
+
     /**
      * @param HydratorInterface      $doctrineHydrator
      * @param HydratorInterface      $indexHydrator
      * @param MetaInformationFactory $metaInformationFactory
      */
-    public function __construct(HydratorInterface $doctrineHydrator, HydratorInterface $indexHydrator, MetaInformationFactory $metaInformationFactory)
-    {
+    public function __construct(
+        HydratorInterface $doctrineHydrator,
+        HydratorInterface $indexHydrator,
+        MetaInformationFactory $metaInformationFactory
+    ) {
         $this->doctrineHydrator = $doctrineHydrator;
         $this->indexHydrator = $indexHydrator;
         $this->metaInformationFactory = $metaInformationFactory;
-
         $this->hydrationMode = HydrationModes::HYDRATE_DOCTRINE;
     }
 
@@ -76,7 +79,7 @@ class EntityMapper
      * @param \ArrayAccess $document
      * @param object       $sourceTargetEntity
      *
-     * @return object
+     * @return object|null
      *
      * @throws \InvalidArgumentException if $sourceTargetEntity is null
      */
@@ -93,6 +96,7 @@ class EntityMapper
         }
 
         $hydratedDocument = $this->indexHydrator->hydrate($document, $metaInformation);
+
         if ($this->hydrationMode == HydrationModes::HYDRATE_INDEX) {
             return $hydratedDocument;
         }
@@ -102,6 +106,8 @@ class EntityMapper
         if ($this->hydrationMode == HydrationModes::HYDRATE_DOCTRINE) {
             return $this->doctrineHydrator->hydrate($document, $metaInformation);
         }
+
+        return null;
     }
 
     /**

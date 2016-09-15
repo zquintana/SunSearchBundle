@@ -12,7 +12,6 @@ use phpDocumentor\Reflection\DocBlock\Type\Collection;
  */
 class Field extends Annotation
 {
-
     /**
      * @var string
      */
@@ -89,6 +88,16 @@ class Field extends Annotation
     public function getGetterName()
     {
         return $this->getter;
+    }
+
+    /**
+     * Check if the current anno has a value getter
+     *
+     * @return bool
+     */
+    public function hasGetter()
+    {
+        return !empty($this->getter);
     }
 
     /**

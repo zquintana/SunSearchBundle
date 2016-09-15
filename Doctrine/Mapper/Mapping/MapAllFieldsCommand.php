@@ -2,12 +2,11 @@
 
 namespace ZQ\SunSearchBundle\Doctrine\Mapper\Mapping;
 
+use Doctrine\Common\Collections\Collection;
 use ZQ\SunSearchBundle\Doctrine\Annotation\Field;
 use ZQ\SunSearchBundle\Doctrine\Annotation\VirtualField;
 use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory;
 use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
-use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 /**
  * command maps all fields of the entity
@@ -48,13 +47,38 @@ class MapAllFieldsCommand extends AbstractDocumentCommand
                 continue;
             }
 
-            $value = $field->getValue();
+
+            $value  = $field->getValue();
             if ($value instanceof Collection) {
                 $document->addField($field->getNameWithAlias(), $this->mapCollection($field), $field->getBoost());
             } elseif (is_object($value)) {
                 $document->addField($field->getNameWithAlias(), $this->mapObject($field), $field->getBoost());
             } else {
                 $document->addField($field->getNameWithAlias(), $field->getValue(), $field->getBoost());
+            }
+        }
+
+        $virtualFields = $meta->getVirtualFields();
+        if (count($virtualFields) === 0) {
+            return $document;
+        }
+
+        foreach ($virtualFields as $virtualField) {
+            if (!$virtualField instanceof VirtualField) {
+                continue;
+            }
+
+            $entity = $meta->getEntity();
+            $getter = $virtualField->name;
+            if (empty($getter) || !method_exists($entity, $getter)) {
+                continue;
+            }
+
+            $value = $entity->{$getter}();
+            if ($value instanceof Collection) {
+                $document->addField($virtualField->getNameWithAlias(), $value->toArray(), $virtualField->getBoost());
+            } else {
+                $document->addField($virtualField->getNameWithAlias(), $value, $virtualField->getBoost());
             }
         }
 

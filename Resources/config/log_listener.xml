@@ -5,45 +5,45 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="solr.log_listener.insert.class">FS\SolrBundle\Event\Listener\InsertLogListener</parameter>
-        <parameter key="solr.log_listener.update.class">FS\SolrBundle\Event\Listener\UpdateLogListener</parameter>
-        <parameter key="solr.log_listener.delete.class">FS\SolrBundle\Event\Listener\DeleteLogListener</parameter>
-        <parameter key="solr.log_listener.error.class">FS\SolrBundle\Event\Listener\ErrorLogListener</parameter>
-        <parameter key="solr.log_listener.clearindex.class">FS\SolrBundle\Event\Listener\ClearIndexLogListener</parameter>
+        <parameter key="sunsearch.log_listener.insert.class">ZQ\SunSearchBundle\Event\Listener\InsertLogListener</parameter>
+        <parameter key="sunsearch.log_listener.update.class">ZQ\SunSearchBundle\Event\Listener\UpdateLogListener</parameter>
+        <parameter key="sunsearch.log_listener.delete.class">ZQ\SunSearchBundle\Event\Listener\DeleteLogListener</parameter>
+        <parameter key="sunsearch.log_listener.error.class">ZQ\SunSearchBundle\Event\Listener\ErrorLogListener</parameter>
+        <parameter key="sunsearch.log_listener.clearindex.class">ZQ\SunSearchBundle\Event\Listener\ClearIndexLogListener</parameter>
     </parameters>
 
     <services>
-        <service id="solr.log_listener.insert" class="%solr.log_listener.insert.class%">
+        <service id="sunsearch.log_listener.insert" class="%sunsearch.log_listener.insert.class%">
             <argument type="service" id="logger"/>
-            <tag name="kernel.event_listener" event="solr.pre_insert" method="onSolrInsert"/>
-            <tag name="kernel.event_listener" event="solr.post_insert" method="onSolrInsert"/>
+            <tag name="kernel.event_listener" event="sunsearch.pre_insert" method="onSolrInsert"/>
+            <tag name="kernel.event_listener" event="sunsearch.post_insert" method="onSolrInsert"/>
             <tag name="monolog.logger" channel="solr" />
         </service>
 
-        <service id="solr.log_listener.update" class="%solr.log_listener.update.class%">
+        <service id="sunsearch.log_listener.update" class="%sunsearch.log_listener.update.class%">
             <argument type="service" id="logger"/>
-            <tag name="kernel.event_listener" event="solr.pre_update" method="onSolrUpdate"/>
-            <tag name="kernel.event_listener" event="solr.post_update" method="onSolrUpdate"/>
+            <tag name="kernel.event_listener" event="sunsearch.pre_update" method="onSolrUpdate"/>
+            <tag name="kernel.event_listener" event="sunsearch.post_update" method="onSolrUpdate"/>
             <tag name="monolog.logger" channel="solr" />
         </service>
 
-        <service id="solr.log_listener.delete" class="%solr.log_listener.delete.class%">
+        <service id="sunsearch.log_listener.delete" class="%sunsearch.log_listener.delete.class%">
             <argument type="service" id="logger"/>
-            <tag name="kernel.event_listener" event="solr.pre_delete" method="onSolrDelete"/>
-            <tag name="kernel.event_listener" event="solr.post_delete" method="onSolrDelete"/>
+            <tag name="kernel.event_listener" event="sunsearch.pre_delete" method="onSolrDelete"/>
+            <tag name="kernel.event_listener" event="sunsearch.post_delete" method="onSolrDelete"/>
             <tag name="monolog.logger" channel="solr" />
         </service>
 
-        <service id="solr.log_listener.clearindex" class="%solr.log_listener.clearindex.class%">
+        <service id="sunsearch.log_listener.clearindex" class="%sunsearch.log_listener.clearindex.class%">
             <argument type="service" id="logger"/>
-            <tag name="kernel.event_listener" event="solr.pre_clear_index" method="onClearIndex"/>
-            <tag name="kernel.event_listener" event="solr.post_clear_index" method="onClearIndex"/>
+            <tag name="kernel.event_listener" event="sunsearch.pre_clear_index" method="onClearIndex"/>
+            <tag name="kernel.event_listener" event="sunsearch.post_clear_index" method="onClearIndex"/>
             <tag name="monolog.logger" channel="solr" />
         </service>
 
-        <service id="solr.log_listener.error" class="%solr.log_listener.error.class%">
+        <service id="sunsearch.log_listener.error" class="%sunsearch.log_listener.error.class%">
             <argument type="service" id="logger"/>
-            <tag name="kernel.event_listener" event="solr.error" method="onSolrError"/>
+            <tag name="kernel.event_listener" event="sunsearch.error" method="onSolrError"/>
             <tag name="monolog.logger" channel="solr" />
         </service>
 

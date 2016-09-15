@@ -42,11 +42,25 @@ class ValueHydrator implements HydratorInterface
                 }
             }
 
+            $field = $metaInformation->getField($classProperty->name);
+            if ($field !== null && $field->hasGetter()) {
+                // Prevent hydration of related entities
+                continue;
+            }
+
             $classProperty->setAccessible(true);
             $classProperty->setValue($targetEntity, $value);
         }
 
         return $targetEntity;
+    }
+
+    /**
+     * @return bool
+     */
+    public function mapValue($fieldName, $value, MetaInformationInterface $metaInformation)
+    {
+        return true;
     }
 
     /**
@@ -99,13 +113,5 @@ class ValueHydrator implements HydratorInterface
         $pascalCased = str_replace(' ', '', $words);
 
         return lcfirst($pascalCased);
-    }
-
-    /**
-     * @return bool
-     */
-    public function mapValue($fieldName, $value, MetaInformationInterface $metaInformation)
-    {
-        return true;
     }
 } 

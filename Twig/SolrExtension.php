@@ -32,6 +32,6 @@ class SolrExtension extends \Twig_Extension
      */
     public function getName()
     {
-        return 'fs_solr_extension';
+        return 'sunsearch_extension';
     }
 }

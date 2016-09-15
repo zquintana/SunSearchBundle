@@ -7,12 +7,12 @@ Given you have the following entity with a ManyToOne relation to `Category`.
 
 // ....
 
-use FS\SolrBundle\Doctrine\Annotation as Solr;
+use ZQ\SunSearchBundle\Doctrine\Annotation as Sun;
 
 /**
  * Post
  *
- * @Solr\Document()
+ * @Sun\Document()
  *
  * @ORM\Table()
  * @ORM\Entity
@@ -26,14 +26,14 @@ class Post
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Solr\Id
+     * @Sun\Id
      */
     private $id;
 
     /**
      * @var string
      *
-     * @Solr\Field(type="string")
+     * @Sun\Field(type="string")
      *
      * @ORM\Column(name="title", type="string", length=255)
      */
@@ -42,7 +42,7 @@ class Post
     /**
      * @var Category
      *
-     * @Solr\Field(type="string", getter="getTitle")
+     * @Sun\Field(type="string", getter="getTitle")
      *
      * @ORM\ManyToOne(targetEntity="Acme\DemoBundle\Entity\Category", inversedBy="posts", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
@@ -53,7 +53,7 @@ class Post
 }
 ```
 
-The important configuration is `@Solr\Field(type="string", getter="getTitle")`. This tells Solr to call `Category::getTitle()` when the `Post` is indexed.
+The important configuration is `@Sun\Field(type="string", getter="getTitle")`. This tells Solr to call `Category::getTitle()` when the `Post` is indexed.
  
 ```php
 
@@ -85,7 +85,7 @@ The index data would look something like this:
 The result of search-queries like this 
 
 ```php
-$posts = $this->get('solr.client')->getRepository('AcmeDemoBundle:Post')->findOneBy(array(
+$posts = $this->get('sunsearch.client')->getRepository('AcmeDemoBundle:Post')->findOneBy(array(
     'category' => 'post category #1'
 ));
 ```
@@ -101,12 +101,12 @@ Given you have the following `Post` entity with a OneToMany relation to `Tag`.
 
 // ....
 
-use FS\SolrBundle\Doctrine\Annotation as Solr;
+use ZQ\SunSearchBundle\Doctrine\Annotation as Sun;
 
 /**
  * Post
  *
- * @Solr\Document()
+ * @Sun\Document()
  *
  * @ORM\Table()
  * @ORM\Entity
@@ -120,14 +120,14 @@ class Post
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Solr\Id
+     * @Sun\Id
      */
     private $id;
 
     /**
      * @var string
      *
-     * @Solr\Field(type="string")
+     * @Sun\Field(type="string")
      *
      * @ORM\Column(name="title", type="string", length=255)
      */
@@ -136,7 +136,7 @@ class Post
     /**
      * @var Tag[]
      *
-     * @Solr\Field(type="strings", getter="getName")
+     * @Sun\Field(type="strings", getter="getName")
      * @ORM\OneToMany(targetEntity="Acme\DemoBundle\Entity\Tag", mappedBy="post", cascade={"persist"})
      */
     private $tags;
@@ -145,7 +145,7 @@ class Post
 }
 ```
 
-All `Tag`s will be transformed to a set of strings `@Solr\Field(type="strings", getter="getName")`. 
+All `Tag`s will be transformed to a set of strings `@Sun\Field(type="strings", getter="getName")`. 
 
 ```php
 $post = new Post();
@@ -183,7 +183,7 @@ Which will result in a document like this:
 Now `Post` can be searched like this
 
 ```php
-$posts = $this->get('solr.client')->getRepository('AcmeDemoBundle:Post')->findOneBy(array(
+$posts = $this->get('sunsearch.client')->getRepository('AcmeDemoBundle:Post')->findOneBy(array(
     'tags' => 'tag #1'
 ));
 ```

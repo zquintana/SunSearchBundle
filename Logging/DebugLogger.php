@@ -2,6 +2,7 @@
 
 namespace ZQ\SunSearchBundle\Logging;
 
+
 /**
  * Class DebugLogger
  *
@@ -23,6 +24,7 @@ class DebugLogger implements SolrLoggerInterface
      * @var integer
      */
     private $currentQuery = 0;
+
 
     /**
      * @return array
