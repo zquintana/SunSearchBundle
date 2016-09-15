@@ -1,8 +1,6 @@
-SolrBundle
+SunSearchBundle (SolrBundle fork)
 ==========
-[![Build Status](https://secure.travis-ci.org/floriansemm/SolrBundle.png?branch=master)](http://travis-ci.org/floriansemm/SolrBundle) 
-[![Latest Stable Version](https://poser.pugx.org/floriansemm/solr-bundle/v/stable.svg)](https://packagist.org/packages/floriansemm/solr-bundle)
-[![Total Downloads](https://poser.pugx.org/floriansemm/solr-bundle/downloads.svg)](https://packagist.org/packages/floriansemm/solr-bundle)
+
 
 Introduction
 ------------
@@ -13,11 +11,11 @@ This Bundle provides a simple API to index and query a Solr Index.
 
 Installation is a quick (I promise!) 3 step process:
 
-1. Download SolrBundle
+1. Download ZQSunSearchBundle
 2. Enable the Bundle
-3. Configure the SolrBundle
+3. Configure the ZQSunSearchBundle
 
-### Step 1: Download SolrBundle
+### Step 1: Download ZQSunSearchBundle
 
 This bundle is available on Packagist. You can install it using Composer:
 
@@ -37,18 +35,18 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new FS\SolrBundle\FSSolrBundle(),
+        new ZQ\SunSearchBundle\ZQSunSearchBundle(),
     );
 }
 ```
 
-### Step 3: Configure the SolrBundle
+### Step 3: Configure the ZQSunSearchBundle
 
 Finally, configure the bundle:
 
 ``` yaml
 # app/config/config.yml
-fs_solr:
+sunsearch:
     endpoints:
         core0:
             host: host
@@ -61,20 +59,20 @@ fs_solr:
 ### Step 4: Configure your entities
 
 To make an entity indexed, you must add some annotations to your entity. Basic configuration requires two annotations: 
-`@Solr\Document()`, `@Solr\Id()`. To index data add `@Solr\Field()` to your properties.
+`@Sun\Document()`, `@Sun\Id()`. To index data add `@Sun\Field()` to your properties.
 
 ```php
 // ....
 use FS\SolrBundle\Doctrine\Annotation as Solr;
     
 /**
-* @Solr\Document()
+* @Sun\Document()
 * @ORM\Table()
 */
 class Post
 {
     /**
-     * @Solr\Id
+     * @Sun\Id
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -83,21 +81,21 @@ class Post
     private $id;
     
     /**
-     * @Solr\Field(type="string")
+     * @Sun\Field(type="string")
      *
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title = '';
 
     /**
-     * @Solr\Field(type="string")
+     * @Sun\Field(type="string")
      *
      * @ORM\Column(name="text", type="text")
      */
     private $text = '';
 
    /**
-    * @Solr\Field(type="date", getter="format('Y-m-d\TH:i:s.z\Z')")
+    * @Sun\Field(type="date", getter="format('Y-m-d\TH:i:s.z\Z')")
     *
     * @ORM\Column(name="created_at", type="datetime")
     */
@@ -107,7 +105,7 @@ class Post
 
 # Annotation reference
 
-## `@Solr\Document` annotation
+## `@Sun\Document` annotation
 
 This annotation denotes that an entity should be indexed as a document. It has several optional properties: 
 
@@ -121,7 +119,7 @@ If you specify your own repository, the repository must extend the `FS\SolrBundl
 
 ```php
 /**
- * @Solr\Document(repository="My/Custom/Repository")
+ * @Sun\Document(repository="My/Custom/Repository")
  */
 class SomeEntity
 {
@@ -135,7 +133,7 @@ It is possible to specify a core the document will be indexed in:
 
 ```php
 /**
- * @Solr\Document(index="core0")
+ * @Sun\Document(index="core0")
  */
 class SomeEntity
 {
@@ -150,7 +148,7 @@ a callback method, which should return the core the entity will be indexed in.
 
 ```php
 /**
- * @Solr\Document(indexHandler="indexHandler")
+ * @Sun\Document(indexHandler="indexHandler")
  */
 class SomeEntity
 {
@@ -166,7 +164,7 @@ class SomeEntity
 Each core must be set up in `config.yml` under `endpoints`. If you leave the `index` or `indexHandler` property empty,
 then the default core will be used (first one in the `endpoints` list). To index a document in all cores, use `*` as index value.
 
-## `@Solr\Id` annotation
+## `@Sun\Id` annotation
 
 This annotation is required to index an entity. The annotation has no properties. You should add this annotation to the field that will be
 used as the primary identifier for the entity/document.
@@ -175,7 +173,7 @@ used as the primary identifier for the entity/document.
 class Post
 {
     /**
-     * @Solr\Id
+     * @Sun\Id
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -186,7 +184,7 @@ class Post
 }
 ```
 
-## `@Solr\Field` annotation
+## `@Sun\Field` annotation
 
 This annotation should be added to properties that should be indexed. You should specify the `type` option for the annotation.
 
@@ -206,7 +204,7 @@ Currently, a basic set of types is implemented:
 ### Object relations
 
 Indexing relations works in simplified way. Related entities will not be indexed as a new document, but only as a searchable value.
-Related entities do not need a `@Solr\Document` annotation.
+Related entities do not need a `@Sun\Document` annotation.
 
 #### ManyToOne relation
 
@@ -214,7 +212,7 @@ Related entities do not need a `@Solr\Document` annotation.
 /**
  * @var Category
  *
- * @Solr\Field(type="string", getter="getTitle")
+ * @Sun\Field(type="string", getter="getTitle")
  *
  * @ORM\ManyToOne(targetEntity="Acme\DemoBundle\Entity\Category", inversedBy="posts", cascade={"persist"})
  * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
@@ -245,7 +243,7 @@ To index a set of objects it is important to use the fieldtype `strings`.
 /**
  * @var Tag[]
  *
- * @Solr\Field(type="strings", getter="getName")
+ * @Sun\Field(type="strings", getter="getName")
  *
  * @ORM\OneToMany(targetEntity="Acme\DemoBundle\Entity\Tag", mappedBy="post", cascade={"persist"})
  */
@@ -269,14 +267,14 @@ class Tag
 
 [For more information read the more detailed "How to index relation" guide](Resources/doc/index_relations.md)
 
-### `@Solr\SynchronizationFilter(callback="shouldBeIndexed")` annotation
+### `@Sun\SynchronizationFilter(callback="shouldBeIndexed")` annotation
 
 In some cases, an entity should not be indexed. For this, you have the `SynchronizationFilter` annotation to run a filter-callback.
 
 ```php
 /**
  * // ....
- * @Solr\SynchronizationFilter(callback="shouldBeIndexed")
+ * @Sun\SynchronizationFilter(callback="shouldBeIndexed")
  */
 class SomeEntity
 {

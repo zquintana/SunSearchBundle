@@ -3,7 +3,6 @@
 namespace ZQ\SunSearchBundle\Doctrine\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
-use phpDocumentor\Reflection\DocBlock\Type\Collection;
 
 /**
  * Defines a field of a solr-document
