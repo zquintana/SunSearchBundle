@@ -1,8 +1,9 @@
 <?php
 
-namespace FS\SolrBundle\Doctrine\Mapper;
+namespace ZQ\SunSearchBundle\Doctrine\Mapper;
 
-use FS\SolrBundle\Doctrine\Annotation\Field;
+use ZQ\SunSearchBundle\Doctrine\Annotation\Field;
+use ZQ\SunSearchBundle\Doctrine\Annotation\VirtualField;
 
 /**
  * Defines common methods for meta-information

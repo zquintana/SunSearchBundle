@@ -1,17 +1,16 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Doctrine\Hydration;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Hydration;
 
-
-use FS\SolrBundle\Doctrine\Annotation\AnnotationReader;
-use FS\SolrBundle\Doctrine\Hydration\DoctrineHydrator;
-use FS\SolrBundle\Doctrine\Hydration\DoctrineHydratorInterface;
-use FS\SolrBundle\Doctrine\Hydration\DoctrineValueHydrator;
-use FS\SolrBundle\Doctrine\Hydration\ValueHydrator;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformation;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory;
-use FS\SolrBundle\Tests\Doctrine\Mapper\SolrDocumentStub;
-use FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntity;
+use ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader;
+use ZQ\SunSearchBundle\Doctrine\Hydration\DoctrineHydrator;
+use ZQ\SunSearchBundle\Doctrine\Hydration\DoctrineHydratorInterface;
+use ZQ\SunSearchBundle\Doctrine\Hydration\DoctrineValueHydrator;
+use ZQ\SunSearchBundle\Doctrine\Hydration\ValueHydrator;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformation;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\SolrDocumentStub;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntity;
 use Symfony\Component\Validator\Constraints\Valid;
 
 /**
@@ -19,7 +18,6 @@ use Symfony\Component\Validator\Constraints\Valid;
  */
 class DoctrineHydratorTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var AnnotationReader
      */
@@ -54,7 +52,7 @@ class DoctrineHydratorTest extends \PHPUnit_Framework_TestCase
         $obj = new SolrDocumentStub(array());
         $obj->id = 'document_1';
 
-        $hydrator = $this->getMock('FS\SolrBundle\Doctrine\Hydration\HydratorInterface');
+        $hydrator = $this->getMock('ZQ\SunSearchBundle\Doctrine\Hydration\HydratorInterface');
         $hydrator->expects($this->once())
             ->method('hydrate')
             ->with($obj, $metainformations)
@@ -129,7 +127,7 @@ class DoctrineHydratorTest extends \PHPUnit_Framework_TestCase
         $obj = new SolrDocumentStub(array());
         $obj->id = 'document_1';
 
-        $hydrator = $this->getMock('FS\SolrBundle\Doctrine\Hydration\HydratorInterface');
+        $hydrator = $this->getMock('ZQ\SunSearchBundle\Doctrine\Hydration\HydratorInterface');
         $hydrator->expects($this->once())
             ->method('hydrate')
             ->with($obj, $metainformations)

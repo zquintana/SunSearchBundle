@@ -1,43 +1,44 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Mapper;
 
-use FS\SolrBundle\Doctrine\Annotation as Solr;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Mapper;
+
+use ZQ\SunSearchBundle\Doctrine\Annotation as Sun;
 
 /**
  *
- * @Solr\Document(boost="1")
+ * @Sun\Document(boost="1")
  */
 class ValidTestEntityWithRelation
 {
 
     /**
-     * @Solr\Id
+     * @Sun\Id
      */
     private $id;
 
     /**
-     * @Solr\Field(type="text")
+     * @Sun\Field(type="text")
      *
      * @var text
      */
     private $text;
 
     /**
-     * @Solr\Field()
+     * @Sun\Field()
      *
      * @var text
      */
     private $title;
 
     /**
-     * @Solr\Field(type="date")
+     * @Sun\Field(type="date")
      *
      * @var date
      */
     private $created_at;
 
     /**
-     * @Solr\Field(type="my_costom_fieldtype")
+     * @Sun\Field(type="my_costom_fieldtype")
      *
      * @var string
      */
@@ -46,14 +47,14 @@ class ValidTestEntityWithRelation
     /**
      * @var object
      *
-     * @Solr\Field(type="strings", getter="getTitle")
+     * @Sun\Field(type="strings", getter="getTitle")
      */
     private $relation;
 
     /**
      * @var object
      *
-     * @Solr\Field(type="strings")
+     * @Sun\Field(type="strings")
      */
     private $posts;
 
@@ -116,7 +117,7 @@ class ValidTestEntityWithRelation
     }
 
     /**
-     * @return \FS\SolrBundle\Tests\Doctrine\Mapper\date
+     * @return \ZQ\SunSearchBundle\Tests\Doctrine\Mapper\date
      */
     public function getCreatedAt()
     {
@@ -124,7 +125,7 @@ class ValidTestEntityWithRelation
     }
 
     /**
-     * @param \FS\SolrBundle\Tests\Doctrine\Mapper\date $created_at
+     * @param \ZQ\SunSearchBundle\Tests\Doctrine\Mapper\date $created_at
      */
     public function setCreatedAt($created_at)
     {

@@ -1,8 +1,12 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Mapper\Mapping;
+
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Mapper\Mapping;
 
 use Solarium\QueryType\Update\Query\Document\Document;
 
+/**
+ * Class SolrDocumentTest
+ */
 abstract class SolrDocumentTest extends \PHPUnit_Framework_TestCase
 {
     const FIELDS_ALWAYS_MAPPED = 1;

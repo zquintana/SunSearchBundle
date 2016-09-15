@@ -1,7 +1,10 @@
 <?php
 
-namespace FS\SolrBundle\Tests;
+namespace ZQ\SunSearchBundle\Tests;
 
+/**
+ * Class ResultFake
+ */
 class ResultFake implements \IteratorAggregate, \Countable
 {
 

@@ -1,10 +1,11 @@
 <?php
-namespace FS\SolrBundle\Repository;
 
-use FS\SolrBundle\Doctrine\Hydration\HydrationModes;
-use FS\SolrBundle\Query\FindByDocumentNameQuery;
-use FS\SolrBundle\Query\FindByIdentifierQuery;
-use FS\SolrBundle\Solr;
+namespace ZQ\SunSearchBundle\Repository;
+
+use ZQ\SunSearchBundle\Client\SunSunClient;
+use ZQ\SunSearchBundle\Doctrine\Hydration\HydrationModes;
+use ZQ\SunSearchBundle\Query\FindByDocumentNameQuery;
+use ZQ\SunSearchBundle\Query\FindByIdentifierQuery;
 
 /**
  * Common repository class to find documents in the index
@@ -13,9 +14,9 @@ class Repository implements RepositoryInterface
 {
 
     /**
-     * @var Solr
+     * @var SunSunClient
      */
-    protected $solr = null;
+    protected $sunClient = null;
 
     /**
      * @var object
@@ -28,13 +29,12 @@ class Repository implements RepositoryInterface
     protected $hydrationMode = '';
 
     /**
-     * @param Solr   $solr
-     *
+     * @param SunSunClient $sunClient
      * @param object $entity
      */
-    public function __construct(Solr $solr, $entity)
+    public function __construct(SunSunClient $sunClient, $entity)
     {
-        $this->solr = $solr;
+        $this->sunClient = $sunClient;
         $this->entity = $entity;
 
         $this->hydrationMode = HydrationModes::HYDRATE_DOCTRINE;
@@ -45,9 +45,9 @@ class Repository implements RepositoryInterface
      */
     public function find($id)
     {
-        $mapper = $this->solr->getMapper();
-        $mapper->setMappingCommand($this->solr->getCommandFactory()->get('all'));
-        $metaInformation = $this->solr->getMetaFactory()->loadInformation($this->entity);
+        $mapper = $this->sunClient->getMapper();
+        $mapper->setMappingCommand($this->sunClient->getCommandFactory()->get('all'));
+        $metaInformation = $this->sunClient->getMetaFactory()->loadInformation($this->entity);
         $metaInformation->setEntityId($id);
 
         $document = $mapper->toDocument($metaInformation);
@@ -57,9 +57,9 @@ class Repository implements RepositoryInterface
         $query->setDocumentKey($metaInformation->getDocumentKey());
         $query->setDocument($document);
         $query->setEntity($this->entity);
-        $query->setSolr($this->solr);
+        $query->setSolr($this->sunClient);
         $query->setHydrationMode($this->hydrationMode);
-        $found = $this->solr->query($query);
+        $found = $this->sunClient->query($query);
 
         if (count($found) == 0) {
             return null;
@@ -73,9 +73,9 @@ class Repository implements RepositoryInterface
      */
     public function findAll()
     {
-        $mapper = $this->solr->getMapper();
-        $mapper->setMappingCommand($this->solr->getCommandFactory()->get('all'));
-        $metaInformation = $this->solr->getMetaFactory()->loadInformation($this->entity);
+        $mapper = $this->sunClient->getMapper();
+        $mapper->setMappingCommand($this->sunClient->getCommandFactory()->get('all'));
+        $metaInformation = $this->sunClient->getMetaFactory()->loadInformation($this->entity);
 
         $document = $mapper->toDocument($metaInformation);
 
@@ -91,10 +91,10 @@ class Repository implements RepositoryInterface
         $query->setIndex($metaInformation->getIndex());
         $query->setDocument($document);
         $query->setEntity($this->entity);
-        $query->setSolr($this->solr);
+        $query->setSolr($this->sunClient);
         $query->setHydrationMode($this->hydrationMode);
 
-        return $this->solr->query($query);
+        return $this->sunClient->query($query);
     }
 
     /**
@@ -102,9 +102,9 @@ class Repository implements RepositoryInterface
      */
     public function findBy(array $args)
     {
-        $metaInformation = $this->solr->getMetaFactory()->loadInformation($this->entity);
+        $metaInformation = $this->sunClient->getMetaFactory()->loadInformation($this->entity);
 
-        $query = $this->solr->createQuery($this->entity);
+        $query = $this->sunClient->createQuery($this->entity);
         $query->setHydrationMode($this->hydrationMode);
         $query->setRows(100000);
         $query->setUseAndOperator(true);
@@ -118,7 +118,7 @@ class Repository implements RepositoryInterface
             $query->addSearchTerm($fieldName, $fieldValue);
         }
 
-        return $this->solr->query($query);
+        return $this->sunClient->query($query);
     }
 
     /**
@@ -126,9 +126,9 @@ class Repository implements RepositoryInterface
      */
     public function findOneBy(array $args)
     {
-        $metaInformation = $this->solr->getMetaFactory()->loadInformation($this->entity);
+        $metaInformation = $this->sunClient->getMetaFactory()->loadInformation($this->entity);
 
-        $query = $this->solr->createQuery($this->entity);
+        $query = $this->sunClient->createQuery($this->entity);
         $query->setHydrationMode($this->hydrationMode);
         $query->setRows(1);
         $query->setUseAndOperator(true);
@@ -142,8 +142,16 @@ class Repository implements RepositoryInterface
             $query->addSearchTerm($fieldName, $fieldValue);
         }
 
-        $found = $this->solr->query($query);
+        $found = $this->sunClient->query($query);
 
         return array_pop($found);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createQuery()
+    {
+        return $this->sunClient->createQuery($this->entity);
     }
 }

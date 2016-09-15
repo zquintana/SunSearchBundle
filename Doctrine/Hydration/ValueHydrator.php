@@ -1,10 +1,10 @@
 <?php
 
-namespace FS\SolrBundle\Doctrine\Hydration;
+namespace ZQ\SunSearchBundle\Doctrine\Hydration;
 
 use Doctrine\Common\Collections\Collection;
-use FS\SolrBundle\Doctrine\Annotation\Field;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
+use ZQ\SunSearchBundle\Doctrine\Annotation\Field;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
 
 /**
  * Maps all values of a given document on a target-entity

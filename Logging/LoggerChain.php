@@ -1,7 +1,10 @@
 <?php
 
-namespace FS\SolrBundle\Logging;
+namespace ZQ\SunSearchBundle\Logging;
 
+/**
+ * Class LoggerChain
+ */
 class LoggerChain implements SolrLoggerInterface
 {
     /**

@@ -1,11 +1,15 @@
 <?php
-namespace FS\SolrBundle\Query;
 
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
-use FS\SolrBundle\Solr;
+namespace ZQ\SunSearchBundle\Query;
+
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
+use ZQ\SunSearchBundle\Client\SunSunClient;
 use Solarium\QueryType\Select\Query\Query;
 use Solarium\QueryType\Update\Query\Document\Document;
 
+/**
+ * Class AbstractQuery
+ */
 abstract class AbstractQuery extends Query
 {
     /**
@@ -15,9 +19,9 @@ abstract class AbstractQuery extends Query
 
     /**
      *
-     * @var Solr
+     * @var SunSunClient
      */
-    protected $solr = null;
+    protected $sunSearch = null;
 
     /**
      * @var string
@@ -86,29 +90,33 @@ abstract class AbstractQuery extends Query
     }
 
     /**
-     * @param Solr $solr
+     * @return SunSunClient
      */
-    public function setSolr($solr)
+    public function getSunSearch()
     {
-        $this->solr = $solr;
+        return $this->sunSearch;
     }
 
     /**
-     * @return \FS\SolrBundle\Solr
+     * @param SunSunClient $sunSearch
+     *
+     * @return AbstractQuery
      */
-    public function getSolr()
+    public function setSunSearch($sunSearch)
     {
-        return $this->solr;
+        $this->sunSearch = $sunSearch;
+
+        return $this;
     }
 
     /**
-     * modes defined in FS\SolrBundle\Doctrine\Hydration\HydrationModes
+     * modes defined in ZQ\SunSearchBundle\Doctrine\Hydration\HydrationModes
      *
      * @param string $mode
      */
     public function setHydrationMode($mode)
     {
-        $this->getSolr()->getMapper()->setHydrationMode($mode);
+        $this->getSunSearch()->getMapper()->setHydrationMode($mode);
     }
 
     /**

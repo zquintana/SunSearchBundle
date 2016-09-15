@@ -1,7 +1,10 @@
 <?php
 
-namespace FS\SolrBundle\Doctrine\Hydration;
+namespace ZQ\SunSearchBundle\Doctrine\Hydration;
 
+/**
+ * Class HydrationModes
+ */
 class HydrationModes
 {
     /**

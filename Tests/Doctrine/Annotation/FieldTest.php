@@ -1,7 +1,8 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Annotation;
 
-use FS\SolrBundle\Doctrine\Annotation\Field;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Annotation;
+
+use ZQ\SunSearchBundle\Doctrine\Annotation\Field;
 
 /**
  *
@@ -75,5 +76,4 @@ class FieldTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('costumtype', $field->getNameWithAlias());
     }
-
 }

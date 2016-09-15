@@ -1,14 +1,15 @@
 <?php
-namespace FS\SolrBundle\Doctrine\Mapper;
 
-use FS\SolrBundle\Doctrine\Annotation\Field;
+namespace ZQ\SunSearchBundle\Doctrine\Mapper;
+
+use ZQ\SunSearchBundle\Doctrine\Annotation\Field;
+use ZQ\SunSearchBundle\Doctrine\Annotation\VirtualField;
 
 /**
  * Holds meta-information about an entity
  */
 class MetaInformation implements MetaInformationInterface
 {
-
     /**
      * @var string
      */

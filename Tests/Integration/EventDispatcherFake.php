@@ -1,12 +1,15 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Integration;
+namespace ZQ\SunSearchBundle\Tests\Integration;
 
-use FS\SolrBundle\Event\ErrorEvent;
+use ZQ\SunSearchBundle\Event\ErrorEvent;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Class EventDispatcherFake
+ */
 class EventDispatcherFake implements EventDispatcherInterface
 {
 
@@ -16,7 +19,7 @@ class EventDispatcherFake implements EventDispatcherInterface
     private $errorEvents = array();
 
     /**
-     * @var \FS\SolrBundle\Event\Event[]
+     * @var \ZQ\SunSearchBundle\Event\Event[]
      */
     private $events = array();
 

@@ -1,13 +1,12 @@
 <?php
 
-namespace FS\SolrBundle\Repository;
+namespace ZQ\SunSearchBundle\Repository;
 
 /**
  * Defines common finder-method for document-repositories
  */
 interface RepositoryInterface
 {
-
     /**
      * @param array $args
      *

@@ -1,6 +1,6 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Integration;
+namespace ZQ\SunSearchBundle\Tests\Integration;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;

@@ -1,10 +1,12 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Doctrine\ClassnameResolver;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\ClassnameResolver;
 
+use ZQ\SunSearchBundle\Doctrine\ClassnameResolver\KnownNamespaceAliases;
 
-use FS\SolrBundle\Doctrine\ClassnameResolver\KnownNamespaceAliases;
-
+/**
+ * Class KnownNamespaceAliasesTest
+ */
 class KnownNamespaceAliasesTest extends \PHPUnit_Framework_TestCase
 {
 

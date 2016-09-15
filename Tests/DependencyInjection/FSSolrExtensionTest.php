@@ -1,11 +1,11 @@
 <?php
 
-namespace FS\SolrBundle\Tests\DependencyInjection;
+namespace ZQ\SunSearchBundle\Tests\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use FS\SolrBundle\DependencyInjection\FSSolrExtension;
 use Symfony\Component\DependencyInjection\Reference;
+use ZQ\SunSearchBundle\DependencyInjection\FSSolrExtension;
 
 /**
  *

@@ -1,16 +1,19 @@
 <?php
 
-namespace FS\SolrBundle\Doctrine\ORM\Listener;
+namespace ZQ\SunSearchBundle\Doctrine\ORM\Listener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use FS\SolrBundle\SolrInterface;
 use Psr\Log\LoggerInterface;
+use ZQ\SunSearchBundle\Client\SunClientInterface;
 
+/**
+ * Class EntityIndexerSubscriber
+ */
 class EntityIndexerSubscriber implements EventSubscriber
 {
     /**
-     * @var SolrInterface
+     * @var SunClientInterface
      */
     private $solr;
 
@@ -19,11 +22,12 @@ class EntityIndexerSubscriber implements EventSubscriber
      */
     private $logger;
 
+
     /**
-     * @param SolrInterface   $solr
+     * @param SunClientInterface $solr
      * @param LoggerInterface $logger
      */
-    public function __construct(SolrInterface $solr, LoggerInterface $logger)
+    public function __construct(SunClientInterface $solr, LoggerInterface $logger)
     {
         $this->solr = $solr;
         $this->logger = $logger;

@@ -1,27 +1,36 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Integration\Bootstrap;
+namespace ZQ\SunSearchBundle\Tests\Integration\Bootstrap;
 
-use FS\SolrBundle\Solr;
-use FS\SolrBundle\Tests\Doctrine\Mapper\EntityCore0;
-use FS\SolrBundle\Tests\Doctrine\Mapper\EntityCore1;
-use FS\SolrBundle\Tests\Util\EntityIdentifier;
+use ZQ\SunSearchBundle\Client\SunSunClient;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\EntityCore0;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\EntityCore1;
+use ZQ\SunSearchBundle\Tests\Util\EntityIdentifier;
 
+/**
+ * Class MulticoreFeatureContext
+ */
 class MulticoreFeatureContext extends FeatureContext
 {
     /**
-     * @var Solr
+     * @var SunSunClient
      */
-    private $solr;
+    private $sunClient;
 
+    /**
+     * @var array
+     */
     private $entities = array();
 
+
+    /**
+     * MulticoreFeatureContext constructor.
+     */
     public function __construct()
     {
         parent::__construct();
 
-        $this->solr = $this->getSolrInstance();
-
+        $this->sunClient = $this->getSunInstance();
         $this->entities = array(
             'core0' => new EntityCore0(),
             'core1' => new EntityCore1()
@@ -47,7 +56,7 @@ class MulticoreFeatureContext extends FeatureContext
     public function iAddThisEntityToSolr()
     {
         foreach ($this->entities as $entity) {
-            $this->solr->addDocument($entity);
+            $this->sunClient->addDocument($entity);
         }
     }
 

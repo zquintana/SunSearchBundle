@@ -1,6 +1,6 @@
 <?php
 
-namespace FS\SolrBundle\Doctrine\ClassnameResolver;
+namespace ZQ\SunSearchBundle\Doctrine\ClassnameResolver;
 
 use Doctrine\ODM\MongoDB\Configuration as OdmConfiguration;
 use Doctrine\ORM\Configuration as OrmConfiguration;

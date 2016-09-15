@@ -1,8 +1,8 @@
 <?php
 
-namespace FS\SolrBundle\Doctrine\Hydration;
+namespace ZQ\SunSearchBundle\Doctrine\Hydration;
 
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
 
 /**
  * When the index was queried the resulting entities can be instantiated in different ways:

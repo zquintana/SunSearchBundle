@@ -1,8 +1,11 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Annotation\Entities;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities;
 
-use FS\SolrBundle\Repository\Repository;
+use ZQ\SunSearchBundle\Repository\Repository;
 
+/**
+ * Class ValidEntityRepository
+ */
 class ValidEntityRepository extends Repository
 {
 

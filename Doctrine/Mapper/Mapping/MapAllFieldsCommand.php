@@ -1,9 +1,11 @@
 <?php
-namespace FS\SolrBundle\Doctrine\Mapper\Mapping;
 
-use FS\SolrBundle\Doctrine\Annotation\Field;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
+namespace ZQ\SunSearchBundle\Doctrine\Mapper\Mapping;
+
+use ZQ\SunSearchBundle\Doctrine\Annotation\Field;
+use ZQ\SunSearchBundle\Doctrine\Annotation\VirtualField;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 

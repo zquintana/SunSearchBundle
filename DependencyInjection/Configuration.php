@@ -1,45 +1,37 @@
 <?php
 
-namespace FS\SolrBundle\DependencyInjection;
+namespace ZQ\SunSearchBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+/**
+ * Class Configuration
+ */
 class Configuration implements ConfigurationInterface
 {
 
     /**
-     * @return TreeBuilder
+     * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('fs_solr');
+        $rootNode = $treeBuilder->root('sunsearch');
         $rootNode->children()
-            ->arrayNode('endpoints')
-            ->useAttributeAsKey('name')
-            ->prototype('array')
-            ->children()
-            ->scalarNode('host')->end()
-            ->scalarNode('port')->end()
-            ->scalarNode('path')->end()
-            ->scalarNode('core')->end()
-            ->scalarNode('timeout')->end()
-            ->booleanNode('active')->defaultValue(true)->end()
-            ->end()
-            ->end()
-            ->end()
-//            ->arrayNode('clients')
-//                ->useAttributeAsKey('name')
-//                ->prototype('array')
-//                    ->children()
-//                        ->arrayNode('endpoints')
-//                            ->prototype('scalar')->end()
-//                        ->end()
-//                    ->end()
-//                ->end()
-//            ->end()
-            ->booleanNode('auto_index')->defaultValue(true)->end()
+                ->arrayNode('endpoints')
+                    ->useAttributeAsKey('name')->prototype('array')
+                        ->children()
+                            ->scalarNode('host')->end()
+                            ->scalarNode('port')->end()
+                            ->scalarNode('path')->end()
+                            ->scalarNode('core')->end()
+                            ->scalarNode('timeout')->end()
+                            ->booleanNode('active')->defaultValue(true)->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->booleanNode('auto_index')->defaultValue(true)->end()
             ->end();
 
         return $treeBuilder;

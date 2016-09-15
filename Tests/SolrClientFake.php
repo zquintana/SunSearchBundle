@@ -1,6 +1,10 @@
 <?php
-namespace FS\SolrBundle\Tests;
 
+namespace ZQ\SunSearchBundle\Tests;
+
+/**
+ * Class SolrClientFake
+ */
 class SolrClientFake
 {
     private $commit = false;

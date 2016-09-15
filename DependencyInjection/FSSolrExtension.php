@@ -1,6 +1,6 @@
 <?php
 
-namespace FS\SolrBundle\DependencyInjection;
+namespace ZQ\SunSearchBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
@@ -10,6 +10,9 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
+/**
+ * Class FSSolrExtension
+ */
 class FSSolrExtension extends Extension
 {
 
@@ -29,7 +32,7 @@ class FSSolrExtension extends Extension
 
         $this->setupClients($config, $container);
 
-        $container->setParameter('solr.auto_index', $config['auto_index']);
+        $container->setParameter('sunsearch.auto_index', $config['auto_index']);
 
         $this->setupDoctrineListener($config, $container);
         $this->setupDoctrineConfiguration($config, $container);
@@ -44,9 +47,9 @@ class FSSolrExtension extends Extension
     {
         $endpoints = $config['endpoints'];
 
-        $builderDefinition = $container->getDefinition('solr.client.adapter.builder');
+        $builderDefinition = $container->getDefinition('sunsearch.client.adapter.builder');
         $builderDefinition->replaceArgument(0, $endpoints);
-        $builderDefinition->addMethodCall('addPlugin', array('request_debugger', new Reference('solr.debug.client_debugger')));
+        $builderDefinition->addMethodCall('addPlugin', array('request_debugger', new Reference('sunsearch.debug.client_debugger')));
     }
 
     /**
@@ -61,7 +64,7 @@ class FSSolrExtension extends Extension
 
             $entityManagersNames = array_keys($entityManagers);
             foreach ($entityManagersNames as $entityManager) {
-                $container->getDefinition('solr.doctrine.classnameresolver.known_entity_namespaces')->addMethodCall(
+                $container->getDefinition('sunsearch.doctrine.classnameresolver.known_entity_namespaces')->addMethodCall(
                     'addEntityNamespaces',
                     array(new Reference(sprintf('doctrine.orm.%s_configuration', $entityManager)))
                 );
@@ -73,16 +76,16 @@ class FSSolrExtension extends Extension
 
             $documentManagersNames = array_keys($documentManagers);
             foreach ($documentManagersNames as $documentManager) {
-                $container->getDefinition('solr.doctrine.classnameresolver.known_entity_namespaces')->addMethodCall(
+                $container->getDefinition('sunsearch.doctrine.classnameresolver.known_entity_namespaces')->addMethodCall(
                     'addDocumentNamespaces',
                     array(new Reference(sprintf('doctrine_mongodb.odm.%s_configuration', $documentManager)))
                 );
             }
         }
 
-        $container->getDefinition('solr.meta.information.factory')->addMethodCall(
+        $container->getDefinition('sunsearch.meta.information.factory')->addMethodCall(
             'setClassnameResolver',
-            array(new Reference('solr.doctrine.classnameresolver'))
+            array(new Reference('sunsearch.doctrine.classnameresolver'))
         );
     }
 
@@ -96,18 +99,18 @@ class FSSolrExtension extends Extension
      */
     private function setupDoctrineListener(array $config, ContainerBuilder $container)
     {
-        $autoIndexing = $container->getParameter('solr.auto_index');
+        $autoIndexing = $container->getParameter('sunsearch.auto_index');
 
         if ($autoIndexing == false) {
             return;
         }
 
         if ($this->isODMConfigured($container)) {
-            $container->getDefinition('solr.document.odm.subscriber')->addTag('doctrine_mongodb.odm.event_subscriber');
+            $container->getDefinition('sunsearch.document.odm.subscriber')->addTag('doctrine_mongodb.odm.event_subscriber');
         }
 
         if ($this->isOrmConfigured($container)) {
-            $container->getDefinition('solr.document.orm.subscriber')->addTag('doctrine.event_subscriber');
+            $container->getDefinition('sunsearch.document.orm.subscriber')->addTag('doctrine.event_subscriber');
         }
     }
 

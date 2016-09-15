@@ -1,8 +1,8 @@
 <?php
-namespace FS\SolrBundle\Event\Listener;
+namespace ZQ\SunSearchBundle\Event\Listener;
 
-use FS\SolrBundle\Event\ErrorEvent;
-use FS\SolrBundle\Event\Event;
+use ZQ\SunSearchBundle\Event\ErrorEvent;
+use ZQ\SunSearchBundle\Event\Event;
 
 /**
  * Creates a error log-entry if a error occurred

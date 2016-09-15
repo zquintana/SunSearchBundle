@@ -1,8 +1,10 @@
 <?php
 
-namespace FS\SolrBundle\Logging;
+namespace ZQ\SunSearchBundle\Logging;
 
 /**
+ * Class DebugLogger
+ *
  * Logs the current request and information about this request
  */
 class DebugLogger implements SolrLoggerInterface

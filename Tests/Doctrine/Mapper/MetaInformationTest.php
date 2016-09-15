@@ -1,7 +1,8 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Mapper;
 
-use FS\SolrBundle\Doctrine\Mapper\MetaInformation;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Mapper;
+
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformation;
 
 /**
  *

@@ -1,8 +1,10 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Util;
+namespace ZQ\SunSearchBundle\Tests\Util;
 
-
+/**
+ * Class EntityIdentifier
+ */
 class EntityIdentifier
 {
     public static function generate()

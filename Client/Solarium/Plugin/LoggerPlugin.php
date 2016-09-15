@@ -1,12 +1,12 @@
 <?php
 
-namespace FS\SolrBundle\Client\Solarium\Plugin;
+namespace ZQ\SunSearchBundle\Client\Solarium\Plugin;
 
-use FS\SolrBundle\Logging\SolrLoggerInterface;
 use Solarium\Core\Client\Client;
 use Solarium\Core\Event\Events;
 use Solarium\Core\Event\PreExecuteRequest;
 use Solarium\Core\Plugin\AbstractPlugin;
+use ZQ\SunSearchBundle\Logging\SolrLoggerInterface;
 
 /**
  * Registers a logger to collection data about request

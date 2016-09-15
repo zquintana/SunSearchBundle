@@ -1,6 +1,10 @@
 <?php
-namespace FS\SolrBundle\Tests;
 
+namespace ZQ\SunSearchBundle\Tests;
+
+/**
+ * Class SolrResponseFake
+ */
 class SolrResponseFake
 {
     private $response = array();

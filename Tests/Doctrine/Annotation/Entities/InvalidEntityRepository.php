@@ -1,6 +1,9 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Annotation\Entities;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities;
 
+/**
+ * Class InvalidEntityRepository
+ */
 class InvalidEntityRepository
 {
 

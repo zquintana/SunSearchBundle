@@ -1,7 +1,10 @@
 <?php
 
-namespace FS\SolrBundle\Doctrine\ClassnameResolver;
+namespace ZQ\SunSearchBundle\Doctrine\ClassnameResolver;
 
+/**
+ * Class ClassnameResolverException
+ */
 class ClassnameResolverException extends \RuntimeException
 {
     /**

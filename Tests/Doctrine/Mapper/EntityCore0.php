@@ -1,22 +1,21 @@
 <?php
 
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Mapper;
 
-namespace FS\SolrBundle\Tests\Doctrine\Mapper;
-
-use FS\SolrBundle\Doctrine\Annotation as Solr;
+use ZQ\SunSearchBundle\Doctrine\Annotation as Sun;
 
 /**
- * @Solr\Document(index="core0")
+ * @Sun\Document(index="core0")
  */
 class EntityCore0
 {
     /**
-     * @Solr\Id
+     * @Sun\Id
      */
     private $id;
 
     /**
-     * @Solr\Field(type="text")
+     * @Sun\Field(type="text")
      *
      * @var string
      */

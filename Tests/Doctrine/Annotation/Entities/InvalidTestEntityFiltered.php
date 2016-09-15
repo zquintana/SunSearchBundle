@@ -1,12 +1,12 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Annotation\Entities;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities;
 
-use FS\SolrBundle\Doctrine\Annotation as Solr;
+use ZQ\SunSearchBundle\Doctrine\Annotation as Sun;
 
 /**
  *
- * @Solr\Document
- * @Solr\SynchronizationFilter(callback="shouldBeIndex")
+ * @Sun\Document
+ * @Sun\SynchronizationFilter(callback="shouldBeIndex")
  */
 class InvalidTestEntityFiltered
 {

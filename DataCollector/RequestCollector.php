@@ -1,14 +1,17 @@
 <?php
 
-namespace FS\SolrBundle\DataCollector;
+namespace ZQ\SunSearchBundle\DataCollector;
 
-use FS\SolrBundle\Logging\DebugLogger;
-use FS\SolrBundle\Logging\SolrLoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
+use ZQ\SunSearchBundle\Logging\DebugLogger;
+use ZQ\SunSearchBundle\Logging\SolrLoggerInterface;
 
+/**
+ * Class RequestCollector
+ */
 class RequestCollector extends DataCollector
 {
     /**

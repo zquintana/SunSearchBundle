@@ -1,37 +1,38 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Annotation\Entities;
 
-use FS\SolrBundle\Doctrine\Annotation as Solr;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities;
+
+use ZQ\SunSearchBundle\Doctrine\Annotation as Sun;
 
 /**
  *
- * @Solr\Document
- * @Solr\SynchronizationFilter(callback="shouldBeIndex")
+ * @Sun\Document
+ * @Sun\SynchronizationFilter(callback="shouldBeIndex")
  */
 class ValidTestEntityNumericFields
 {
 
     /**
      *
-     * @Solr\Field(type="integer")
+     * @Sun\Field(type="integer")
      */
     private $integer;
 
     /**
      *
-     * @Solr\Field(type="double")
+     * @Sun\Field(type="double")
      */
     private $double;
 
     /**
      *
-     * @Solr\Field(type="float")
+     * @Sun\Field(type="float")
      */
     private $float;
 
     /**
      *
-     * @Solr\Field(type="long")
+     * @Sun\Field(type="long")
      */
     private $long;
 }

@@ -1,7 +1,7 @@
 <?php
-namespace FS\SolrBundle\Doctrine\Mapper\Mapping;
+namespace ZQ\SunSearchBundle\Doctrine\Mapper\Mapping;
 
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
 use Solarium\QueryType\Update\Query\Document\Document;
 
 /**

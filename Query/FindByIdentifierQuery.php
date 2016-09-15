@@ -1,7 +1,10 @@
 <?php
 
-namespace FS\SolrBundle\Query;
+namespace ZQ\SunSearchBundle\Query;
 
+/**
+ * Class FindByIdentifierQuery
+ */
 class FindByIdentifierQuery extends AbstractQuery
 {
     /**

@@ -1,13 +1,13 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Solr\Repository;
+namespace ZQ\SunSearchBundle\Tests\Solr\Repository;
 
-use FS\SolrBundle\Tests\Util\MetaTestInformationFactory;
-use FS\SolrBundle\Tests\Util\CommandFactoryStub;
 use Solarium\Core\Query\Helper;
 use Solarium\QueryType\Update\Query\Document\Document;
-use FS\SolrBundle\Repository\Repository;
-use FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntity;
+use ZQ\SunSearchBundle\Repository\Repository;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntity;
+use ZQ\SunSearchBundle\Tests\Util\MetaTestInformationFactory;
+use ZQ\SunSearchBundle\Tests\Util\CommandFactoryStub;
 
 /**
  * @group repository
@@ -22,7 +22,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $document->addField('document_name_s', 'post');
 
         $metaFactory = $this->getMock(
-            'FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory',
+            'ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory',
             array(),
             array(),
             '',
@@ -32,12 +32,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('loadInformation')
             ->will($this->returnValue(MetaTestInformationFactory::getMetaInformation()));
 
-        $mapper = $this->getMock('FS\SolrBundle\Doctrine\Mapper\EntityMapper', array(), array(), '', false);
+        $mapper = $this->getMock('ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper', array(), array(), '', false);
         $mapper->expects($this->once())
             ->method('toDocument')
             ->will($this->returnValue($document));
 
-        $solr = $this->getMock('FS\SolrBundle\Solr', array(), array(), '', false);
+        $solr = $this->getMock('ZQ\SunSearchBundle\Solr', array(), array(), '', false);
         $solr->expects($this->exactly(2))
             ->method('getMapper')
             ->will($this->returnValue($mapper));
@@ -68,7 +68,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $document->addField('document_name_s', 'post');
 
         $metaFactory = $this->getMock(
-            'FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory',
+            'ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory',
             array(),
             array(),
             '',
@@ -78,12 +78,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('loadInformation')
             ->will($this->returnValue(MetaTestInformationFactory::getMetaInformation()));
 
-        $mapper = $this->getMock('FS\SolrBundle\Doctrine\Mapper\EntityMapper', array(), array(), '', false);
+        $mapper = $this->getMock('ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper', array(), array(), '', false);
         $mapper->expects($this->once())
             ->method('toDocument')
             ->will($this->returnValue($document));
 
-        $solr = $this->getMock('FS\SolrBundle\Solr', array(), array(), '', false);
+        $solr = $this->getMock('ZQ\SunSearchBundle\Solr', array(), array(), '', false);
         $solr->expects($this->exactly(2))
             ->method('getMapper')
             ->will($this->returnValue($mapper));
@@ -117,7 +117,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $metaFactory = $this->getMock(
-            'FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory',
+            'ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory',
             array(),
             array(),
             '',
@@ -127,8 +127,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('loadInformation')
             ->will($this->returnValue(MetaTestInformationFactory::getMetaInformation()));
 
-        $solr = $this->getMock('FS\SolrBundle\Solr', array(), array(), '', false);
-        $query = $this->getMock('FS\SolrBundle\Query\SolrQuery', array(), array(), '', false);
+        $solr = $this->getMock('ZQ\SunSearchBundle\Solr', array(), array(), '', false);
+        $query = $this->getMock('ZQ\SunSearchBundle\Query\SolrQuery', array(), array(), '', false);
         $query->expects($this->exactly(3))
             ->method('addSearchTerm');
 

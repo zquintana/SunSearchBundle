@@ -1,10 +1,13 @@
 <?php
 
-namespace FS\SolrBundle\Doctrine\Annotation;
+namespace ZQ\SunSearchBundle\Doctrine\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\Reader;
 
+/**
+ * Class AnnotationReader
+ */
 class AnnotationReader
 {
     /**
@@ -12,11 +15,12 @@ class AnnotationReader
      */
     private $reader;
 
-    const DOCUMENT_CLASS = 'FS\SolrBundle\Doctrine\Annotation\Document';
-    const FIELD_CLASS = 'FS\SolrBundle\Doctrine\Annotation\Field';
-    const FIELD_IDENTIFIER_CLASS = 'FS\SolrBundle\Doctrine\Annotation\Id';
-    const DOCUMENT_INDEX_CLASS = 'FS\SolrBundle\Doctrine\Annotation\Document';
-    const SYNCHRONIZATION_FILTER_CLASS = 'FS\SolrBundle\Doctrine\Annotation\SynchronizationFilter';
+    const DOCUMENT_CLASS            = 'ZQ\SunSearchBundle\Doctrine\Annotation\Document';
+    const FIELD_CLASS               = 'ZQ\SunSearchBundle\Doctrine\Annotation\Field';
+    const VIRTUAL_FIELD_CLASS       = 'ZQ\SunSearchBundle\Doctrine\Annotation\VirtualField';
+    const FIELD_IDENTIFIER_CLASS    = 'ZQ\SunSearchBundle\Doctrine\Annotation\Id';
+    const DOCUMENT_INDEX_CLASS      = 'ZQ\SunSearchBundle\Doctrine\Annotation\Document';
+    const SYNCHRONIZATION_FILTER_CLASS = 'ZQ\SunSearchBundle\Doctrine\Annotation\SynchronizationFilter';
 
     /**
      * @param Reader $reader

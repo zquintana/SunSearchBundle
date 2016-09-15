@@ -1,6 +1,6 @@
 <?php
 
-namespace FS\SolrBundle\Event;
+namespace ZQ\SunSearchBundle\Event;
 
 /**
  * Event is fired if an error has occurred

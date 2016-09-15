@@ -1,10 +1,12 @@
 <?php
-namespace FS\SolrBundle\Doctrine\Mapper;
+namespace ZQ\SunSearchBundle\Doctrine\Mapper;
 
-use FS\SolrBundle\Doctrine\Hydration\HydrationModes;
-use FS\SolrBundle\Doctrine\Hydration\HydratorInterface;
-use FS\SolrBundle\Doctrine\Mapper\Mapping\AbstractDocumentCommand;
-use FS\SolrBundle\Doctrine\Annotation\Index as Solr;
+use ZQ\SunSearchBundle\Doctrine\Hydration\DoctrineHydrator;
+use ZQ\SunSearchBundle\Doctrine\Hydration\HydrationModes;
+use ZQ\SunSearchBundle\Doctrine\Hydration\HydratorInterface;
+use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\AbstractDocumentCommand;
+use ZQ\SunSearchBundle\Doctrine\Annotation\Index as Solr;
+use Solarium\QueryType\Select\Result\Result;
 use Solarium\QueryType\Update\Query\Document\Document;
 
 class EntityMapper

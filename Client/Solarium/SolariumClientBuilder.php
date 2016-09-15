@@ -1,14 +1,14 @@
 <?php
 
-namespace FS\SolrBundle\Client\Solarium;
+namespace ZQ\SunSearchBundle\Client\Solarium;
 
-use FS\SolrBundle\Client\Builder;
 use Solarium\Client;
 use Solarium\Core\Plugin\AbstractPlugin;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use ZQ\SunSearchBundle\Client\Builder;
 
 /**
- * Creates an instance of the Solarium Client
+ * Creates an instance of the Solarium SunSunClient
  */
 class SolariumClientBuilder implements Builder
 {

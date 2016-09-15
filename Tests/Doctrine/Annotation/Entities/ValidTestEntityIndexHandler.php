@@ -1,26 +1,30 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Annotation\Entities;
 
-use FS\SolrBundle\Doctrine\Annotation as Solr;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities;
+
+use ZQ\SunSearchBundle\Doctrine\Annotation as Solr;
 
 /**
  *
- * @Solr\Document(indexHandler="indexHandler")
+ * @Sun\Document(indexHandler="indexHandler")
  */
 class ValidTestEntityIndexHandler
 {
 
     /**
-     * @Solr\Id
+     * @Sun\Id
      */
     private $id;
 
     /**
      *
-     * @Solr\Field
+     * @Sun\Field
      */
     private $title;
 
+    /**
+     * @return string
+     */
     public function indexHandler()
     {
         return 'my_core';

@@ -1,17 +1,21 @@
 <?php
-namespace FS\SolrBundle\Tests\Util;
 
-use FS\SolrBundle\Doctrine\Annotation\AnnotationReader;
-use FS\SolrBundle\Doctrine\Mapper\Mapping\CommandFactory;
-use FS\SolrBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand;
-use FS\SolrBundle\Doctrine\Mapper\Mapping\MapIdentifierCommand;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory;
+namespace ZQ\SunSearchBundle\Tests\Util;
 
+use ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader;
+use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\CommandFactory;
+use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand;
+use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\MapIdentifierCommand;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory;
+
+/**
+ * Class CommandFactoryStub
+ */
 class CommandFactoryStub
 {
     /**
      *
-     * @return \FS\SolrBundle\Doctrine\Mapper\Mapping\CommandFactory
+     * @return \ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\CommandFactory
      */
     public static function getFactoryWithAllMappingCommand()
     {

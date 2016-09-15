@@ -1,8 +1,9 @@
 <?php
-namespace FS\SolrBundle\Doctrine\Mapper;
 
-use FS\SolrBundle\Doctrine\Annotation\AnnotationReader;
-use FS\SolrBundle\Doctrine\ClassnameResolver\ClassnameResolver;
+namespace ZQ\SunSearchBundle\Doctrine\Mapper;
+
+use ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader;
+use ZQ\SunSearchBundle\Doctrine\ClassnameResolver\ClassnameResolver;
 
 /**
  * instantiates a new MetaInformation object by a given entity

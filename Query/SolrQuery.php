@@ -1,9 +1,12 @@
 <?php
 
-namespace FS\SolrBundle\Query;
+namespace ZQ\SunSearchBundle\Query;
 
-use FS\SolrBundle\Query\Exception\UnknownFieldException;
+use ZQ\SunSearchBundle\Query\Exception\UnknownFieldException;
 
+/**
+ * Class SolrQuery
+ */
 class SolrQuery extends AbstractQuery
 {
 
@@ -37,7 +40,7 @@ class SolrQuery extends AbstractQuery
      */
     public function getResult()
     {
-        return $this->solr->query($this);
+        return $this->sunSearch->query($this);
     }
 
     /**

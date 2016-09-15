@@ -1,21 +1,21 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Doctrine\Mapping\Mapper;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Mapping\Mapper;
 
 use Doctrine\Common\Annotations\Reader;
-use FS\SolrBundle\Doctrine\Annotation\Field;
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityIndexHandler;
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityIndexProperty;
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityNoBoost;
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityNoTypes;
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityFiltered;
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityFloatBoost;
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityNumericFields;
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityWithInvalidBoost;
-use FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntity;
-use FS\SolrBundle\Doctrine\Annotation\AnnotationReader;
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\EntityWithRepository;
-use FS\SolrBundle\Tests\Doctrine\Mapper\NotIndexedEntity;
+use ZQ\SunSearchBundle\Doctrine\Annotation\Field;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityIndexHandler;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityIndexProperty;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityNoBoost;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityNoTypes;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityFiltered;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityFloatBoost;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityNumericFields;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityWithInvalidBoost;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntity;
+use ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\EntityWithRepository;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\NotIndexedEntity;
 
 /**
  *
@@ -86,7 +86,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
     {
         $repository = $this->reader->getRepository(new EntityWithRepository());
 
-        $expected = 'FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidEntityRepository';
+        $expected = 'ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidEntityRepository';
         $actual = $repository;
         $this->assertEquals($expected, $actual, 'wrong declared repository');
     }
@@ -116,7 +116,7 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
             $this->fail();
         } catch (\InvalidArgumentException $e) {
             $this->assertEquals(
-                'Invalid boost value aaaa for entity FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityWithInvalidBoost',
+                'Invalid boost value aaaa for entity ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityWithInvalidBoost',
                 $e->getMessage()
             );
         }
@@ -241,11 +241,11 @@ class AnnotationReaderTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-use FS\SolrBundle\Doctrine\Annotation as Solr;
+use ZQ\SunSearchBundle\Doctrine\Annotation as Sun;
 
 /**
  *
- * @Solr\Document
+ * @Sun\Document
  */
 abstract class BaseEntity
 {
@@ -256,7 +256,7 @@ abstract class BaseEntity
 
     /**
      *
-     * @Solr\Field(type="integer")
+     * @Sun\Field(type="integer")
      */
     protected $baseField2;
 }
@@ -264,12 +264,12 @@ abstract class BaseEntity
 class ChildEntity extends BaseEntity
 {
     /**
-     * @Solr\Field(type="integer")
+     * @Sun\Field(type="integer")
      */
     protected $baseField1;
 
     /**
-     * @Solr\Field(type="integer")
+     * @Sun\Field(type="integer")
      */
     protected $childField1;
 }
@@ -277,7 +277,7 @@ class ChildEntity extends BaseEntity
 class ChildEntity2 extends ChildEntity
 {
     /**
-     * @Solr\Field(type="integer")
+     * @Sun\Field(type="integer")
      */
     private $childField2;
 }
@@ -285,7 +285,7 @@ class ChildEntity2 extends ChildEntity
 class EntityWithObject
 {
     /**
-     * @Solr\Field(type="datetime", getter="format('d.m.Y')")
+     * @Sun\Field(type="datetime", getter="format('d.m.Y')")
      */
     private $object;
 }

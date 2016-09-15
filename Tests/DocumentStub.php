@@ -1,8 +1,10 @@
 <?php
 
+namespace ZQ\SunSearchBundle\Tests;
 
-namespace FS\SolrBundle\Tests;
-
+/**
+ * Class DocumentStub
+ */
 class DocumentStub implements \Solarium\QueryType\Update\Query\Document\DocumentInterface
 {
     public $id = 1;

@@ -1,16 +1,16 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Doctrine\Mapper\Mapping;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Mapper\Mapping;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use FS\SolrBundle\Doctrine\Annotation\AnnotationReader;
-use FS\SolrBundle\Doctrine\Annotation\Field;
-use FS\SolrBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory;
-use FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntity;
-use FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntityWithCollection;
-use FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntityWithRelation;
-use FS\SolrBundle\Tests\Util\MetaTestInformationFactory;
+use ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader;
+use ZQ\SunSearchBundle\Doctrine\Annotation\Field;
+use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntity;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntityWithCollection;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntityWithRelation;
+use ZQ\SunSearchBundle\Tests\Util\MetaTestInformationFactory;
 use Solarium\QueryType\Update\Query\Document\Document;
 
 /**

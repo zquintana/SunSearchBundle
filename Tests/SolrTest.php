@@ -1,23 +1,23 @@
 <?php
 
-namespace FS\SolrBundle\Tests;
+namespace ZQ\SunSearchBundle\Tests;
 
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\InvalidTestEntityFiltered;
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityFiltered;
-use FS\SolrBundle\Tests\Doctrine\Mapper\SolrDocumentStub;
-use FS\SolrBundle\Tests\ResultFake;
-use FS\SolrBundle\Tests\SolrResponseFake;
-use FS\SolrBundle\Query\FindByDocumentNameQuery;
-use FS\SolrBundle\Event\EventManager;
-use FS\SolrBundle\Tests\SolrClientFake;
-use FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntity;
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\EntityWithRepository;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformation;
-use FS\SolrBundle\Tests\Util\MetaTestInformationFactory;
-use FS\SolrBundle\Solr;
-use FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidEntityRepository;
-use FS\SolrBundle\Tests\Util\CommandFactoryStub;
-use FS\SolrBundle\Query\SolrQuery;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\InvalidTestEntityFiltered;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityFiltered;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\SolrDocumentStub;
+use ZQ\SunSearchBundle\Tests\ResultFake;
+use ZQ\SunSearchBundle\Tests\SolrResponseFake;
+use ZQ\SunSearchBundle\Query\FindByDocumentNameQuery;
+use ZQ\SunSearchBundle\Event\EventManager;
+use ZQ\SunSearchBundle\Tests\SolrClientFake;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntity;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\EntityWithRepository;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformation;
+use ZQ\SunSearchBundle\Tests\Util\MetaTestInformationFactory;
+use ZQ\SunSearchBundle\Solr;
+use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidEntityRepository;
+use ZQ\SunSearchBundle\Tests\Util\CommandFactoryStub;
+use ZQ\SunSearchBundle\Query\SolrQuery;
 use Solarium\QueryType\Update\Query\Document\Document;
 
 /**
@@ -43,7 +43,7 @@ class SolrTest extends AbstractSolrTest
     {
         $metaInformation = new MetaInformation();
         $metaInformation->setClassName(get_class(new EntityWithRepository()));
-        $metaInformation->setRepository('FS\SolrBundle\Tests\Doctrine\Annotation\Entities\ValidEntityRepository');
+        $metaInformation->setRepository('ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidEntityRepository');
 
         $this->setupMetaFactoryLoadOneCompleteInformation($metaInformation);
 
@@ -60,7 +60,7 @@ class SolrTest extends AbstractSolrTest
     {
         $metaInformation = new MetaInformation();
         $metaInformation->setClassName(get_class(new EntityWithRepository()));
-        $metaInformation->setRepository('FS\SolrBundle\Tests\Doctrine\Annotation\Entities\InvalidEntityRepository');
+        $metaInformation->setRepository('ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\InvalidEntityRepository');
 
         $this->setupMetaFactoryLoadOneCompleteInformation($metaInformation);
 

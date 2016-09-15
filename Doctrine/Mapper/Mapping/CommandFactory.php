@@ -1,6 +1,10 @@
 <?php
-namespace FS\SolrBundle\Doctrine\Mapper\Mapping;
 
+namespace ZQ\SunSearchBundle\Doctrine\Mapper\Mapping;
+
+/**
+ * Class CommandFactory
+ */
 class CommandFactory
 {
 

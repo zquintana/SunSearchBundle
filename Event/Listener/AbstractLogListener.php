@@ -1,16 +1,20 @@
 <?php
-namespace FS\SolrBundle\Event\Listener;
 
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
+namespace ZQ\SunSearchBundle\Event\Listener;
+
 use Psr\Log\LoggerInterface;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
 
+/**
+ * Class AbstractLogListener
+ */
 abstract class AbstractLogListener
 {
-
     /**
      * @var LoggerInterface
      */
     protected $logger = null;
+
 
     /**
      * @param LoggerInterface $logger

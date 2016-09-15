@@ -1,24 +1,24 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Integration\Bootstrap;
+namespace ZQ\SunSearchBundle\Tests\Integration\Bootstrap;
 
 use Behat\Behat\Context\Context;
 use Doctrine\ORM\Configuration;
-use FS\SolrBundle\Client\Solarium\SolariumClientBuilder;
-use FS\SolrBundle\Doctrine\Annotation\AnnotationReader;
-use FS\SolrBundle\Doctrine\ClassnameResolver\ClassnameResolver;
-use FS\SolrBundle\Doctrine\ClassnameResolver\KnownNamespaceAliases;
-use FS\SolrBundle\Doctrine\Hydration\DoctrineHydrator;
-use FS\SolrBundle\Doctrine\Hydration\IndexHydrator;
-use FS\SolrBundle\Doctrine\Hydration\ValueHydrator;
-use FS\SolrBundle\Doctrine\Mapper\EntityMapper;
-use FS\SolrBundle\Doctrine\Mapper\Mapping\CommandFactory;
-use FS\SolrBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand;
-use FS\SolrBundle\Doctrine\Mapper\Mapping\MapIdentifierCommand;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory;
-use FS\SolrBundle\Solr;
-use FS\SolrBundle\Tests\Integration\DoctrineRegistryFake;
-use FS\SolrBundle\Tests\Integration\EventDispatcherFake;
+use ZQ\SunSearchBundle\Client\Solarium\SolariumClientBuilder;
+use ZQ\SunSearchBundle\Client\SunSunClient;
+use ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader;
+use ZQ\SunSearchBundle\Doctrine\ClassnameResolver\ClassnameResolver;
+use ZQ\SunSearchBundle\Doctrine\ClassnameResolver\KnownNamespaceAliases;
+use ZQ\SunSearchBundle\Doctrine\Hydration\DoctrineHydrator;
+use ZQ\SunSearchBundle\Doctrine\Hydration\IndexHydrator;
+use ZQ\SunSearchBundle\Doctrine\Hydration\ValueHydrator;
+use ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper;
+use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\CommandFactory;
+use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand;
+use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\MapIdentifierCommand;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory;
+use ZQ\SunSearchBundle\Tests\Integration\DoctrineRegistryFake;
+use ZQ\SunSearchBundle\Tests\Integration\EventDispatcherFake;
 use Solarium\Client;
 
 class SolrSetupFeatureContext implements Context
@@ -62,9 +62,9 @@ class SolrSetupFeatureContext implements Context
     }
 
     /**
-     * @return Solr
+     * @return SunSunClient
      */
-    public function getSolrInstance()
+    public function getSunInstance()
     {
         \Doctrine\Common\Annotations\AnnotationRegistry::registerLoader('class_exists');
         \Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver::registerAnnotationClasses();
@@ -74,7 +74,7 @@ class SolrSetupFeatureContext implements Context
         $metaFactory = $this->setupMetaInformationFactory();
         $entityMapper = $this->setupEntityMapper();
 
-        $solr = new Solr(
+        $sunSearch = new SunSunClient(
             $this->solrClient,
             $factory,
             $this->eventDispatcher,
@@ -82,7 +82,7 @@ class SolrSetupFeatureContext implements Context
             $entityMapper
         );
 
-        return $solr;
+        return $sunSearch;
     }
 
     /**
@@ -130,9 +130,9 @@ class SolrSetupFeatureContext implements Context
     private function setupMetaInformationFactory()
     {
         $ormConfiguration = new Configuration();
-        $ormConfiguration->addEntityNamespace('FSTest:ValidTestEntity', 'FS\SolrBundle\Tests\Doctrine\Mapper');
-        $ormConfiguration->addEntityNamespace('FSTest:EntityCore0', 'FS\SolrBundle\Tests\Doctrine\Mapper');
-        $ormConfiguration->addEntityNamespace('FSTest:EntityCore1', 'FS\SolrBundle\Tests\Doctrine\Mapper');
+        $ormConfiguration->addEntityNamespace('FSTest:ValidTestEntity', 'ZQ\SunSearchBundle\Tests\Doctrine\Mapper');
+        $ormConfiguration->addEntityNamespace('FSTest:EntityCore0', 'ZQ\SunSearchBundle\Tests\Doctrine\Mapper');
+        $ormConfiguration->addEntityNamespace('FSTest:EntityCore1', 'ZQ\SunSearchBundle\Tests\Doctrine\Mapper');
 
         $knowNamespaces = new KnownNamespaceAliases();
         $knowNamespaces->addEntityNamespaces($ormConfiguration);
@@ -150,7 +150,7 @@ class SolrSetupFeatureContext implements Context
     }
 
     /**
-     * Solarium Client with two cores (core0, core1)
+     * Solarium SunSunClient with two cores (core0, core1)
      *
      * @return Client
      */

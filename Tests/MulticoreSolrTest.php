@@ -11,7 +11,7 @@ use FS\SolrBundle\Tests\Util\MetaTestInformationFactory;
 class MulticoreSolrTest extends AbstractSolrTest
 {
     /**
-     * parent method assert that Client::update is called only once. We have to verify that all cores are called.
+     * parent method assert that SunSunClient::update is called only once. We have to verify that all cores are called.
      *
      * @param string $index
      *

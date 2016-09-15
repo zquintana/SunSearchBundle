@@ -1,8 +1,8 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Query;
+namespace ZQ\SunSearchBundle\Tests\Query;
 
-use FS\SolrBundle\Query\FindByIdentifierQuery;
+use ZQ\SunSearchBundle\Query\FindByIdentifierQuery;
 use Solarium\QueryType\Update\Query\Document\Document;
 
 /**

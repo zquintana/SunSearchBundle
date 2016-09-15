@@ -1,6 +1,6 @@
 <?php
 
-namespace FS\SolrBundle\DependencyInjection\Compiler;
+namespace ZQ\SunSearchBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -18,7 +18,7 @@ class AddSolariumPluginsPass implements CompilerPassInterface
     {
         $plugins = $container->findTaggedServiceIds('solarium.client.plugin');
 
-        $clientBuilder = $container->getDefinition('solr.client.adapter.builder');
+        $clientBuilder = $container->getDefinition('sunsearch.client.adapter.builder');
         foreach ($plugins as $service => $definition) {
             $clientBuilder->addMethodCall(
                 'addPlugin',

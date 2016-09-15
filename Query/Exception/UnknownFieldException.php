@@ -1,7 +1,10 @@
 <?php
 
-namespace FS\SolrBundle\Query\Exception;
+namespace ZQ\SunSearchBundle\Query\Exception;
 
+/**
+ * Class UnknownFieldException
+ */
 class UnknownFieldException extends \InvalidArgumentException
 {
 

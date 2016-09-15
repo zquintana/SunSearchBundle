@@ -1,11 +1,11 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Annotation\Entities;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities;
 
-use FS\SolrBundle\Doctrine\Annotation as Solr;
+use ZQ\SunSearchBundle\Doctrine\Annotation as Solr;
 
 /**
  *
- * @Solr\Document(repository="FS\SolrBundle\Tests\Doctrine\Annotation\Entities\InvalidEntityRepository")
+ * @Solr\Document(repository="ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\InvalidEntityRepository")
  *
  */
 class EntityWithInvalidRepository

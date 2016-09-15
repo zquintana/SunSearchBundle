@@ -1,14 +1,14 @@
 <?php
-namespace FS\SolrBundle\Command;
+namespace ZQ\SunSearchBundle\Command;
 
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
-use FS\SolrBundle\Console\ConsoleErrorListOutput;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use ZQ\SunSearchBundle\Console\ConsoleErrorListOutput;
 
 /**
  * Command synchronizes the DB with solr
@@ -20,7 +20,7 @@ class SynchronizeIndexCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        $this->setName('solr:index:populate')
+        $this->setName('sunsearch:index:populate')
             ->addArgument('entity', InputArgument::OPTIONAL, 'The entity you want to index', null)
             ->addOption(
                 'flushsize',
@@ -126,8 +126,8 @@ class SynchronizeIndexCommand extends ContainerAwareCommand
         }
 
         $entities = array();
-        $namespaces = $this->getContainer()->get('solr.doctrine.classnameresolver.known_entity_namespaces');
-        $metaInformationFactory = $this->getContainer()->get('solr.meta.information.factory');
+        $namespaces = $this->getContainer()->get('sunsearch.doctrine.classnameresolver.known_entity_namespaces');
+        $metaInformationFactory = $this->getContainer()->get('sunsearch.meta.information.factory');
 
         foreach ($namespaces->getEntityClassnames() as $classname) {
             try {

@@ -1,12 +1,11 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Doctrine\Mapper\Mapping;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Mapper\Mapping;
 
-use FS\SolrBundle\Doctrine\Annotation\AnnotationReader;
-use FS\SolrBundle\Doctrine\Mapper\Command\CreateDeletedDocumentCommand;
-use FS\SolrBundle\Doctrine\Mapper\Mapping\MapIdentifierCommand;
-use FS\SolrBundle\Tests\Util\MetaTestInformationFactory;
-
+use ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader;
+use ZQ\SunSearchBundle\Doctrine\Mapper\Command\CreateDeletedDocumentCommand;
+use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\MapIdentifierCommand;
+use ZQ\SunSearchBundle\Tests\Util\MetaTestInformationFactory;
 
 /**
  * @group mappingcommands

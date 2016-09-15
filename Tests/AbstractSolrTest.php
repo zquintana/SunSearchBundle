@@ -1,13 +1,14 @@
 <?php
 
+namespace ZQ\SunSearchBundle\Tests;
 
-namespace FS\SolrBundle\Tests;
-
-
-use FS\SolrBundle\Tests\Util\CommandFactoryStub;
-use FS\SolrBundle\Tests\Util\MetaTestInformationFactory;
+use ZQ\SunSearchBundle\Tests\Util\CommandFactoryStub;
+use ZQ\SunSearchBundle\Tests\Util\MetaTestInformationFactory;
 use Solarium\QueryType\Select\Result\Result;
 
+/**
+ * Class AbstractSolrTest
+ */
 abstract class AbstractSolrTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -21,16 +22,16 @@ abstract class AbstractSolrTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->metaFactory = $metaFactory = $this->getMock(
-            'FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory',
+            'ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory',
             array(),
             array(),
             '',
             false
         );
-        $this->config = $this->getMock('FS\SolrBundle\SolrConnection', array(), array(), '', false);
+        $this->config = $this->getMock('ZQ\SunSearchBundle\SolrConnection', array(), array(), '', false);
         $this->commandFactory = CommandFactoryStub::getFactoryWithAllMappingCommand();
         $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcher', array(), array(), '', false);
-        $this->mapper = $this->getMock('FS\SolrBundle\Doctrine\Mapper\EntityMapper', array(), array(), '', false);
+        $this->mapper = $this->getMock('ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper', array(), array(), '', false);
 
         $this->solrClientFake = $this->getMock('Solarium\Client', array(), array(), '', false);
     }

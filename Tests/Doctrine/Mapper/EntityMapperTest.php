@@ -1,13 +1,13 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Doctrine\Mapper;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Mapper;
 
-use FS\SolrBundle\Doctrine\Annotation\AnnotationReader;
-use FS\SolrBundle\Doctrine\Hydration\HydrationModes;
-use FS\SolrBundle\Doctrine\Mapper\EntityMapper;
-use FS\SolrBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory;
-use FS\SolrBundle\Tests\Util\MetaTestInformationFactory;
+use ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader;
+use ZQ\SunSearchBundle\Doctrine\Hydration\HydrationModes;
+use ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper;
+use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\MapAllFieldsCommand;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory;
+use ZQ\SunSearchBundle\Tests\Util\MetaTestInformationFactory;
 use Solarium\QueryType\Update\Query\Document\Document;
 
 /**
@@ -23,14 +23,14 @@ class EntityMapperTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->doctrineHydrator = $this->getMock('FS\SolrBundle\Doctrine\Hydration\HydratorInterface');
-        $this->indexHydrator = $this->getMock('FS\SolrBundle\Doctrine\Hydration\HydratorInterface');
+        $this->doctrineHydrator = $this->getMock('ZQ\SunSearchBundle\Doctrine\Hydration\HydratorInterface');
+        $this->indexHydrator = $this->getMock('ZQ\SunSearchBundle\Doctrine\Hydration\HydratorInterface');
         $this->metaInformationFactory = new MetaInformationFactory(new AnnotationReader(new \Doctrine\Common\Annotations\AnnotationReader()));
     }
 
     public function testToDocument_EntityMayNotIndexed()
     {
-        $mapper = new \FS\SolrBundle\Doctrine\Mapper\EntityMapper($this->doctrineHydrator, $this->indexHydrator, $this->metaInformationFactory);
+        $mapper = new \ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper($this->doctrineHydrator, $this->indexHydrator, $this->metaInformationFactory);
 
         $actual = $mapper->toDocument(MetaTestInformationFactory::getMetaInformation());
         $this->assertNull($actual);
@@ -40,7 +40,7 @@ class EntityMapperTest extends \PHPUnit_Framework_TestCase
     {
         $reader = new AnnotationReader(new \Doctrine\Common\Annotations\AnnotationReader());
 
-        $mapper = new \FS\SolrBundle\Doctrine\Mapper\EntityMapper($this->doctrineHydrator, $this->indexHydrator, $this->metaInformationFactory);
+        $mapper = new \ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper($this->doctrineHydrator, $this->indexHydrator, $this->metaInformationFactory);
         $mapper->setMappingCommand(new MapAllFieldsCommand(new MetaInformationFactory($reader)));
 
         $actual = $mapper->toDocument(MetaTestInformationFactory::getMetaInformation());
@@ -60,7 +60,7 @@ class EntityMapperTest extends \PHPUnit_Framework_TestCase
         $this->doctrineHydrator->expects($this->never())
             ->method('hydrate');
 
-        $mapper = new \FS\SolrBundle\Doctrine\Mapper\EntityMapper($this->doctrineHydrator, $this->indexHydrator, $this->metaInformationFactory);
+        $mapper = new \ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper($this->doctrineHydrator, $this->indexHydrator, $this->metaInformationFactory);
         $mapper->setHydrationMode(HydrationModes::HYDRATE_INDEX);
         $entity = $mapper->toEntity(new SolrDocumentStub(), $targetEntity);
 
@@ -79,7 +79,7 @@ class EntityMapperTest extends \PHPUnit_Framework_TestCase
             ->method('hydrate')
             ->will($this->returnValue($targetEntity));
 
-        $mapper = new \FS\SolrBundle\Doctrine\Mapper\EntityMapper($this->doctrineHydrator, $this->indexHydrator, $this->metaInformationFactory);
+        $mapper = new \ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper($this->doctrineHydrator, $this->indexHydrator, $this->metaInformationFactory);
         $mapper->setHydrationMode(HydrationModes::HYDRATE_DOCTRINE);
         $entity = $mapper->toEntity(new Document(array()), $targetEntity);
 

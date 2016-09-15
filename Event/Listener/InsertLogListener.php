@@ -1,7 +1,7 @@
 <?php
-namespace FS\SolrBundle\Event\Listener;
+namespace ZQ\SunSearchBundle\Event\Listener;
 
-use FS\SolrBundle\Event\Event;
+use ZQ\SunSearchBundle\Event\Event;
 
 /**
  * Create a log-entry if a document was insert

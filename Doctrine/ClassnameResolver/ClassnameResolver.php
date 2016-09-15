@@ -1,6 +1,6 @@
 <?php
 
-namespace FS\SolrBundle\Doctrine\ClassnameResolver;
+namespace ZQ\SunSearchBundle\Doctrine\ClassnameResolver;
 
 /**
  * Determines the full qualified classname of an entity-alias

@@ -1,6 +1,10 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Mapper;
 
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Mapper;
+
+/**
+ * Class SolrDocumentStub
+ */
 class SolrDocumentStub extends \ArrayObject
 {
 

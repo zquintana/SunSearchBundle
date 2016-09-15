@@ -1,22 +1,22 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Solr\Doctrine;
+namespace ZQ\SunSearchBundle\Tests\Solr\Doctrine;
 
-use FS\SolrBundle\Doctrine\ClassnameResolver\ClassnameResolver;
+use ZQ\SunSearchBundle\Doctrine\ClassnameResolver\ClassnameResolver;
 
 /**
  * @group resolver
  */
 class ClassnameResolverTest extends \PHPUnit_Framework_TestCase
 {
-    const ENTITY_NAMESPACE = 'FS\SolrBundle\Tests\Doctrine\Mapper';
+    const ENTITY_NAMESPACE = 'ZQ\SunSearchBundle\Tests\Doctrine\Mapper';
     const UNKNOW_ENTITY_NAMESPACE = 'FS\Unknown';
 
     private $knownAliases;
 
     public function setUp()
     {
-        $this->knownAliases = $this->getMock('FS\SolrBundle\Doctrine\ClassnameResolver\KnownNamespaceAliases', array(), array(), '', false);
+        $this->knownAliases = $this->getMock('ZQ\SunSearchBundle\Doctrine\ClassnameResolver\KnownNamespaceAliases', array(), array(), '', false);
     }
 
     /**
@@ -26,14 +26,14 @@ class ClassnameResolverTest extends \PHPUnit_Framework_TestCase
     {
         $resolver = $this->getResolverWithKnowNamespace(self::ENTITY_NAMESPACE);
 
-        $expectedClass = 'FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntity';
+        $expectedClass = 'ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntity';
 
         $this->assertEquals($expectedClass, $resolver->resolveFullQualifiedClassname('FSTest:ValidTestEntity'));
     }
 
     /**
      * @test
-     * @expectedException \FS\SolrBundle\Doctrine\ClassnameResolver\ClassnameResolverException
+     * @expectedException \ZQ\SunSearchBundle\Doctrine\ClassnameResolver\ClassnameResolverException
      */
     public function cantResolveClassnameFromUnknowClassWithValidNamespace()
     {
@@ -44,7 +44,7 @@ class ClassnameResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \FS\SolrBundle\Doctrine\ClassnameResolver\ClassnameResolverException
+     * @expectedException \ZQ\SunSearchBundle\Doctrine\ClassnameResolver\ClassnameResolverException
      */
     public function cantResolveClassnameIfEntityNamespaceIsUnknown()
     {

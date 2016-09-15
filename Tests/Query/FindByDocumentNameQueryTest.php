@@ -1,8 +1,8 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Query;
+namespace ZQ\SunSearchBundle\Tests\Query;
 
-use FS\SolrBundle\Query\FindByDocumentNameQuery;
+use ZQ\SunSearchBundle\Query\FindByDocumentNameQuery;
 use Solarium\QueryType\Update\Query\Document\Document;
 
 /**

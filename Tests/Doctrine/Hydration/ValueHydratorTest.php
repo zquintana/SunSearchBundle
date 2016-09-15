@@ -1,17 +1,16 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Doctrine\Hydration;
-
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Hydration;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use FS\SolrBundle\Doctrine\Annotation\AnnotationReader;
-use FS\SolrBundle\Doctrine\Hydration\ValueHydrator;
-use FS\SolrBundle\Doctrine\Hydration\ValueHydratorInterface;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory;
-use FS\SolrBundle\Tests\Doctrine\Mapper\SolrDocumentStub;
-use FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntity;
-use FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntityWithCollection;
-use FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntityWithRelation;
+use ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader;
+use ZQ\SunSearchBundle\Doctrine\Hydration\ValueHydrator;
+use ZQ\SunSearchBundle\Doctrine\Hydration\ValueHydratorInterface;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\SolrDocumentStub;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntity;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntityWithCollection;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntityWithRelation;
 
 /**
  * @group hydration

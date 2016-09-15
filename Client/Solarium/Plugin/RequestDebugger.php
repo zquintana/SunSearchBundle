@@ -1,6 +1,6 @@
 <?php
 
-namespace FS\SolrBundle\Client\Solarium\Plugin;
+namespace ZQ\SunSearchBundle\Client\Solarium\Plugin;
 
 use Psr\Log\LoggerInterface;
 use Solarium\Core\Event\Events;

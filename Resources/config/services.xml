@@ -17,16 +17,16 @@
             <argument type="service" id="solr.doctrine.entity_mapper"/>
         </service>
 
-        <service id="solr.client.adapter" class="Solarium\Client">
+        <service id="solr.client.adapter" class="Solarium\SunSunClient">
             <factory service="solr.client.adapter.builder" method="build" />
         </service>
 
-        <service id="solr.client.adapter.builder" class="FS\SolrBundle\Client\Solarium\SolariumClientBuilder">
+        <service id="solr.client.adapter.builder" class="FS\SolrBundle\SunSunClient\Solarium\SolariumClientBuilder">
             <argument type="collection"/>
             <argument type="service" id="event_dispatcher" />
         </service>
 
-        <service id="solr.client.plugin.logger" class="FS\SolrBundle\Client\Solarium\Plugin\LoggerPlugin">
+        <service id="solr.client.plugin.logger" class="FS\SolrBundle\SunSunClient\Solarium\Plugin\LoggerPlugin">
             <argument type="service" id="solr.client.logger.debug"/>
 
             <tag name="solarium.client.plugin" plugin-name="SolrBundleLogger"/>
@@ -40,7 +40,7 @@
             <tag name="data_collector" template="FSSolrBundle:Profiler:solr" id="solr" />
         </service>
 
-        <service id="solr.debug.client_debugger" class="FS\SolrBundle\Client\Solarium\Plugin\RequestDebugger">
+        <service id="solr.debug.client_debugger" class="FS\SolrBundle\SunSunClient\Solarium\Plugin\RequestDebugger">
             <argument type="service" id="logger"/>
 
             <tag name="monolog.logger" channel="solr" />

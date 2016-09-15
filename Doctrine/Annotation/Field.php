@@ -1,5 +1,6 @@
 <?php
-namespace FS\SolrBundle\Doctrine\Annotation;
+
+namespace ZQ\SunSearchBundle\Doctrine\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 use phpDocumentor\Reflection\DocBlock\Type\Collection;
@@ -81,26 +82,6 @@ class Field extends Annotation
     }
 
     /**
-     * @param string $type
-     *
-     * @return string
-     */
-    private function getTypeSuffix($type)
-    {
-        self::$TYP_MAPPING = array_merge(self::$TYP_COMPLEX_MAPPING, self::$TYP_SIMPLE_MAPPING);
-
-        if ($type == '') {
-            return '';
-        }
-
-        if (!isset(self::$TYP_MAPPING[$this->type])) {
-            return '';
-        }
-
-        return self::$TYP_MAPPING[$this->type];
-    }
-
-    /**
      * Related object getter name
      *
      * @return string
@@ -145,16 +126,44 @@ class Field extends Annotation
     }
 
     /**
+     * @return array
+     */
+    public static function getComplexFieldMapping()
+    {
+        return self::$TYP_COMPLEX_MAPPING;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return string
+     */
+    protected function getTypeSuffix($type)
+    {
+        self::$TYP_MAPPING = array_merge(self::$TYP_COMPLEX_MAPPING, self::$TYP_SIMPLE_MAPPING);
+
+        if ($type == '') {
+            return '';
+        }
+
+        if (!isset(self::$TYP_MAPPING[$this->type])) {
+            return '';
+        }
+
+        return self::$TYP_MAPPING[$this->type];
+    }
+
+    /**
      * normalize class attributes camelcased names to underscores
      * (according to solr specification, document field names should
      * contain only lowercase characters and underscores to maintain
      * retro compatibility with old components).
      *
-     * @param $name The field name
+     * @param string $name The field name
      *
      * @return string normalized field name
      */
-    private function normalizeName($name)
+    protected function normalizeName($name)
     {
         $words = preg_split('/(?=[A-Z])/', $name);
         $words = array_map(
@@ -165,13 +174,5 @@ class Field extends Annotation
         );
 
         return implode('_', $words);
-    }
-
-    /**
-     * @return array
-     */
-    public static function getComplexFieldMapping()
-    {
-        return self::$TYP_COMPLEX_MAPPING;
     }
 }

@@ -1,11 +1,12 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Annotation\Entities;
 
-use FS\SolrBundle\Doctrine\Annotation as Solr;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities;
+
+use ZQ\SunSearchBundle\Doctrine\Annotation as Sun;
 
 /**
  *
- * @Solr\Document
+ * @Sun\Document
  */
 class ValidTestEntityNoBoost
 {

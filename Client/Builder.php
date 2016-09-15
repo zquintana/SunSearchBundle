@@ -1,7 +1,10 @@
 <?php
 
-namespace FS\SolrBundle\Client;
+namespace ZQ\SunSearchBundle\Client;
 
+/**
+ * Interface Builder
+ */
 interface Builder
 {
     /**

@@ -1,15 +1,15 @@
 <?php
 
-namespace FS\SolrBundle\Client\Solarium;
+namespace ZQ\SunSearchBundle\Client\Solarium;
 
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
-use FS\SolrBundle\Query\FindByIdentifierQuery;
 use Solarium\Core\Query\QueryInterface;
 use Solarium\QueryType\Update\Query\Document\DocumentInterface;
-use \Solarium\Client;
+use Solarium\Client;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
+use ZQ\SunSearchBundle\Query\FindByIdentifierQuery;
 
 /**
- * Wrapper class for \Solarium\Client to perform actions on multiple cores
+ * Wrapper class for \Solarium\SunSunClient to perform actions on multiple cores
  */
 class SolariumMulticoreClient
 {

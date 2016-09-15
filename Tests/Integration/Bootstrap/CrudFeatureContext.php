@@ -1,13 +1,16 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Integration\Bootstrap;
+namespace ZQ\SunSearchBundle\Tests\Integration\Bootstrap;
 
 use Behat\Behat\Context\Context;
-use FS\SolrBundle\Solr;
-use FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntity;
-use FS\SolrBundle\Tests\Util\EntityIdentifier;
+use ZQ\SunSearchBundle\Client\SunSunClient;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntity;
+use ZQ\SunSearchBundle\Tests\Util\EntityIdentifier;
 use Solarium\QueryType\Update\Query\Document\Document;
 
+/**
+ * Class CrudFeatureContext
+ */
 class CrudFeatureContext extends FeatureContext
 {
     /**
@@ -16,18 +19,19 @@ class CrudFeatureContext extends FeatureContext
     private $entity;
 
     /**
-     * @var Solr
+     * @var SunSunClient
      */
-    private $solr;
+    private $sunClient;
 
     const DOCUMENT_NAME = 'validtestentity';
+
 
     /**
      * @Given /^I have a Doctrine entity$/
      */
     public function iHaveADoctrineEntity()
     {
-        $this->solr = $this->getSolrInstance();
+        $this->sunClient = $this->getSunInstance();
 
         $this->entity = new ValidTestEntity();
         $this->entity->setId(EntityIdentifier::generate());
@@ -39,7 +43,7 @@ class CrudFeatureContext extends FeatureContext
      */
     public function iAddThisEntityToSolr()
     {
-        $this->solr->addDocument($this->entity);
+        $this->sunClient->addDocument($this->entity);
     }
 
     /**
@@ -86,7 +90,7 @@ class CrudFeatureContext extends FeatureContext
      */
     public function iDeleteTheEntity()
     {
-        $this->solr->removeDocument($this->entity);
+        $this->sunClient->removeDocument($this->entity);
     }
 
     /**

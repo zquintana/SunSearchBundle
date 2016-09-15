@@ -1,11 +1,11 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Query;
+namespace ZQ\SunSearchBundle\Tests\Query;
 
-use FS\SolrBundle\Doctrine\Annotation\AnnotationReader;
-use FS\SolrBundle\Query\Exception\UnknownFieldException;
-use FS\SolrBundle\Query\SolrQuery;
-use FS\SolrBundle\SolrQueryFacade;
+use ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader;
+use ZQ\SunSearchBundle\Query\Exception\UnknownFieldException;
+use ZQ\SunSearchBundle\Query\SolrQuery;
+use ZQ\SunSearchBundle\SolrQueryFacade;
 
 /**
  *
@@ -28,7 +28,7 @@ class SolrQueryTest extends \PHPUnit_Framework_TestCase
      */
     private function createQueryWithFieldMapping()
     {
-        $solr = $this->getMock('FS\SolrBundle\Solr', array(), array(), '', false);
+        $solr = $this->getMock('ZQ\SunSearchBundle\Solr', array(), array(), '', false);
 
         $solrQuery = new SolrQuery();
         $solrQuery->setSolr($solr);
@@ -101,7 +101,7 @@ class SolrQueryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \FS\SolrBundle\Query\Exception\UnknownFieldException
+     * @expectedException \ZQ\SunSearchBundle\Query\Exception\UnknownFieldException
      */
     public function testAddSearchTerm_UnknownField()
     {

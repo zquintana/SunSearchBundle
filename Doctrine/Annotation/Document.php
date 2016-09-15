@@ -1,5 +1,5 @@
 <?php
-namespace FS\SolrBundle\Doctrine\Annotation;
+namespace ZQ\SunSearchBundle\Doctrine\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace FS\SolrBundle\Command;
+namespace ZQ\SunSearchBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\Table;
@@ -14,7 +14,7 @@ class ShowSchemaCommand extends ContainerAwareCommand
      */
     protected function configure()
     {
-        $this->setName('solr:schema:show')
+        $this->setName('sunsearch:schema:show')
             ->setDescription('Show configured entities and their fields');
     }
 
@@ -23,8 +23,8 @@ class ShowSchemaCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $namespaces = $this->getContainer()->get('solr.doctrine.classnameresolver.known_entity_namespaces');
-        $metaInformationFactory = $this->getContainer()->get('solr.meta.information.factory');
+        $namespaces = $this->getContainer()->get('sunsearch.doctrine.classnameresolver.known_entity_namespaces');
+        $metaInformationFactory = $this->getContainer()->get('sunsearch.meta.information.factory');
 
         foreach ($namespaces->getEntityClassnames() as $classname) {
             try {

@@ -1,22 +1,18 @@
 <?php
-namespace FS\SolrBundle\Tests\Doctrine\Mapper;
+namespace ZQ\SunSearchBundle\Tests\Doctrine\Mapper;
 
-use FS\SolrBundle\Doctrine\Annotation as Solr;
-
+use ZQ\SunSearchBundle\Doctrine\Annotation as Sun;
 
 /**
- *
- *
- *
  * @author Florian
- * @Solr\Index
+ * @Sun\Index
  */
 class NoIdEntity
 {
     private $id;
 
     /**
-     * @Solr\Field(type="string")
+     * @Sun\Field(type="string")
      * @var string
      */
     private $text;

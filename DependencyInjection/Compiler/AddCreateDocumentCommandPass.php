@@ -1,5 +1,6 @@
 <?php
-namespace FS\SolrBundle\DependencyInjection\Compiler;
+
+namespace ZQ\SunSearchBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -12,9 +13,9 @@ class AddCreateDocumentCommandPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $definitions = $container->findTaggedServiceIds('solr.document.command');
+        $definitions = $container->findTaggedServiceIds('sunsearch.document.command');
 
-        $factory = $container->getDefinition('solr.mapping.factory');
+        $factory = $container->getDefinition('sunsearch.mapping.factory');
 
         foreach ($definitions as $service => $definition) {
             $factory->addMethodCall(

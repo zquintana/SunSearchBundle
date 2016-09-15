@@ -1,30 +1,31 @@
 <?php
 
-namespace FS\SolrBundle;
+namespace ZQ\SunSearchBundle\Client;
 
-use FS\SolrBundle\Client\Solarium\SolariumMulticoreClient;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
+use Solarium\Client as SolrClient;
 use Solarium\Plugin\BufferedAdd\BufferedAdd;
 use Solarium\QueryType\Update\Query\Document\Document;
-use FS\SolrBundle\Doctrine\Mapper\EntityMapper;
-use FS\SolrBundle\Doctrine\Mapper\Mapping\CommandFactory;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationFactory;
-use FS\SolrBundle\Event\ErrorEvent;
-use FS\SolrBundle\Event\Event;
-use FS\SolrBundle\Event\Events;
-use FS\SolrBundle\Query\AbstractQuery;
-use FS\SolrBundle\Query\SolrQuery;
-use FS\SolrBundle\Repository\Repository;
-use Solarium\Client;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use ZQ\SunSearchBundle\Client\Solarium\SolariumMulticoreClient;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
+use ZQ\SunSearchBundle\Query\ResultSet;
+use ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper;
+use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\CommandFactory;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory;
+use ZQ\SunSearchBundle\Event\ErrorEvent;
+use ZQ\SunSearchBundle\Event\Event;
+use ZQ\SunSearchBundle\Event\Events;
+use ZQ\SunSearchBundle\Query\AbstractQuery;
+use ZQ\SunSearchBundle\Query\SolrQuery;
+use ZQ\SunSearchBundle\Repository\Repository;
 
 /**
  * Class allows to index doctrine entities
  */
-class Solr implements SolrInterface
+class SunSunClient implements SunClientInterface
 {
     /**
-     * @var Client
+     * @var SolrClient
      */
     protected $solrClientCore = null;
 
@@ -54,14 +55,14 @@ class Solr implements SolrInterface
     private $numberOfFoundDocuments = 0;
 
     /**
-     * @param Client                   $client
+     * @param SolrClient               $client
      * @param CommandFactory           $commandFactory
      * @param EventDispatcherInterface $manager
      * @param MetaInformationFactory   $metaInformationFactory
      * @param EntityMapper             $entityMapper
      */
     public function __construct(
-        Client $client,
+        SolrClient $client,
         CommandFactory $commandFactory,
         EventDispatcherInterface $manager,
         MetaInformationFactory $metaInformationFactory,
@@ -77,7 +78,7 @@ class Solr implements SolrInterface
     }
 
     /**
-     * @return Client
+     * @return SolrClient
      */
     public function getClient()
     {
@@ -148,7 +149,7 @@ class Solr implements SolrInterface
             }
 
             throw new \RuntimeException(sprintf(
-                '%s must extends the FS\SolrBundle\Repository\Repository',
+                '%s must extends the ZQ\SunSearchBundle\Repository\Repository',
                 $repositoryClass
             ));
         }

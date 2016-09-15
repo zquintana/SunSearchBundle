@@ -1,9 +1,9 @@
 <?php
 
-namespace FS\SolrBundle\Tests\Integration\Bootstrap;
+namespace ZQ\SunSearchBundle\Tests\Integration\Bootstrap;
 
 use Behat\Behat\Context\Context;
-use FS\SolrBundle\Event\Events;
+use ZQ\SunSearchBundle\Event\Events;
 use Solarium\QueryType\Update\Query\Document\Document;
 
 /**

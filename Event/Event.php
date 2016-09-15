@@ -1,10 +1,13 @@
 <?php
-namespace FS\SolrBundle\Event;
+namespace ZQ\SunSearchBundle\Event;
 
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
 use Solarium\Client;
 use Symfony\Component\EventDispatcher\Event as BaseEvent;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
 
+/**
+ * Class Event
+ */
 class Event extends BaseEvent
 {
     /**

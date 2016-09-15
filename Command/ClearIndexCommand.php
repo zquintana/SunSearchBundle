@@ -1,7 +1,6 @@
 <?php
-namespace FS\SolrBundle\Command;
+namespace ZQ\SunSearchBundle\Command;
 
-use FS\SolrBundle\Console\ConsoleErrorListOutput;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,7 +18,7 @@ class ClearIndexCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('solr:index:clear')
+            ->setName('sunsearch:index:clear')
             ->setDescription('Clear the whole index');
     }
 
@@ -28,7 +27,7 @@ class ClearIndexCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $solr = $this->getContainer()->get('solr.client');
+        $solr = $this->getContainer()->get('sunsearch.client');
 
         try {
             $solr->clearIndex();

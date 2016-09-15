@@ -1,10 +1,14 @@
 <?php
-namespace FS\SolrBundle\Tests\Util;
 
-use FS\SolrBundle\Doctrine\Annotation\Field;
-use FS\SolrBundle\Tests\Doctrine\Mapper\ValidTestEntity;
-use FS\SolrBundle\Doctrine\Mapper\MetaInformation;
+namespace ZQ\SunSearchBundle\Tests\Util;
 
+use ZQ\SunSearchBundle\Doctrine\Annotation\Field;
+use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntity;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformation;
+
+/**
+ * Class MetaTestInformationFactory
+ */
 class MetaTestInformationFactory
 {
     /**

@@ -1,11 +1,14 @@
 <?php
 
-namespace FS\SolrBundle;
+namespace ZQ\SunSearchBundle\Client;
 
-use FS\SolrBundle\Query\AbstractQuery;
-use FS\SolrBundle\Repository\Repository;
+use ZQ\SunSearchBundle\Query\AbstractQuery;
+use ZQ\SunSearchBundle\Repository\Repository;
 
-interface SolrInterface
+/**
+ * Interface SunClientInterface
+ */
+interface SunClientInterface
 {
 
     /**
@@ -39,7 +42,7 @@ interface SolrInterface
      *
      * @return Repository
      *
-     * @throws \RuntimeException if repository of the given $entityAlias does not extend FS\SolrBundle\Repository\Repository
+     * @throws \RuntimeException if repository of the given $entityAlias does not extend ZQ\SunSearchBundle\Repository\Repository
      */
     public function getRepository($entityAlias);
 

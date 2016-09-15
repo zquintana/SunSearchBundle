@@ -1,8 +1,8 @@
 <?php
 
-namespace FS\SolrBundle\Doctrine\Hydration;
+namespace ZQ\SunSearchBundle\Doctrine\Hydration;
 
-use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
 
 /**
  * Hydrates blank Entity from Document

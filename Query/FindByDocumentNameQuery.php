@@ -1,6 +1,6 @@
 <?php
 
-namespace FS\SolrBundle\Query;
+namespace ZQ\SunSearchBundle\Query;
 
 /**
  * Builds a wildcard query to find all documents
