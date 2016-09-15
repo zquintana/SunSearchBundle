@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: zach
- * Date: 12/9/15
- * Time: 11:45 AM
- */
 
 namespace FS\SolrBundle\Query;
 
-
 use Doctrine\Common\Collections\ArrayCollection;
+use FS\SolrBundle\Doctrine\Mapper\EntityMapper;
 use Solarium\QueryType\Select\Result\Result;
 
 /**
@@ -28,16 +22,24 @@ class ResultSet extends ArrayCollection
     /**
      * ResultSet constructor.
      *
-     * @param array $elements
-     * @param Result|null $result
+     * @param object            $entity
+     * @param EntityMapper|null $mapper
+     * @param Result|null       $response
      */
-    public function __construct(array $elements = array(), Result $result = null)
+    public function __construct($entity, EntityMapper $mapper = null, Result $response = null)
     {
-        parent::__construct($elements);
-
-        if ($result !== null) {
-            $this->response = $result;
+        if ($mapper === null || $response === null) {
+            return;
         }
+
+        $mappedEntities = array();
+        foreach ($response as $document) {
+            $mappedEntities[] = $mapper->toEntity($document, $entity);
+        }
+
+        $this->response = $response;
+
+        parent::__construct($mappedEntities);
     }
 
     /**

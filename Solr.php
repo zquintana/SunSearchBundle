@@ -6,6 +6,7 @@ use FS\SolrBundle\Client\Solarium\SolariumMulticoreClient;
 use FS\SolrBundle\Doctrine\Mapper\MetaInformationInterface;
 use FS\SolrBundle\Query\ResultSet;
 use Solarium\Plugin\BufferedAdd\BufferedAdd;
+use Solarium\QueryType\Select\Query\Query;
 use Solarium\QueryType\Update\Query\Document\Document;
 use FS\SolrBundle\Doctrine\Mapper\EntityMapper;
 use FS\SolrBundle\Doctrine\Mapper\Mapping\CommandFactory;
@@ -67,13 +68,11 @@ class Solr implements SolrInterface
         EventDispatcherInterface $manager,
         MetaInformationFactory $metaInformationFactory,
         EntityMapper $entityMapper
-    )
-    {
+    ) {
         $this->solrClientCore = $client;
         $this->commandFactory = $commandFactory;
         $this->eventManager = $manager;
         $this->metaInformationFactory = $metaInformationFactory;
-
         $this->entityMapper = $entityMapper;
     }
 
@@ -271,6 +270,7 @@ class Solr implements SolrInterface
         $selectQuery->setFilterQueries($query->getFilterQueries());
         $selectQuery->setSorts($query->getSorts());
         $selectQuery->setFields($query->getFields());
+        $selectQuery->setComponent(Query::COMPONENT_FACETSET, $query->getComponent(Query::COMPONENT_FACETSET));
 
         return $selectQuery;
     }
@@ -286,24 +286,16 @@ class Solr implements SolrInterface
 
         try {
             $response = $this->solrClientCore->select($selectQuery, $runQueryInIndex);
+
+            return new ResultSet($entity, $this->entityMapper, $response);
         } catch (\Exception $e) {
             $errorEvent = new ErrorEvent(null, null, 'query solr');
             $errorEvent->setException($e);
 
             $this->eventManager->dispatch(Events::ERROR, $errorEvent);
 
-            return new ResultSet();
+            return new ResultSet($entity, null, null);
         }
-
-        $this->numberOfFoundDocuments = $response->getNumFound();
-        if ($this->numberOfFoundDocuments == 0) {
-            return new ResultSet([], $response);
-        }
-
-        $targetEntity = $entity;
-        $mappedEntities = $this->entityMapper->toEntities($response, $targetEntity);
-
-        return new ResultSet($mappedEntities, $response);
     }
 
     /**
