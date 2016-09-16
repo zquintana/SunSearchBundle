@@ -47,7 +47,7 @@ class SynchronizeIndexCommand extends ContainerAwareCommand
         $entities = $this->getIndexableEntities($input->getArgument('entity'));
         $source = $input->getOption('source');
         $batchSize = $input->getOption('flushsize');
-        $solr = $this->getContainer()->get('solr.client');
+        $solr = $this->getContainer()->get('sunsearch.client');
 
         $objectManager = $this->getObjectManager($source);
 
