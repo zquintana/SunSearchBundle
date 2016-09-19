@@ -28,10 +28,6 @@
             <tag name="solarium.client.plugin" plugin-name="SolrBundleLogger"/>
         </service>
 
-        <service id="sunsearch.client.plugin.admin" class="ZQ\SunSearchBundle\Client\Solarium\Plugin\AdminPlugin">
-            <tag name="solarium.client.plugin" plugin-name="SolrBundleAdmin" />
-        </service>
-
         <service id="sunsearch.client.logger.debug" class="ZQ\SunSearchBundle\Logging\DebugLogger" />
 
         <service id="sunsearch.data_collector" class="ZQ\SunSearchBundle\DataCollector\RequestCollector" public="false">
