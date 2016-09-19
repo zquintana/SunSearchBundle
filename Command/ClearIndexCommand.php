@@ -1,4 +1,5 @@
 <?php
+
 namespace ZQ\SunSearchBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
