@@ -20,11 +20,11 @@ class ResultSet extends ArrayCollection
     /**
      * ResultSet constructor.
      *
-     * @param object            $entity
+     * @param object|null       $entity
      * @param EntityMapper|null $mapper
      * @param Result|null       $response
      */
-    public function __construct($entity, EntityMapper $mapper = null, Result $response = null)
+    public function __construct($entity = null, EntityMapper $mapper = null, Result $response = null)
     {
         if ($mapper === null || $response === null) {
             return;

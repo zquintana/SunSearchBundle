@@ -298,7 +298,7 @@ entity should be indexed.
 Querying the index is done via the `solr.client` service:
 
 ```php
-$query = $this->get('solr.client')->createQuery('AcmeDemoBundle:Post');
+$query = $this->get('solr.client')->createEntityQuery('AcmeDemoBundle:Post');
 $query->addSearchTerm('title', 'my title');
 $query->addSearchTerm('collection_field', array('value1', 'value2'));
 
@@ -319,7 +319,7 @@ $posts = $this->get('solr.client')->getRepository('AcmeDemoBundle:Post')->findOn
 The previous examples were only querying the `title` field. You can also query all fields with a string.
 
 ```php
-$query = $this->get('solr.client')->createQuery('AcmeDemoBundle:Post');
+$query = $this->get('solr.client')->createEntityQuery('AcmeDemoBundle:Post');
 $query->queryAllFields('my title');
 
 $result = $query->getResult();
@@ -330,7 +330,7 @@ $result = $query->getResult();
 If you need more flexiblity in your queries you can define your own query strings:
 
 ```php
-$query = $this->get('solr.client')->createQuery('AcmeDemoBundle:Post');
+$query = $this->get('solr.client')->createEntityQuery('AcmeDemoBundle:Post');
 $query->setCustomQuery('id:post_* AND (author_s:Name1 OR author_s:Name2)');
 
 $result = $query->getResult();
@@ -341,7 +341,7 @@ $result = $query->getResult();
 To narrow the mapping, you can use the `addField()` method.
 
 ```php
-$query = $this->get('solr.client')->createQuery('AcmeDemoBundle:Post');
+$query = $this->get('solr.client')->createEntityQuery('AcmeDemoBundle:Post');
 $query->addSearchTerm('title', 'my title');
 $query->addField('id');
 $query->addField('text');
@@ -368,7 +368,7 @@ HydrationMode tells the bundle how to create an entity from a document.
 With a custom query:
 
 ```php
-$query = $this->get('solr.client')->createQuery('AcmeDemoBundle:Post');
+$query = $this->get('solr.client')->createEntityQuery('AcmeDemoBundle:Post');
 $query->setHydrationMode($mode)
 ```
 
@@ -396,7 +396,7 @@ class ProviderRepository extends Repository
 {
     public function findPost($what)
     {
-        $query = $this->solr->createQuery('AcmeDemoBundle:Post');
+        $query = $this->solr->createEntityQuery('AcmeDemoBundle:Post');
         // some query-magic here
 
         return $query->getResult();

@@ -24,6 +24,7 @@ class SunSearchExtension extends Extension
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
+        $loader->load('hydrators.xml');
         $loader->load('event_listener.xml');
         $loader->load('log_listener.xml');
 
@@ -36,7 +37,19 @@ class SunSearchExtension extends Extension
 
         $this->setupDoctrineListener($config, $container);
         $this->setupDoctrineConfiguration($config, $container);
+        $this->setupHydrationManager($container);
+    }
 
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function setupHydrationManager(ContainerBuilder $container)
+    {
+        $manager = $container->getDefinition('sunsearch.hydration_manager');
+
+        foreach ($container->findTaggedServiceIds('sunsearch.hydrator') as $id => $tags) {
+            $manager->addMethodCall('register', [ new Reference($id) ]);
+        }
     }
 
     /**

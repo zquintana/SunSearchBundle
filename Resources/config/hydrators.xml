@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sunsearch.hydration_manager" class="ZQ\SunSearchBundle\Doctrine\Hydration\HydrationManager">
+        </service>
+
+        <service id="sunsearch.doctrine.hydration.doctrine_hydrator" class="ZQ\SunSearchBundle\Doctrine\Hydration\DoctrineHydrator">
+            <argument id="doctrine" type="service"/>
+            <argument id="sunsearch.doctrine.hydration.index_hydrator" type="service"/>
+            <tag name="sunsearch.hydrator" />
+        </service>
+
+        <service id="sunsearch.doctrine.hydration.value_hydrator" class="ZQ\SunSearchBundle\Doctrine\Hydration\ValueHydrator">
+            <tag name="sunsearch.hydrator" />
+        </service>
+
+        <service id="sunsearch.doctrine.hydration.doctrine_value_hydrator" class="ZQ\SunSearchBundle\Doctrine\Hydration\DoctrineValueHydrator">
+            <tag name="sunsearch.hydrator" />
+        </service>
+
+        <service id="sunsearch.doctrine.hydration.index_hydrator" class="ZQ\SunSearchBundle\Doctrine\Hydration\IndexHydrator">
+            <argument id="sunsearch.doctrine.hydration.value_hydrator" type="service"/>
+            <tag name="sunsearch.hydrator" />
+        </service>
+
+        <service id="sunsearch.hydration.document" class="ZQ\SunSearchBundle\Doctrine\Hydration\DocumentHydrator">
+            <tag name="sunsearch.hydrator" />
+        </service>
+    </services>
+</container>

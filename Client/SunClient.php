@@ -9,6 +9,7 @@ use Solarium\QueryType\Update\Query\Document\Document;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ZQ\SunSearchBundle\Client\Solarium\SolariumMulticoreClient;
 use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
+use ZQ\SunSearchBundle\Exception\HydratorException;
 use ZQ\SunSearchBundle\Query\ResultSet;
 use ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper;
 use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\CommandFactory;
@@ -113,18 +114,29 @@ class SunClient implements SunClientInterface
      *
      * @return SolrQuery
      */
-    public function createQuery($entity)
+    public function createEntityQuery($entity)
     {
         $metaInformation = $this->metaInformationFactory->loadInformation($entity);
         $class = $metaInformation->getClassName();
-        $entity = new $class;
+        $entity = new $class();
 
-        $query = new SolrQuery();
-        $query->setSolr($this);
+        $query = $this->createQuery($metaInformation->getIndex());
         $query->setEntity($entity);
-        $query->setIndex($metaInformation->getIndex());
-
         $query->setMappedFields($metaInformation->getFieldMapping());
+
+        return $query;
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return SolrQuery
+     */
+    public function createQuery($index)
+    {
+        $query = new SolrQuery();
+        $query->setSunSearch($this);
+        $query->setIndex($index);
 
         return $query;
     }
@@ -137,7 +149,7 @@ class SunClient implements SunClientInterface
         $metaInformation = $this->metaInformationFactory->loadInformation($entityAlias);
         $class = $metaInformation->getClassName();
 
-        $entity = new $class;
+        $entity = new $class();
 
         $repositoryClass = $metaInformation->getRepository();
         if (class_exists($repositoryClass)) {
@@ -210,28 +222,6 @@ class SunClient implements SunClientInterface
     }
 
     /**
-     * @param MetaInformationInterface $metaInformation
-     * @param object                   $entity
-     *
-     * @return boolean
-     *
-     * @throws \BadMethodCallException if callback method not exists
-     */
-    private function addToIndex(MetaInformationInterface $metaInformation, $entity)
-    {
-        if (!$metaInformation->hasSynchronizationFilter()) {
-            return true;
-        }
-
-        $callback = $metaInformation->getSynchronizationCallback();
-        if (!method_exists($entity, $callback)) {
-            throw new \BadMethodCallException(sprintf('unknown method %s in entity %s', $callback, get_class($entity)));
-        }
-
-        return $entity->$callback();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function computeChangeSet(array $doctrineChangeSet, $entity)
@@ -270,7 +260,11 @@ class SunClient implements SunClientInterface
         $selectQuery->setFilterQueries($query->getFilterQueries());
         $selectQuery->setSorts($query->getSorts());
         $selectQuery->setFields($query->getFields());
-        $selectQuery->setComponent(Query::COMPONENT_FACETSET, $query->getComponent(Query::COMPONENT_FACETSET));
+
+        $facetSet = $query->getComponent(Query::COMPONENT_FACETSET);
+        if ($facetSet) {
+            $selectQuery->setComponent(Query::COMPONENT_FACETSET, $facetSet);
+        }
 
         return $selectQuery;
     }
@@ -278,24 +272,44 @@ class SunClient implements SunClientInterface
     /**
      * {@inheritdoc}
      */
-    public function query(AbstractQuery $query)
+    public function query(AbstractQuery $query, $hydrationMode = 'doctrine')
     {
+        $prevMode = $this->entityMapper->getHydrationMode();
+        $this->entityMapper->setHydrationMode($hydrationMode);
+
         $entity = $query->getEntity();
         $runQueryInIndex = $query->getIndex();
         $selectQuery = $this->getSelectQuery($query);
 
         try {
             $response = $this->solrClientCore->select($selectQuery, $runQueryInIndex);
-
-            return new ResultSet($entity, $this->entityMapper, $response);
-        } catch (\Exception $e) {
+            $results = new ResultSet($entity, $this->entityMapper, $response);
+        } catch (HydratorException $e) {
             $errorEvent = new ErrorEvent(null, null, 'query solr');
             $errorEvent->setException($e);
 
             $this->eventManager->dispatch(Events::ERROR, $errorEvent);
 
-            return new ResultSet($entity, null, null);
+            $results = new ResultSet($entity, null, null);
         }
+
+        $this->entityMapper->setHydrationMode($prevMode);
+
+        return $results;
+    }
+
+    /**
+     * @param string $sQuery
+     * @param string $index
+     *
+     * @return SolrQuery
+     */
+    public function selectQuery($sQuery, $index)
+    {
+        $query = $this->createQuery($index);
+        $query->setCustomQuery($sQuery);
+
+        return $query;
     }
 
     /**
@@ -411,5 +425,27 @@ class SunClient implements SunClientInterface
 
             $this->eventManager->dispatch(Events::ERROR, $errorEvent);
         }
+    }
+
+    /**
+     * @param MetaInformationInterface $metaInformation
+     * @param object                   $entity
+     *
+     * @return boolean
+     *
+     * @throws \BadMethodCallException if callback method not exists
+     */
+    private function addToIndex(MetaInformationInterface $metaInformation, $entity)
+    {
+        if (!$metaInformation->hasSynchronizationFilter()) {
+            return true;
+        }
+
+        $callback = $metaInformation->getSynchronizationCallback();
+        if (!method_exists($entity, $callback)) {
+            throw new \BadMethodCallException(sprintf('unknown method %s in entity %s', $callback, get_class($entity)));
+        }
+
+        return $entity->$callback();
     }
 }

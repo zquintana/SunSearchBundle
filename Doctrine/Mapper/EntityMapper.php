@@ -1,7 +1,9 @@
 <?php
+
 namespace ZQ\SunSearchBundle\Doctrine\Mapper;
 
 use Solarium\QueryType\Update\Query\Document\Document;
+use ZQ\SunSearchBundle\Doctrine\Hydration\HydrationManager;
 use ZQ\SunSearchBundle\Doctrine\Hydration\HydrationModes;
 use ZQ\SunSearchBundle\Doctrine\Hydration\HydratorInterface;
 use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\AbstractDocumentCommand;
@@ -17,14 +19,9 @@ class EntityMapper
     private $mappingCommand = null;
 
     /**
-     * @var HydratorInterface
+     * @var HydrationManager
      */
-    private $doctrineHydrator;
-
-    /**
-     * @var HydratorInterface
-     */
-    private $indexHydrator;
+    private $hydrationManager;
 
     /**
      * @var string
@@ -38,17 +35,14 @@ class EntityMapper
 
 
     /**
-     * @param HydratorInterface      $doctrineHydrator
-     * @param HydratorInterface      $indexHydrator
+     * @param HydrationManager       $hydrationManager
      * @param MetaInformationFactory $metaInformationFactory
      */
     public function __construct(
-        HydratorInterface $doctrineHydrator,
-        HydratorInterface $indexHydrator,
+        HydrationManager $hydrationManager,
         MetaInformationFactory $metaInformationFactory
     ) {
-        $this->doctrineHydrator = $doctrineHydrator;
-        $this->indexHydrator = $indexHydrator;
+        $this->hydrationManager = $hydrationManager;
         $this->metaInformationFactory = $metaInformationFactory;
         $this->hydrationMode = HydrationModes::HYDRATE_DOCTRINE;
     }
@@ -83,38 +77,33 @@ class EntityMapper
      *
      * @throws \InvalidArgumentException if $sourceTargetEntity is null
      */
-    public function toEntity(\ArrayAccess $document, $sourceTargetEntity)
+    public function toEntity(\ArrayAccess $document, $sourceTargetEntity = null)
     {
-        if (null === $sourceTargetEntity) {
-            throw new \InvalidArgumentException('$sourceTargetEntity should not be null');
+        $metaInformation = null;
+        if ($sourceTargetEntity) {
+            $metaInformation = $this->metaInformationFactory->loadInformation($sourceTargetEntity);
         }
 
-        $metaInformation = $this->metaInformationFactory->loadInformation($sourceTargetEntity);
-
-        if ($metaInformation->isDoctrineEntity() === false && $this->hydrationMode == HydrationModes::HYDRATE_DOCTRINE) {
-            throw new \RuntimeException(sprintf('Please check your config. Given entity is not a Doctrine entity, but Doctrine hydration is enabled. Use setHydrationMode(HydrationModes::HYDRATE_DOCTRINE) to fix this.'));
-        }
-
-        $hydratedDocument = $this->indexHydrator->hydrate($document, $metaInformation);
-
-        if ($this->hydrationMode == HydrationModes::HYDRATE_INDEX) {
-            return $hydratedDocument;
-        }
-
-        $metaInformation->setEntity($hydratedDocument);
-
-        if ($this->hydrationMode == HydrationModes::HYDRATE_DOCTRINE) {
-            return $this->doctrineHydrator->hydrate($document, $metaInformation);
-        }
-
-        return null;
+        return $this->hydrationManager->get($this->hydrationMode)->hydrate($document, $metaInformation);
     }
 
     /**
      * @param string $mode
+     *
+     * @return EntityMapper $this
      */
     public function setHydrationMode($mode)
     {
         $this->hydrationMode = $mode;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHydrationMode(): string
+    {
+        return $this->hydrationMode;
     }
 }

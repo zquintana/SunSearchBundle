@@ -13,6 +13,10 @@
             <argument type="service" id="sunsearch.doctrine.entity_mapper"/>
         </service>
 
+        <service id="sunsearch.solr" class="Solarium\Core\Client\Client">
+            <factory service="sunsearch.client" method="getClient" />
+        </service>
+
         <service id="sunsearch.client.adapter" class="Solarium\Client">
             <factory service="sunsearch.client.adapter.builder" method="build" />
         </service>
@@ -65,24 +69,8 @@
         </service>
 
         <service id="sunsearch.doctrine.entity_mapper" class="ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper">
-            <argument id="sunsearch.doctrine.hydration.doctrine_hydrator" type="service"/>
-            <argument id="sunsearch.doctrine.hydration.index_hydrator" type="service"/>
+            <argument id="sunsearch.hydration_manager" type="service"/>
             <argument type="service" id="sunsearch.meta.information.factory"/>
-        </service>
-
-        <service id="sunsearch.doctrine.hydration.doctrine_hydrator" class="ZQ\SunSearchBundle\Doctrine\Hydration\DoctrineHydrator">
-            <argument id="doctrine" type="service"/>
-            <argument id="sunsearch.doctrine.hydration.doctrine_value_hydrator" type="service"/>
-        </service>
-
-        <service id="sunsearch.doctrine.hydration.value_hydrator" class="ZQ\SunSearchBundle\Doctrine\Hydration\ValueHydrator">
-        </service>
-
-        <service id="sunsearch.doctrine.hydration.doctrine_value_hydrator" class="ZQ\SunSearchBundle\Doctrine\Hydration\DoctrineValueHydrator">
-        </service>
-
-        <service id="sunsearch.doctrine.hydration.index_hydrator" class="ZQ\SunSearchBundle\Doctrine\Hydration\IndexHydrator">
-            <argument id="sunsearch.doctrine.hydration.value_hydrator" type="service"/>
         </service>
 
         <service id="sunsearch.doctrine.annotation.annotation_reader" class="ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader">

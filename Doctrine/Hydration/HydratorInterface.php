@@ -14,10 +14,17 @@ use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
 interface HydratorInterface
 {
     /**
-     * @param object                   $document
-     * @param MetaInformationInterface $metaInformation holds the target entity
+     * @param object                        $document
+     * @param MetaInformationInterface|null $metaInformation holds the target entity
      *
      * @return object
      */
-    public function hydrate($document, MetaInformationInterface $metaInformation);
+    public function hydrate($document, MetaInformationInterface $metaInformation = null);
+
+    /**
+     * Name of the hydration method
+     *
+     * @return string
+     */
+    public function getName();
 } 

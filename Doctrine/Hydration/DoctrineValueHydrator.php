@@ -13,7 +13,7 @@ class DoctrineValueHydrator extends ValueHydrator
     /**
      * {@inheritdoc}
      */
-    public function mapValue($fieldName, $value, MetaInformationInterface $metaInformation)
+    public function mapValue($fieldName, $value, MetaInformationInterface $metaInformation = null)
     {
         if (is_array($value)) {
             return false;
@@ -35,4 +35,11 @@ class DoctrineValueHydrator extends ValueHydrator
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'doctrine_value';
+    }
 }

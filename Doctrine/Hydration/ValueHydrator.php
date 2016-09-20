@@ -14,7 +14,7 @@ class ValueHydrator implements HydratorInterface
     /**
      * {@inheritdoc}
      */
-    public function hydrate($document, MetaInformationInterface $metaInformation)
+    public function hydrate($document, MetaInformationInterface $metaInformation = null)
     {
         $targetEntity = $metaInformation->getEntity();
 
@@ -61,6 +61,14 @@ class ValueHydrator implements HydratorInterface
     public function mapValue($fieldName, $value, MetaInformationInterface $metaInformation)
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'value';
     }
 
     /**
@@ -114,4 +122,4 @@ class ValueHydrator implements HydratorInterface
 
         return lcfirst($pascalCased);
     }
-} 
+}
