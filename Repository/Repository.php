@@ -2,7 +2,7 @@
 
 namespace ZQ\SunSearchBundle\Repository;
 
-use ZQ\SunSearchBundle\Client\SunSunClient;
+use ZQ\SunSearchBundle\Client\SunClient;
 use ZQ\SunSearchBundle\Doctrine\Hydration\HydrationModes;
 use ZQ\SunSearchBundle\Query\FindByDocumentNameQuery;
 use ZQ\SunSearchBundle\Query\FindByIdentifierQuery;
@@ -13,7 +13,7 @@ use ZQ\SunSearchBundle\Query\FindByIdentifierQuery;
 class Repository implements RepositoryInterface
 {
     /**
-     * @var SunSunClient
+     * @var SunClient
      */
     protected $sunClient = null;
 
@@ -29,10 +29,10 @@ class Repository implements RepositoryInterface
 
 
     /**
-     * @param SunSunClient $sunClient
-     * @param object $entity
+     * @param SunClient $sunClient
+     * @param object    $entity
      */
-    public function __construct(SunSunClient $sunClient, $entity)
+    public function __construct(SunClient $sunClient, $entity)
     {
         $this->sunClient     = $sunClient;
         $this->entity        = $entity;
@@ -103,11 +103,11 @@ class Repository implements RepositoryInterface
     {
         $metaInformation = $this->sunClient->getMetaFactory()->loadInformation($this->entity);
 
-        $query = $this->sunClient->createQuery($this->entity);
+        $query = $this->sunClient->createEntityQuery($this->entity);
         $query->setHydrationMode($this->hydrationMode);
         $query->setRows(100000);
         $query->setUseAndOperator(true);
-        $query->addSearchTerm('id', $metaInformation->getDocumentName(). '_*');
+        $query->addSearchTerm('id', $metaInformation->getDocumentName().'_*');
         $query->setQueryDefaultField('id');
 
         $helper = $query->getHelper();
@@ -127,11 +127,11 @@ class Repository implements RepositoryInterface
     {
         $metaInformation = $this->sunClient->getMetaFactory()->loadInformation($this->entity);
 
-        $query = $this->sunClient->createQuery($this->entity);
+        $query = $this->sunClient->createEntityQuery($this->entity);
         $query->setHydrationMode($this->hydrationMode);
         $query->setRows(1);
         $query->setUseAndOperator(true);
-        $query->addSearchTerm('id', $metaInformation->getDocumentName(). '_*');
+        $query->addSearchTerm('id', $metaInformation->getDocumentName().'_*');
         $query->setQueryDefaultField('id');
 
         $helper = $query->getHelper();
@@ -151,6 +151,6 @@ class Repository implements RepositoryInterface
      */
     public function createQuery()
     {
-        return $this->sunClient->createQuery($this->entity);
+        return $this->sunClient->createEntityQuery($this->entity);
     }
 }

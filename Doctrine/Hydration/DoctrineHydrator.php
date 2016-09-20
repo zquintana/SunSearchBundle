@@ -21,30 +21,31 @@ class DoctrineHydrator implements HydratorInterface
     /**
      * @var HydratorInterface
      */
-    private $valueHydrator;
+    private $indexHydrator;
 
     /**
      * @param RegistryInterface $doctrine
-     * @param HydratorInterface $valueHydrator
+     * @param HydratorInterface $indexHydrator
      */
-    public function __construct(RegistryInterface $doctrine, HydratorInterface $valueHydrator)
+    public function __construct(RegistryInterface $doctrine, HydratorInterface $indexHydrator)
     {
         $this->doctrine = $doctrine;
-        $this->valueHydrator = $valueHydrator;
+        $this->indexHydrator = $indexHydrator;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function hydrate($document, MetaInformationInterface $metaInformation)
+    public function hydrate($document, MetaInformationInterface $metaInformation = null)
     {
+        $hydratedDocument = $this->indexHydrator->hydrate($document, $metaInformation);
+        $metaInformation->setEntity($hydratedDocument);
+
         $entityId = $metaInformation->getEntityId();
         $doctrineEntity = $this->doctrine
             ->getManager()
             ->getRepository($metaInformation->getClassName())
             ->find($entityId);
-
-        $metaInformation->setEntity($doctrineEntity);
 
         return $doctrineEntity;
     }
@@ -70,5 +71,13 @@ class DoctrineHydrator implements HydratorInterface
         } else {
             return $repo->findBy(['id' => $ids]);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'doctrine';
     }
 }

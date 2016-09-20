@@ -25,13 +25,25 @@ class IndexHydrator implements HydratorInterface
     /**
      * {@inheritdoc}
      */
-    public function hydrate($document, MetaInformationInterface $metaInformation)
+    public function hydrate($document, MetaInformationInterface $metaInformation = null)
     {
+        if ($metaInformation->isDoctrineEntity() === false) {
+            throw new \RuntimeException(sprintf('Please check your config. Given entity is not a Doctrine entity, but Doctrine hydration is enabled. Use setHydrationMode(HydrationModes::HYDRATE_DOCTRINE) to fix this.'));
+        }
+
         $sourceTargetEntity = $metaInformation->getEntity();
         $targetEntity = clone $sourceTargetEntity;
 
         $metaInformation->setEntity($targetEntity);
 
         return $this->valueHydrator->hydrate($document, $metaInformation);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'index';
     }
 } 

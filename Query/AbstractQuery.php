@@ -3,7 +3,7 @@
 namespace ZQ\SunSearchBundle\Query;
 
 use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
-use ZQ\SunSearchBundle\Client\SunSunClient;
+use ZQ\SunSearchBundle\Client\SunClient;
 use Solarium\QueryType\Select\Query\Query;
 use Solarium\QueryType\Update\Query\Document\Document;
 
@@ -19,7 +19,7 @@ abstract class AbstractQuery extends Query
 
     /**
      *
-     * @var SunSunClient
+     * @var SunClient
      */
     protected $sunSearch = null;
 
@@ -108,7 +108,7 @@ abstract class AbstractQuery extends Query
     }
 
     /**
-     * @return SunSunClient
+     * @return SunClient
      */
     public function getSunSearch()
     {
@@ -116,7 +116,7 @@ abstract class AbstractQuery extends Query
     }
 
     /**
-     * @param SunSunClient $sunSearch
+     * @param SunClient $sunSearch
      *
      * @return AbstractQuery
      */

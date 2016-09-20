@@ -14,7 +14,7 @@ use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntity;
 use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\EntityWithRepository;
 use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformation;
 use ZQ\SunSearchBundle\Tests\Util\MetaTestInformationFactory;
-use ZQ\SunSearchBundle\Solr;
+use ZQ\SunSearchBundle\Client\SunClient;
 use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidEntityRepository;
 use ZQ\SunSearchBundle\Tests\Util\CommandFactoryStub;
 use ZQ\SunSearchBundle\Query\SolrQuery;
@@ -31,8 +31,8 @@ class SolrTest extends AbstractSolrTest
     {
         $this->setupMetaFactoryLoadOneCompleteInformation();
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
-        $query = $solr->createQuery('FSBlogBundle:ValidTestEntity');
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $query = $solr->createEntityQuery('FSBlogBundle:ValidTestEntity');
 
         $this->assertTrue($query instanceof SolrQuery);
         $this->assertEquals(4, count($query->getMappedFields()));
@@ -47,7 +47,7 @@ class SolrTest extends AbstractSolrTest
 
         $this->setupMetaFactoryLoadOneCompleteInformation($metaInformation);
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
         $actual = $solr->getRepository('Tests:EntityWithRepository');
 
         $this->assertTrue($actual instanceof ValidEntityRepository);
@@ -64,7 +64,7 @@ class SolrTest extends AbstractSolrTest
 
         $this->setupMetaFactoryLoadOneCompleteInformation($metaInformation);
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
         $solr->getRepository('Tests:EntityWithInvalidRepository');
     }
 
@@ -79,7 +79,7 @@ class SolrTest extends AbstractSolrTest
 
         $this->setupMetaFactoryLoadOneCompleteInformation();
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
         $solr->addDocument(new ValidTestEntity());
     }
 
@@ -94,7 +94,7 @@ class SolrTest extends AbstractSolrTest
 
         $this->setupMetaFactoryLoadOneCompleteInformation();
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
         $solr->updateDocument(new ValidTestEntity());
     }
 
@@ -112,7 +112,7 @@ class SolrTest extends AbstractSolrTest
         $filteredEntity = new ValidTestEntityFiltered();
         $filteredEntity->shouldIndex = false;
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
         $solr->updateDocument($filteredEntity);
     }
 
@@ -129,7 +129,7 @@ class SolrTest extends AbstractSolrTest
             ->method('toDocument')
             ->will($this->returnValue(new DocumentStub()));
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
         $solr->removeDocument(new ValidTestEntity());
     }
 
@@ -144,7 +144,7 @@ class SolrTest extends AbstractSolrTest
 
         $this->assertDeleteQueryWasExecuted();
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
         $solr->clearIndex();
     }
 
@@ -160,7 +160,7 @@ class SolrTest extends AbstractSolrTest
 
         $this->assertQueryWasExecuted(array(), 'index0');
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
 
         $entities = $solr->query($query);
         $this->assertEquals(0, count($entities));
@@ -168,7 +168,7 @@ class SolrTest extends AbstractSolrTest
 
     public function testQuery_OneDocumentFound()
     {
-        $arrayObj = new SolrDocumentStub(array('title_s' => 'title'));
+        $arrayObj = new SunClientDocumentStub(array('title_s' => 'title'));
 
         $document = new Document();
         $document->addField('document_name_s', 'name');
@@ -181,7 +181,7 @@ class SolrTest extends AbstractSolrTest
 
         $this->assertQueryWasExecuted(array($arrayObj), 'index0');
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
 
         $entities = $solr->query($query);
         $this->assertEquals(1, count($entities));
@@ -200,7 +200,7 @@ class SolrTest extends AbstractSolrTest
         $information->setSynchronizationCallback('shouldBeIndex');
         $this->setupMetaFactoryLoadOneCompleteInformation($information);
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
         $solr->addDocument($entity);
 
         $this->assertTrue($entity->getShouldBeIndexedWasCalled(), 'filter method was not called');
@@ -223,7 +223,7 @@ class SolrTest extends AbstractSolrTest
 
         $this->mapOneDocument();
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
         $solr->addDocument($entity);
 
         $this->assertTrue($entity->getShouldBeIndexedWasCalled(), 'filter method was not called');
@@ -243,7 +243,7 @@ class SolrTest extends AbstractSolrTest
         $information->setSynchronizationCallback('shouldBeIndex');
         $this->setupMetaFactoryLoadOneCompleteInformation($information);
 
-        $solr = new Solr($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
+        $solr = new SunClient($this->solrClientFake, $this->commandFactory, $this->eventDispatcher, $this->metaFactory, $this->mapper);
         $solr->addDocument(new InvalidTestEntityFiltered());
     }
 
