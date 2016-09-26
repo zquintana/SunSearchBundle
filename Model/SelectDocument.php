@@ -35,7 +35,7 @@ class SelectDocument extends Document
     /**
      * @return int
      */
-    public function getEntityId(): int
+    public function getEntityId()
     {
         return $this->entityId;
     }
@@ -43,7 +43,7 @@ class SelectDocument extends Document
     /**
      * @return string
      */
-    public function getType(): string
+    public function getType()
     {
         return $this->type;
     }

@@ -102,7 +102,7 @@ class EntityMapper
     /**
      * @return string
      */
-    public function getHydrationMode(): string
+    public function getHydrationMode()
     {
         return $this->hydrationMode;
     }
