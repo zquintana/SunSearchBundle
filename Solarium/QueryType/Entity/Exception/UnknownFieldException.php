@@ -1,6 +1,6 @@
 <?php
 
-namespace ZQ\SunSearchBundle\Query\Exception;
+namespace ZQ\SunSearchBundle\Solarium\QueryType\Entity\Exception;
 
 /**
  * Class UnknownFieldException

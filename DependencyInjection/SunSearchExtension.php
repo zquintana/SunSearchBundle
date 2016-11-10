@@ -2,8 +2,7 @@
 
 namespace ZQ\SunSearchBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
-use Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -27,6 +26,7 @@ class SunSearchExtension extends Extension
         $loader->load('hydrators.xml');
         $loader->load('event_listener.xml');
         $loader->load('log_listener.xml');
+        $loader->load('plugins.xml');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -58,11 +58,17 @@ class SunSearchExtension extends Extension
      */
     private function setupClients(array $config, ContainerBuilder $container)
     {
-        $endpoints = $config['endpoints'];
+        $endpoints = $config['connections'];
+
+        if (!isset($endpoints['default'])) {
+            throw new Exception('SunSearch connections config expects at least one connection of name "default".');
+        }
 
         $builderDefinition = $container->getDefinition('sunsearch.client.adapter.builder');
         $builderDefinition->replaceArgument(0, $endpoints);
-        $builderDefinition->addMethodCall('addPlugin', array('request_debugger', new Reference('sunsearch.debug.client_debugger')));
+
+        $mgrDef = $container->getDefinition('sunsearch.core_manager');
+        $mgrDef->addArgument($config['cores']);
     }
 
     /**

@@ -2,8 +2,8 @@
 
 namespace ZQ\SunSearchBundle\Tests\Query;
 
-use ZQ\SunSearchBundle\Query\FindByIdentifierQuery;
 use Solarium\QueryType\Update\Query\Document\Document;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\FindByIdentifierQuery;
 
 /**
  * @group query

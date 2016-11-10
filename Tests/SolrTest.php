@@ -2,22 +2,16 @@
 
 namespace ZQ\SunSearchBundle\Tests;
 
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\FindByDocumentNameQuery;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\SolrQuery;
 use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\InvalidTestEntityFiltered;
 use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidTestEntityFiltered;
-use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\SolrDocumentStub;
-use ZQ\SunSearchBundle\Tests\ResultFake;
-use ZQ\SunSearchBundle\Tests\SolrResponseFake;
-use ZQ\SunSearchBundle\Query\FindByDocumentNameQuery;
-use ZQ\SunSearchBundle\Event\EventManager;
-use ZQ\SunSearchBundle\Tests\SolrClientFake;
 use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntity;
 use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\EntityWithRepository;
 use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformation;
 use ZQ\SunSearchBundle\Tests\Util\MetaTestInformationFactory;
 use ZQ\SunSearchBundle\Client\SunClient;
 use ZQ\SunSearchBundle\Tests\Doctrine\Annotation\Entities\ValidEntityRepository;
-use ZQ\SunSearchBundle\Tests\Util\CommandFactoryStub;
-use ZQ\SunSearchBundle\Query\SolrQuery;
 use Solarium\QueryType\Update\Query\Document\Document;
 
 /**
@@ -168,7 +162,7 @@ class SolrTest extends AbstractSolrTest
 
     public function testQuery_OneDocumentFound()
     {
-        $arrayObj = new SunClientDocumentStub(array('title_s' => 'title'));
+        $arrayObj = new DocumentStub(array('title_s' => 'title'));
 
         $document = new Document();
         $document->addField('document_name_s', 'name');

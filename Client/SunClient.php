@@ -10,16 +10,17 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ZQ\SunSearchBundle\Client\Solarium\SolariumMulticoreClient;
 use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
 use ZQ\SunSearchBundle\Exception\HydratorException;
-use ZQ\SunSearchBundle\Query\ResultSet;
 use ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper;
 use ZQ\SunSearchBundle\Doctrine\Mapper\Mapping\CommandFactory;
 use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory;
 use ZQ\SunSearchBundle\Event\ErrorEvent;
 use ZQ\SunSearchBundle\Event\Event;
 use ZQ\SunSearchBundle\Event\Events;
-use ZQ\SunSearchBundle\Query\AbstractQuery;
-use ZQ\SunSearchBundle\Query\SolrQuery;
+use ZQ\SunSearchBundle\Model\CoreManager;
 use ZQ\SunSearchBundle\Repository\Repository;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\AbstractQuery;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\ResultSet;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\SolrQuery;
 
 /**
  * Class allows to index doctrine entities
@@ -29,32 +30,38 @@ class SunClient implements SunClientInterface
     /**
      * @var SolrClient
      */
-    protected $solrClientCore = null;
+    protected $solrClientCore;
 
     /**
      * @var EntityMapper
      */
-    protected $entityMapper = null;
+    protected $entityMapper;
 
     /**
      * @var CommandFactory
      */
-    protected $commandFactory = null;
+    protected $commandFactory;
 
     /**
      * @var EventDispatcherInterface
      */
-    protected $eventManager = null;
+    protected $eventManager;
 
     /**
      * @var MetaInformationFactory
      */
-    protected $metaInformationFactory = null;
+    protected $metaInformationFactory;
+
+    /**
+     * @var CoreManager
+     */
+    protected $coreManager;
 
     /**
      * @var int numFound
      */
     private $numberOfFoundDocuments = 0;
+
 
     /**
      * @param SolrClient               $client
@@ -62,19 +69,22 @@ class SunClient implements SunClientInterface
      * @param EventDispatcherInterface $manager
      * @param MetaInformationFactory   $metaInformationFactory
      * @param EntityMapper             $entityMapper
+     * @param CoreManager              $coreManager
      */
     public function __construct(
         SolrClient $client,
         CommandFactory $commandFactory,
         EventDispatcherInterface $manager,
         MetaInformationFactory $metaInformationFactory,
-        EntityMapper $entityMapper
+        EntityMapper $entityMapper,
+        CoreManager $coreManager
     ) {
         $this->solrClientCore = $client;
         $this->commandFactory = $commandFactory;
         $this->eventManager = $manager;
         $this->metaInformationFactory = $metaInformationFactory;
         $this->entityMapper = $entityMapper;
+        $this->coreManager  = $coreManager;
     }
 
     /**
@@ -107,6 +117,14 @@ class SunClient implements SunClientInterface
     public function getMetaFactory()
     {
         return $this->metaInformationFactory;
+    }
+
+    /**
+     * @return CoreManager
+     */
+    public function getCoreManager()
+    {
+        return $this->coreManager;
     }
 
     /**
@@ -278,11 +296,13 @@ class SunClient implements SunClientInterface
         $this->entityMapper->setHydrationMode($hydrationMode);
 
         $entity = $query->getEntity();
-        $runQueryInIndex = $query->getIndex();
+        $core   = $query->getIndex();
+        $endpoint    = $this->getCoreManager()->getEndpoint($core);
         $selectQuery = $this->getSelectQuery($query);
 
         try {
-            $response = $this->solrClientCore->select($selectQuery, $runQueryInIndex);
+            $endpoint->setCore($core);
+            $response = $this->solrClientCore->select($selectQuery, $endpoint);
             $results = new ResultSet($entity, $this->entityMapper, $response);
         } catch (HydratorException $e) {
             $errorEvent = new ErrorEvent(null, null, 'query solr');
@@ -293,6 +313,7 @@ class SunClient implements SunClientInterface
             $results = new ResultSet($entity, null, null);
         }
 
+        $endpoint->setCore(null);
         $this->entityMapper->setHydrationMode($prevMode);
 
         return $results;
@@ -415,6 +436,7 @@ class SunClient implements SunClientInterface
     {
         try {
             $indexName = $metaInformation->getIndex();
+
 
             $client = new SolariumMulticoreClient($this->solrClientCore);
             $client->update($doc, $indexName);

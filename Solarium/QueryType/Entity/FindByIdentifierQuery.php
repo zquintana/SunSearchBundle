@@ -1,6 +1,6 @@
 <?php
 
-namespace ZQ\SunSearchBundle\Query;
+namespace ZQ\SunSearchBundle\Solarium\QueryType\Entity;
 
 /**
  * Class FindByIdentifierQuery

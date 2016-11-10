@@ -11,6 +11,7 @@
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="sunsearch.meta.information.factory"/>
             <argument type="service" id="sunsearch.doctrine.entity_mapper"/>
+            <argument type="service" id="sunsearch.core_manager"/>
         </service>
 
         <service id="sunsearch.solr" class="Solarium\Core\Client\Client">
@@ -26,25 +27,12 @@
             <argument type="service" id="event_dispatcher" />
         </service>
 
-        <service id="sunsearch.client.plugin.logger" class="ZQ\SunSearchBundle\Client\Solarium\Plugin\LoggerPlugin">
-            <argument type="service" id="sunsearch.client.logger.debug"/>
-
-            <tag name="solarium.client.plugin" plugin-name="SolrBundleLogger"/>
-        </service>
-
         <service id="sunsearch.client.logger.debug" class="ZQ\SunSearchBundle\Logging\DebugLogger" />
 
         <service id="sunsearch.data_collector" class="ZQ\SunSearchBundle\DataCollector\RequestCollector" public="false">
             <argument type="service" id="sunsearch.client.logger.debug" />
 
             <tag name="data_collector" template="SunSearchBundle:Profiler:solr" id="solr" />
-        </service>
-
-        <service id="sunsearch.debug.client_debugger" class="ZQ\SunSearchBundle\Client\Solarium\Plugin\RequestDebugger">
-            <argument type="service" id="logger"/>
-
-            <tag name="monolog.logger" channel="solr" />
-            <tag name="kernel.event_listener" event="solarium.core.preExecuteRequest" method="preExecuteRequest" />
         </service>
 
         <service id="sunsearch.meta.information.factory" class="ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory">
@@ -75,6 +63,11 @@
 
         <service id="sunsearch.doctrine.annotation.annotation_reader" class="ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader">
             <argument id="annotation_reader" type="service"/>
+        </service>
+
+        <service id="sunsearch.core_manager" class="ZQ\SunSearchBundle\Model\CoreManager">
+            <argument id="sunsearch.client.adapter" type="service" />
+            <argument id="event_dispatcher" type="service" />
         </service>
     </services>
 </container>

@@ -1,6 +1,6 @@
 <?php
 
-namespace ZQ\SunSearchBundle\Client\Solarium\Plugin;
+namespace ZQ\SunSearchBundle\Solarium\Plugin;
 
 use Solarium\Core\Client\Client;
 use Solarium\Core\Event\Events;
@@ -23,17 +23,9 @@ class LoggerPlugin extends AbstractPlugin
      */
     public function __construct(SolrLoggerInterface $logger)
     {
-        $this->logger = $logger;
-    }
+        parent::__construct();
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function initPluginType()
-    {
-        $dispatcher = $this->client->getEventDispatcher();
-        $dispatcher->addListener(Events::PRE_EXECUTE_REQUEST,   [$this, 'preExecuteRequest']);
-        $dispatcher->addListener(Events::POST_EXECUTE_REQUEST,  [$this, 'postExecuteRequest']);
+        $this->logger = $logger;
     }
 
     /**
@@ -63,5 +55,15 @@ class LoggerPlugin extends AbstractPlugin
     public function getClient()
     {
         return $this->client;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initPluginType()
+    {
+        $dispatcher = $this->client->getEventDispatcher();
+        $dispatcher->addListener(Events::PRE_EXECUTE_REQUEST, [$this, 'preExecuteRequest']);
+        $dispatcher->addListener(Events::POST_EXECUTE_REQUEST, [$this, 'postExecuteRequest']);
     }
 }

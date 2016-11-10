@@ -18,7 +18,7 @@ class Event extends BaseEvent
     /**
      * @var MetaInformationInterface
      */
-    private $metainformation = null;
+    private $metaInformation = null;
 
     /**
      * something like 'update-solr-document'
@@ -34,19 +34,18 @@ class Event extends BaseEvent
 
     /**
      * @param Client                   $client
-     * @param MetaInformationInterface $metainformation
+     * @param MetaInformationInterface $metaInformation
      * @param string                   $solrAction
      * @param Event                    $sourceEvent
      */
     public function __construct(
         Client $client = null,
-        MetaInformationInterface $metainformation = null,
+        MetaInformationInterface $metaInformation = null,
         $solrAction = '',
         Event $sourceEvent = null
-    )
-    {
+    ) {
         $this->client = $client;
-        $this->metainformation = $metainformation;
+        $this->metaInformation = $metaInformation;
         $this->solrAction = $solrAction;
         $this->sourceEvent = $sourceEvent;
     }
@@ -56,7 +55,7 @@ class Event extends BaseEvent
      */
     public function getMetaInformation()
     {
-        return $this->metainformation;
+        return $this->metaInformation;
     }
 
     /**

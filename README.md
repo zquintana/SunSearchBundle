@@ -47,13 +47,17 @@ Finally, configure the bundle:
 ``` yaml
 # app/config/config.yml
 sun_search:
-    endpoints:
-        core0:
+    connections:
+        default:
             host: host
             port: 8983
             path: /solr/core0
-            core: corename
             timeout: 5
+            
+    cores:
+        corename:
+            config_set: ~
+            connection: ~
 ```
 
 ### Step 4: Configure your entities

@@ -4,7 +4,10 @@ namespace ZQ\SunSearchBundle\Tests\Solr\Repository;
 
 use Solarium\Core\Query\Helper;
 use Solarium\QueryType\Update\Query\Document\Document;
+use ZQ\SunSearchBundle\Client\SunClient;
+use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory;
 use ZQ\SunSearchBundle\Repository\Repository;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\SolrQuery;
 use ZQ\SunSearchBundle\Tests\Doctrine\Mapper\ValidTestEntity;
 use ZQ\SunSearchBundle\Tests\Util\MetaTestInformationFactory;
 use ZQ\SunSearchBundle\Tests\Util\CommandFactoryStub;
@@ -117,7 +120,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $metaFactory = $this->getMock(
-            'ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory',
+            MetaInformationFactory::class,
             array(),
             array(),
             '',
@@ -127,8 +130,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('loadInformation')
             ->will($this->returnValue(MetaTestInformationFactory::getMetaInformation()));
 
-        $solr = $this->getMock('ZQ\SunSearchBundle\Solr', array(), array(), '', false);
-        $query = $this->getMock('ZQ\SunSearchBundle\Query\SolrQuery', array(), array(), '', false);
+        $solr = $this->getMock(SunClient::class, array(), array(), '', false);
+        $query = $this->getMock(SolrQuery::class, array(), array(), '', false);
         $query->expects($this->exactly(3))
             ->method('addSearchTerm');
 
