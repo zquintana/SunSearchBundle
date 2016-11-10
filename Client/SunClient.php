@@ -437,6 +437,7 @@ class SunClient implements SunClientInterface
         try {
             $indexName = $metaInformation->getIndex();
 
+
             $client = new SolariumMulticoreClient($this->solrClientCore);
             $client->update($doc, $indexName);
 

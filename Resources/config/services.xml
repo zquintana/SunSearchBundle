@@ -66,8 +66,8 @@
         </service>
 
         <service id="sunsearch.core_manager" class="ZQ\SunSearchBundle\Model\CoreManager">
-            <argument id="event_dispatcher" type="service" />
             <argument id="sunsearch.client.adapter" type="service" />
+            <argument id="event_dispatcher" type="service" />
         </service>
     </services>
 </container>

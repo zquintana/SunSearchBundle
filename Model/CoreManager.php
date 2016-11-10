@@ -3,7 +3,7 @@
 namespace ZQ\SunSearchBundle\Model;
 
 use Solarium\Core\Client\Client;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ZQ\SunSearchBundle\Event\CoresLoadedEvent;
 use ZQ\SunSearchBundle\Exception\CoreManagerException;
 
@@ -18,7 +18,7 @@ class CoreManager
     private $client;
 
     /**
-     * @var EventDispatcher
+     * @var EventDispatcherInterface
      */
     private $dispatcher;
 
@@ -31,13 +31,13 @@ class CoreManager
     /**
      * CoreManager constructor.
      *
-     * @param Client          $client
-     * @param EventDispatcher $dispatcher
-     * @param array           $cores
+     * @param Client                   $client
+     * @param EventDispatcherInterface $dispatcher
+     * @param array                    $cores
      */
     public function __construct(
         Client $client,
-        EventDispatcher $dispatcher,
+        EventDispatcherInterface $dispatcher,
         array $cores = []
     ) {
         $this->client     = $client;
