@@ -1,8 +1,8 @@
 <?php
 
-namespace ZQ\SunSearchBundle\Query;
+namespace ZQ\SunSearchBundle\Solarium\QueryType\Entity;
 
-use ZQ\SunSearchBundle\Query\Exception\UnknownFieldException;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\Exception\UnknownFieldException;
 
 /**
  * Class SolrQuery

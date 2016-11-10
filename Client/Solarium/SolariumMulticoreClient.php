@@ -6,7 +6,7 @@ use Solarium\Core\Query\QueryInterface;
 use Solarium\QueryType\Update\Query\Document\DocumentInterface;
 use Solarium\Client;
 use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
-use ZQ\SunSearchBundle\Query\FindByIdentifierQuery;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\FindByIdentifierQuery;
 
 /**
  * Wrapper class for \Solarium\SunSunClient to perform actions on multiple cores

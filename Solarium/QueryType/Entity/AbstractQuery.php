@@ -1,6 +1,6 @@
 <?php
 
-namespace ZQ\SunSearchBundle\Query;
+namespace ZQ\SunSearchBundle\Solarium\QueryType\Entity;
 
 use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
 use ZQ\SunSearchBundle\Client\SunClient;
@@ -50,7 +50,7 @@ abstract class AbstractQuery extends Query
     public function getSelectQuery()
     {
         if (!$this->selectQuery) {
-            $this->selectQuery = $this->solr->getSelectQuery($this);
+            $this->selectQuery = $this->sunSearch->getSelectQuery($this);
         }
 
         return $this->selectQuery;

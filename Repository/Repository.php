@@ -4,8 +4,8 @@ namespace ZQ\SunSearchBundle\Repository;
 
 use ZQ\SunSearchBundle\Client\SunClient;
 use ZQ\SunSearchBundle\Doctrine\Hydration\HydrationModes;
-use ZQ\SunSearchBundle\Query\FindByDocumentNameQuery;
-use ZQ\SunSearchBundle\Query\FindByIdentifierQuery;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\FindByDocumentNameQuery;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\FindByIdentifierQuery;
 
 /**
  * Common repository class to find documents in the index

@@ -18,16 +18,24 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('sun_search');
-        $rootNode->children()
-                ->arrayNode('endpoints')
+        $rootNode
+            ->children()
+                ->arrayNode('connections')
                     ->useAttributeAsKey('name')->prototype('array')
                         ->children()
                             ->scalarNode('host')->end()
                             ->scalarNode('port')->end()
                             ->scalarNode('path')->end()
-                            ->scalarNode('core')->end()
                             ->scalarNode('timeout')->end()
                             ->booleanNode('active')->defaultValue(true)->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('cores')
+                    ->useAttributeAsKey('core')->prototype('array')
+                        ->children()
+                            ->scalarNode('config_set')->end()
+                            ->scalarNode('connection')->end()
                         ->end()
                     ->end()
                 ->end()

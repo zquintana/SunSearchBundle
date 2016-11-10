@@ -1,6 +1,6 @@
 <?php
 
-namespace ZQ\SunSearchBundle\Client\Solarium\Plugin;
+namespace ZQ\SunSearchBundle\Solarium\Plugin;
 
 use Psr\Log\LoggerInterface;
 use Solarium\Core\Event\PreExecuteRequest;

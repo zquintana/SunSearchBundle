@@ -2,8 +2,7 @@
 
 namespace ZQ\SunSearchBundle\Repository;
 
-
-use FS\SolrBundle\Query\SolrQuery;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\SolrQuery;
 
 /**
  * Defines common finder-method for document-repositories

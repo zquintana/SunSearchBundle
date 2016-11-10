@@ -2,10 +2,8 @@
 
 namespace ZQ\SunSearchBundle\Tests\Query;
 
-use ZQ\SunSearchBundle\Doctrine\Annotation\AnnotationReader;
-use ZQ\SunSearchBundle\Query\Exception\UnknownFieldException;
-use ZQ\SunSearchBundle\Query\SolrQuery;
-use ZQ\SunSearchBundle\SolrQueryFacade;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\Exception\UnknownFieldException;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\SolrQuery;
 
 /**
  *
@@ -101,7 +99,7 @@ class SolrQueryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \ZQ\SunSearchBundle\Query\Exception\UnknownFieldException
+     * @expectedException UnknownFieldException
      */
     public function testAddSearchTerm_UnknownField()
     {

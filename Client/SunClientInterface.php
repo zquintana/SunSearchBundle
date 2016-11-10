@@ -2,8 +2,8 @@
 
 namespace ZQ\SunSearchBundle\Client;
 
-use ZQ\SunSearchBundle\Query\AbstractQuery;
 use ZQ\SunSearchBundle\Repository\Repository;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\AbstractQuery;
 
 /**
  * Interface SunClientInterface
