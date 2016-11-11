@@ -37,7 +37,7 @@ class CreateCoresCommand extends ContainerAwareCommand
                 continue;
             }
 
-            $endpoint = $coreManager->getEndpoint($name);
+            $endpoint = $solr->getEndpoint($core->getConnection());
 
             /** @var Query $query */
             $query = $solr->createQuery(Query::TYPE);
@@ -50,11 +50,7 @@ class CreateCoresCommand extends ContainerAwareCommand
                 $errorMsg = isset($error['error']['msg']) ?
                     $error['error']['msg'] : 'Unknown';
 
-                $output->writeln(sprintf(
-                    'Failed to create core "%s". Reason: %s',
-                    $core->getName(),
-                    $errorMsg
-                ));
+                throw isset($error['error']['msg']) ? new \Exception($error['error']['msg'], 0, $e) : $e;
             }
         }
     }

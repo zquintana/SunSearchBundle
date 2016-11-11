@@ -72,15 +72,14 @@ class SynchronizeIndexCommand extends ContainerAwareCommand
 
             $output->writeln(sprintf('Synchronize <info>%s</info> entities', $totalSize));
 
-            $batchLoops = ceil($totalSize / $batchSize);
-
-            for ($i = 0; $i <= $batchLoops; $i++) {
+            $batchLoops = intval(ceil($totalSize / $batchSize));
+            for ($i = 0; $i < $batchLoops; $i++) {
                 $entities = $repository->findBy(array(), null, $batchSize, $i * $batchSize);
-                try {
-                    $solr->synchronizeIndex($entities);
-                } catch (\Exception $e) {
-                    $output->writeln(sprintf('A error occurs: %s', $e->getMessage()));
+                if (empty($entities)) {
+                    $output->writeln('<info>Unable to find any additional entities.</info> ');
+                    continue;
                 }
+                $solr->synchronizeIndex($entities);
             }
 
             $output->writeln('<info>Synchronization finished</info>');

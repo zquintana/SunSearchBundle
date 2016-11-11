@@ -3,6 +3,7 @@
 namespace ZQ\SunSearchBundle\Model;
 
 use Solarium\Core\Client\Client;
+use Solarium\Core\Client\Endpoint;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ZQ\SunSearchBundle\Event\CoresLoadedEvent;
 use ZQ\SunSearchBundle\Exception\CoreManagerException;
@@ -26,6 +27,13 @@ class CoreManager
      * @var Core[]
      */
     private $cores;
+
+    /**
+     * Core scoped endpoint
+     *
+     * @var Endpoint[]
+     */
+    private $endpoints = [];
 
 
     /**
@@ -82,6 +90,12 @@ class CoreManager
      */
     public function getCore($name)
     {
+        if (empty($name)) {
+            $keys = array_keys($this->cores);
+
+            return $this->cores[$keys[0]];
+        }
+
         if (!isset($this->cores[$name])) {
             throw new CoreManagerException(sprintf('Unknown core "%s".', $name));
         }
@@ -90,19 +104,26 @@ class CoreManager
     }
 
     /**
-     * @param string $name
+     * @param string|Core $name
      *
      * @return \Solarium\Core\Client\Endpoint
      */
     public function getEndpoint($name)
     {
-        $core = $this->getCore($name);
+        $core = $name instanceof Core ? $name : $this->getCore($name);
+        $name = $core->getName();
 
-        return $this->client->getEndpoint($core->getConnection());
+        if (!isset($this->endpoints[$name])) {
+            $endpoint = clone $this->client->getEndpoint($core->getConnection());
+            $endpoint->setCore($name);
+            $this->endpoints[$name] = $endpoint;
+        }
+
+        return $this->endpoints[$name];
     }
 
     /**
-     * @return EventDispatcher
+     * @return EventDispatcherInterface
      */
     public function getDispatcher()
     {

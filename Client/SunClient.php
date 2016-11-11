@@ -6,8 +6,8 @@ use Solarium\Client as SolrClient;
 use Solarium\Plugin\BufferedAdd\BufferedAdd;
 use Solarium\QueryType\Select\Query\Query;
 use Solarium\QueryType\Update\Query\Document\Document;
+use Solarium\QueryType\Update\Query\Document\DocumentInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use ZQ\SunSearchBundle\Client\Solarium\SolariumMulticoreClient;
 use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationInterface;
 use ZQ\SunSearchBundle\Exception\HydratorException;
 use ZQ\SunSearchBundle\Doctrine\Mapper\EntityMapper;
@@ -16,9 +16,11 @@ use ZQ\SunSearchBundle\Doctrine\Mapper\MetaInformationFactory;
 use ZQ\SunSearchBundle\Event\ErrorEvent;
 use ZQ\SunSearchBundle\Event\Event;
 use ZQ\SunSearchBundle\Event\Events;
+use ZQ\SunSearchBundle\Model\Core;
 use ZQ\SunSearchBundle\Model\CoreManager;
 use ZQ\SunSearchBundle\Repository\Repository;
 use ZQ\SunSearchBundle\Solarium\QueryType\Entity\AbstractQuery;
+use ZQ\SunSearchBundle\Solarium\QueryType\Entity\FindByIdentifierQuery;
 use ZQ\SunSearchBundle\Solarium\QueryType\Entity\ResultSet;
 use ZQ\SunSearchBundle\Solarium\QueryType\Entity\SolrQuery;
 
@@ -204,9 +206,17 @@ class SunClient implements SunClientInterface
             try {
                 $indexName = $metaInformations->getIndex();
 
-                $client = new SolariumMulticoreClient($this->solrClientCore);
+                $documentFields = $document->getFields();
+                $documentKey = $documentFields[MetaInformationInterface::DOCUMENT_KEY_FIELD_NAME];
 
-                $client->delete($document, $indexName);
+                $deleteQuery = new FindByIdentifierQuery();
+                $deleteQuery->setDocument($document);
+                $deleteQuery->setDocumentKey($documentKey);
+
+                $delete = $this->solrClientCore->createUpdate();
+                $delete->addDeleteQuery($deleteQuery->getQuery());
+                $delete->addCommit();
+                $this->solrClientCore->update($delete, $this->getEndpoint($indexName));
             } catch (\Exception $e) {
                 $errorEvent = new ErrorEvent(null, $metaInformations, 'delete-document', $event);
                 $errorEvent->setException($e);
@@ -344,15 +354,30 @@ class SunClient implements SunClientInterface
     }
 
     /**
-     * clears the whole index by using the query *:*
+     * Clears all cores
      */
-    public function clearIndex()
+    public function clearIndexes()
+    {
+        foreach ($this->getCoreManager()->getCores() as $core) {
+            $this->clearIndex($core);
+        }
+    }
+
+    /**
+     * clears the whole index by using the query *:*
+     *
+     * @param Core $core
+     */
+    public function clearIndex(Core $core)
     {
         $this->eventManager->dispatch(Events::PRE_CLEAR_INDEX, new Event($this->solrClientCore));
 
         try {
-            $client = new SolariumMulticoreClient($this->solrClientCore);
-            $client->clearCores();
+            $endpoint = $this->getEndpoint($core);
+            $delete = $this->solrClientCore->createUpdate();
+            $delete->addDeleteQuery('*:*');
+            $delete->addCommit();
+            $this->solrClientCore->update($delete, $endpoint);
         } catch (\Exception $e) {
             $errorEvent = new ErrorEvent(null, null, 'clear-index');
             $errorEvent->setException($e);
@@ -372,14 +397,19 @@ class SunClient implements SunClientInterface
         $buffer = $this->solrClientCore->getPlugin('bufferedadd');
         $buffer->setBufferSize(500);
 
-        foreach ($entities as $entity) {
-            $metaInformations = $this->metaInformationFactory->loadInformation($entity);
+        // Set the endpoint from the first record
+        $firstEntity = $entities[0];
+        $metaInformation = $this->metaInformationFactory->loadInformation($firstEntity);
+        $buffer->setEndpoint($this->getEndpoint($metaInformation->getIndex()));
 
-            if (!$this->addToIndex($metaInformations, $entity)) {
+        foreach ($entities as $entity) {
+            $metaInformation = $this->metaInformationFactory->loadInformation($entity);
+
+            if (!$this->addToIndex($metaInformation, $entity)) {
                 continue;
             }
 
-            $doc = $this->toDocument($metaInformations);
+            $doc = $this->toDocument($metaInformation);
 
             $buffer->addDocument($doc);
         }
@@ -413,6 +443,18 @@ class SunClient implements SunClientInterface
     }
 
     /**
+     * Returns the endpoint for the configured core
+     *
+     * @param string|Core $core
+     *
+     * @return \Solarium\Core\Client\Endpoint
+     */
+    public function getEndpoint($core)
+    {
+        return $this->getCoreManager()->getEndpoint($core);
+    }
+
+    /**
      * @param MetaInformationInterface $metaInformation
      *
      * @return Document
@@ -428,19 +470,19 @@ class SunClient implements SunClientInterface
     }
 
     /**
-     * @param object                   $doc
+     * @param DocumentInterface        $doc
      * @param MetaInformationInterface $metaInformation
      * @param Event                    $event
      */
-    private function addDocumentToIndex($doc, MetaInformationInterface $metaInformation, Event $event)
+    private function addDocumentToIndex(DocumentInterface $doc, MetaInformationInterface $metaInformation, Event $event)
     {
         try {
             $indexName = $metaInformation->getIndex();
 
-
-            $client = new SolariumMulticoreClient($this->solrClientCore);
-            $client->update($doc, $indexName);
-
+            $update = $this->solrClientCore->createUpdate();
+            $update->addDocument($doc);
+            $update->addCommit();
+            $this->solrClientCore->update($update, $this->getEndpoint($indexName));
         } catch (\Exception $e) {
             $errorEvent = new ErrorEvent(null, $metaInformation, json_encode($this->solrClientCore->getOptions()), $event);
             $errorEvent->setException($e);

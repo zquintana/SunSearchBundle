@@ -30,7 +30,7 @@ class ClearIndexCommand extends ContainerAwareCommand
         $solr = $this->getContainer()->get('sunsearch.client');
 
         try {
-            $solr->clearIndex();
+            $solr->clearIndexes();
         } catch (\Exception $e) {
             $output->writeln(sprintf('A error occurs: %s', $e->getMessage()));
         }
