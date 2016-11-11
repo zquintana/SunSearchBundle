@@ -1,6 +1,6 @@
 <?php
 
-namespace ZQ\SunSearchBundle\Client\Solarium;
+namespace ZQ\SunSearchBundle\Solarium;
 
 use Solarium\Client;
 use Solarium\Core\Plugin\AbstractPlugin;
@@ -8,9 +8,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ZQ\SunSearchBundle\Client\Builder;
 
 /**
- * Creates an instance of the Solarium SunSunClient
+ * Creates an instance of the Solarium Client
  */
-class SolariumClientBuilder implements Builder
+class ClientBuilder implements Builder
 {
     /**
      * @var array

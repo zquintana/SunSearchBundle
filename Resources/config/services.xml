@@ -22,7 +22,7 @@
             <factory service="sunsearch.client.adapter.builder" method="build" />
         </service>
 
-        <service id="sunsearch.client.adapter.builder" class="ZQ\SunSearchBundle\Client\Solarium\SolariumClientBuilder">
+        <service id="sunsearch.client.adapter.builder" class="ZQ\SunSearchBundle\Solarium\ClientBuilder">
             <argument type="collection"/>
             <argument type="service" id="event_dispatcher" />
         </service>
