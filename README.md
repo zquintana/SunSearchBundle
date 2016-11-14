@@ -408,13 +408,33 @@ class ProviderRepository extends Repository
 }
 ```
 
+## Creating Cores
+
+Creating cores via SunSearch can be done 2 ways. To do so programatically use the Core\Query
+located in SunSearch to create and execute a request to create the core by name with a 
+config set. 
+
+~~~ php
+use ZQ\SunSearchBundle\Solarium\QueryType\Core\Query;
+
+/** @var Solarium\Client $solr */
+$solr  = $this->getContainer()->get('sunsearch.client.adapter');
+$query = $solr->createQuery(Query::TYPE);
+$query->createWithConfigSet($coreName, $configSet);
+$solr->execute($query, $endpoint);
+~~~
+
+Another ways is outlined below through the use the `sunsearch:cores:create` command. This command
+requires that you define the config set name as part of your cores configuration.
+
 ## Commands
 
 Here's all the commands provided by this bundle:
 
-* `solr:index:clear` - delete all documents in the index
-* `solr:index:populate` - synchronize the db with the index
-* `solr:schema:show` - shows your configured documents
+* `sunsearch:cores:create` - creates cores via configuration (only works with config sets defined.)
+* `sunsearch:index:clear` - delete all documents in the index
+* `sunsearch:index:populate` - synchronize the db with the index
+* `sunsearch:schema:show` - shows your configured documents
 
 ## Extend Solarium
 
