@@ -20,7 +20,7 @@ Installation is a quick (I promise!) 3 step process:
 This bundle is available on Packagist. You can install it using Composer:
 
 ```bash
-$ composer require floriansemm/solr-bundle
+$ composer require zquintana/sun-search-bundle
 ```
 
 ### Step 2: Enable the bundle
@@ -67,7 +67,7 @@ To make an entity indexed, you must add some annotations to your entity. Basic c
 
 ```php
 // ....
-use FS\SolrBundle\Doctrine\Annotation as Solr;
+use ZQ\SunSearchBundle\Doctrine\Annotation as Sun;
     
 /**
 * @Sun\Document()
@@ -119,7 +119,7 @@ This annotation denotes that an entity should be indexed as a document. It has s
 
 ### Setting custom repository class with `repository` option
 
-If you specify your own repository, the repository must extend the `FS\SolrBundle\Repository\Repository` class.
+If you specify your own repository, the repository must extend the `ZQ\SunSearchBundle\Repository\Repository` class.
 
 ```php
 /**
@@ -299,10 +299,10 @@ entity should be indexed.
 
 ### Query a field of a document
 
-Querying the index is done via the `solr.client` service:
+Querying the index is done via the `sunsearch.client` service:
 
 ```php
-$query = $this->get('solr.client')->createEntityQuery('AcmeDemoBundle:Post');
+$query = $this->get('sunsearch.client')->createEntityQuery('AcmeDemoBundle:Post');
 $query->addSearchTerm('title', 'my title');
 $query->addSearchTerm('collection_field', array('value1', 'value2'));
 
@@ -312,7 +312,7 @@ $result = $query->getResult();
 or 
 
 ```php
-$posts = $this->get('solr.client')->getRepository('AcmeDemoBundle:Post')->findOneBy(array(
+$posts = $this->get('sunsearch.client')->getRepository('AcmeDemoBundle:Post')->findOneBy(array(
     'title' => 'my title',
     'collection_field' => array('value1', 'value2')
 ));
@@ -323,7 +323,7 @@ $posts = $this->get('solr.client')->getRepository('AcmeDemoBundle:Post')->findOn
 The previous examples were only querying the `title` field. You can also query all fields with a string.
 
 ```php
-$query = $this->get('solr.client')->createEntityQuery('AcmeDemoBundle:Post');
+$query = $this->get('sunsearch.client')->createEntityQuery('AcmeDemoBundle:Post');
 $query->queryAllFields('my title');
 
 $result = $query->getResult();
@@ -334,7 +334,7 @@ $result = $query->getResult();
 If you need more flexiblity in your queries you can define your own query strings:
 
 ```php
-$query = $this->get('solr.client')->createEntityQuery('AcmeDemoBundle:Post');
+$query = $this->get('sunsearch.client')->createEntityQuery('AcmeDemoBundle:Post');
 $query->setCustomQuery('id:post_* AND (author_s:Name1 OR author_s:Name2)');
 
 $result = $query->getResult();
@@ -345,7 +345,7 @@ $result = $query->getResult();
 To narrow the mapping, you can use the `addField()` method.
 
 ```php
-$query = $this->get('solr.client')->createEntityQuery('AcmeDemoBundle:Post');
+$query = $this->get('sunsearch.client')->createEntityQuery('AcmeDemoBundle:Post');
 $query->addSearchTerm('title', 'my title');
 $query->addField('id');
 $query->addField('text');
@@ -366,13 +366,13 @@ $query->setRows(1000000);
 
 HydrationMode tells the bundle how to create an entity from a document.
 
-1. `FS\SolrBundle\Doctrine\Hydration\HydrationModes::HYDRATE_INDEX` - use only the data from solr
-2. `FS\SolrBundle\Doctrine\Hydration\HydrationModes::HYDRATE_DOCTRINE` - merge the data from solr with the entire doctrine-entity
+1. `ZQ\SunSearchBundle\Doctrine\Hydration\HydrationModes::HYDRATE_INDEX` - use only the data from solr
+2. `ZQ\SunSearchBundle\Doctrine\Hydration\HydrationModes::HYDRATE_DOCTRINE` - merge the data from solr with the entire doctrine-entity
 
 With a custom query:
 
 ```php
-$query = $this->get('solr.client')->createEntityQuery('AcmeDemoBundle:Post');
+$query = $this->get('sunsearch.client')->createEntityQuery('AcmeDemoBundle:Post');
 $query->setHydrationMode($mode)
 ```
 
@@ -389,12 +389,12 @@ public function find($id)
 
 ## Repositories
 
-Your should define your own repository-class to make your custom queries reuseable. How to configure a repository for a document have a look at [the annotation section](https://github.com/floriansemm/SolrBundle#setting-custom-repository-class-with-repository-option)
+Your should define your own repository-class to make your custom queries reuseable. How to configure a repository for a document have a look at [the annotation section](https://github.com/zquintana/SunSearchBundle#setting-custom-repository-class-with-repository-option)
 
 ```php
 namespace AppBundle\Search;
 
-use FS\SolrBundle\Repository\Repository;
+use ZQ\SunSearchBundle\Repository\Repository;
 
 class ProviderRepository extends Repository
 {
