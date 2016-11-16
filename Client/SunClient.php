@@ -311,7 +311,6 @@ class SunClient implements SunClientInterface
         $selectQuery = $this->getSelectQuery($query);
 
         try {
-            $endpoint->setCore($core);
             $response = $this->solrClientCore->select($selectQuery, $endpoint);
             $results = new ResultSet($entity, $this->entityMapper, $response);
         } catch (HydratorException $e) {
