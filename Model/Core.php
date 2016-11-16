@@ -14,6 +14,11 @@ class Core extends Configurable
      */
     protected $name;
 
+    /**
+     * @var string
+     */
+    protected $coreName;
+
 
     /**
      * Core constructor.
@@ -52,5 +57,29 @@ class Core extends Configurable
     public function getConfigSet()
     {
         return $this->getOption('config_set');
+    }
+
+    /**
+     * @return string
+     */
+    public function getCoreName()
+    {
+        if (!$this->coreName) {
+            $this->coreName = $this->name;
+        }
+
+        return $this->coreName;
+    }
+
+    /**
+     * @param string $coreName
+     *
+     * @return Core
+     */
+    public function setCoreName($coreName)
+    {
+        $this->coreName = $coreName;
+
+        return $this;
     }
 }

@@ -11,6 +11,8 @@ class Query extends BaseQuery
 {
     const CREATE_ACTION = 'CREATE';
 
+    const STATUS_ACTION = 'STATUS';
+
     const TYPE = 'admin_core';
 
     /**
@@ -59,6 +61,21 @@ class Query extends BaseQuery
             'name'      => $core,
             'configSet' => $configSet,
             'action'    => static::CREATE_ACTION,
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * @param string $core
+     *
+     * @return $this
+     */
+    public function status($core)
+    {
+        $this->setOption('args', [
+            'core'   => $core,
+            'action' => static::STATUS_ACTION,
         ]);
 
         return $this;
