@@ -33,22 +33,29 @@ class CreateCoresCommand extends ContainerAwareCommand
         foreach ($coreManager->getCores() as $name => $core) {
             $configSet = $core->getConfigSet();
             if (!$configSet) {
-                $output->writeln(sprintf('Skipping "%s" because it\'s missing a config set.', $name));
+                $output->writeln(sprintf('Skipping <info>%s</info> because it\'s missing a config set.', $core->getCoreName()));
                 continue;
             }
 
-            $endpoint = $solr->getEndpoint($core->getConnection());
+            $endpoint    = $solr->getEndpoint($core->getConnection());
+            /** @var Query $statusQuery */
+            $statusQuery = $solr->createQuery(Query::TYPE);
+            $statusQuery->status($core->getCoreName());
+            $result = $solr->execute($statusQuery, $endpoint);
+            $data   = $result->getData();
+            if (!empty($data['status'][$core->getCoreName()])) {
+                $output->writeln(sprintf('Core of name <info>%s</info> already exists.', $core->getCoreName()));
+                continue;
+            }
 
             /** @var Query $query */
             $query = $solr->createQuery(Query::TYPE);
-            $query->createWithConfigSet($core->getName(), $configSet);
+            $query->createWithConfigSet($core->getCoreName(), $configSet);
             try {
                 $solr->execute($query, $endpoint);
-                $output->writeln(sprintf('Successfully created core "%s".', $core->getName()));
+                $output->writeln(sprintf('Successfully created core <info>%s</info>.', $core->getCoreName()));
             } catch (HttpException $e) {
                 $error    = json_decode($e->getBody(), true);
-                $errorMsg = isset($error['error']['msg']) ?
-                    $error['error']['msg'] : 'Unknown';
 
                 throw isset($error['error']['msg']) ? new \Exception($error['error']['msg'], 0, $e) : $e;
             }

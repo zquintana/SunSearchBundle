@@ -115,7 +115,7 @@ class CoreManager
 
         if (!isset($this->endpoints[$name])) {
             $endpoint = clone $this->client->getEndpoint($core->getConnection());
-            $endpoint->setCore($name);
+            $endpoint->setCore($core->getCoreName());
             $this->endpoints[$name] = $endpoint;
         }
 
