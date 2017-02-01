@@ -152,11 +152,13 @@ class SunClient implements SunClientInterface
      *
      * @return SolrQuery
      */
-    public function createQuery($index)
+    public function createQuery($index = null)
     {
         $query = new SolrQuery();
         $query->setSunSearch($this);
-        $query->setIndex($index);
+        if ($index) {
+            $query->setIndex($index);
+        }
 
         return $query;
     }
@@ -334,7 +336,7 @@ class SunClient implements SunClientInterface
      *
      * @return SolrQuery
      */
-    public function selectQuery($sQuery, $index)
+    public function selectQuery($sQuery, $index = null)
     {
         $query = $this->createQuery($index);
         $query->setCustomQuery($sQuery);
